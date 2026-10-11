@@ -1,12 +1,3 @@
-# AI-Based Adaptive Process Parameter Tuning
-
-**Course:** 21CSE732P — Applied AI in Manufacturing, Industry 5.0  
-**Project:** AI-Based Adaptive Process Parameter Tuning  
-**Worklet:** No. 28  
-**Tier:** Tier 3 — Advanced  
-**Institution:** Applied AI Research Lab  
-
----
 
 ## 1. Project Overview & Official Problem Statement
 
