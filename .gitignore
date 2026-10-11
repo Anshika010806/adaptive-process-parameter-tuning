@@ -1,0 +1,224 @@
+# ==============================================================================
+# AppliedAI — AI-Based Adaptive Process Parameter Tuning
+# Master .gitignore specification
+# ==============================================================================
+
+# ==============================================================================
+# 1. Python Virtual Environments & Interpreters
+# ==============================================================================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+*.venv/
+pip-wheel-metadata/
+.pdm/
+.pixi/
+
+# ==============================================================================
+# 2. Python Bytecode, Build & Packaging Artifacts
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+
+# ==============================================================================
+# 3. Testing, Coverage & Static Analysis Caches
+# ==============================================================================
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.pyre/
+.hypothesis/
+
+# ==============================================================================
+# 4. IDE, Text Editor & Operating System Files
+# ==============================================================================
+# Visual Studio Code: Ignore local workspace state while preserving team configs
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json.example
+
+# JetBrains IDEs (PyCharm / IntelliJ IDEA)
+.idea/
+*.iml
+
+# Editor temporary swap and backup files
+*.swp
+*.swo
+*~
+*.bak
+
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows system files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ==============================================================================
+# 5. Environment Variables, Secrets & Local Credentials
+# ==============================================================================
+# Never commit credentials or local environment configurations
+.env
+.env.*
+*.env
+*.key
+*.pem
+*.cert
+*.crt
+secrets.json
+credentials.json
+*credentials*.json
+*.token
+
+# Explicitly preserve sanitized template configuration
+!.env.example
+
+# ==============================================================================
+# 6. Generated Datasets & Tabular Ingestion Artifacts (Mode A & Mode B)
+# ==============================================================================
+# Mode A: Generated synthetic physics datasets (train, val, test-ID, OOD benchmarks)
+data/synthetic/*.csv
+data/synthetic/*.parquet
+data/synthetic/*.feather
+data/synthetic/*.h5
+data/synthetic/*.json
+!data/synthetic/.gitkeep
+
+# Processed and split datasets generated during pipeline execution
+data/processed/
+data/interim/
+data/splits/
+
+# Mode B: Temporary examiner uploads, uploaded tabular files & local copies
+data/uploads/
+data/examiner_uploads/
+uploads/
+instance/uploads/
+temp_data/
+*.tmp
+
+# Explicitly preserve documented sample test datasets and test fixtures
+!data/examiner_samples/
+!data/examiner_samples/*.csv
+!data/examiner_samples/*.xlsx
+!tests/fixtures/
+
+# ==============================================================================
+# 7. Trained Models & Heavy Machine Learning Artifacts
+# ==============================================================================
+# Serialized surrogate model weights and scalers
+models/*.joblib
+models/*.pkl
+models/*.pickle
+models/*.onnx
+models/*.pt
+models/*.pth
+models/*.h5
+models/*.bin
+*.ckpt
+
+# Checkpoint directories
+checkpoints/
+models/checkpoints/
+
+# Preserve directory structure marker and model source code
+!models/.gitkeep
+!src/models/**
+
+# ==============================================================================
+# 8. Experiment Outputs, Metrics & Profiling Artifacts
+# ==============================================================================
+experiments/outputs/
+experiments/results/
+results/
+outputs/
+reports/generated/
+*.prof
+profile_results/
+profiling_reports/
+.benchmarks/
+
+# Jupyter / IPython Notebook checkpoints
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+
+# ==============================================================================
+# 9. Logs, Application Caches & Runtime Artifacts
+# ==============================================================================
+*.log
+logs/
+*.log.*
+temp/
+tmp/
+.cache/
+
+# ==============================================================================
+# 10. Flask Web Application & Instance Storage
+# ==============================================================================
+instance/
+.webassets-cache/
+flask_session/
+
+# ==============================================================================
+# 11. Core Version-Controlled Assets (Explicit Whitelist & Safeguards)
+# ==============================================================================
+# Research documentation and academic deliverables
+!docs/
+!docs/*.md
+!docs/research_logbook.md
+!docs/assessment_traceability.md
+!docs/process_model.md
+!docs/dataset_documentation.md
+!docs/experiment_protocol.md
+
+# Project root documentation & requirements
+!README.md
+!requirements.txt
+
+# Master simulation constants and schemas
+!config/
+!config/*.json
+!config/*.yaml
+!config/*.yml
+
+# Source code, experiment generation scripts, and test suite
+!src/**
+!experiments/**
+!tests/**

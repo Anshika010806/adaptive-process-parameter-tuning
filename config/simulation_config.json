@@ -1,0 +1,159 @@
+{
+  "scenario": "Polymer Injection Molding under Recycled Feedstock Variability",
+  "version": "1.0.0",
+  "convention_notes": "Moisture (M) and Recycled Content (C_rec) are strictly percentage-by-weight (wt %)",
+  
+  "material_inputs": {
+    "moisture_pct": {
+      "symbol": "M",
+      "units": "wt %",
+      "nominal": 0.15,
+      "train_min": 0.05,
+      "train_max": 0.50,
+      "distribution": "truncated_normal",
+      "dist_mean": 0.15,
+      "dist_std": 0.06
+    },
+    "melt_flow_index": {
+      "symbol": "MFI",
+      "units": "g/10 min",
+      "nominal": 22.0,
+      "train_min": 14.0,
+      "train_max": 30.0,
+      "distribution": "truncated_normal",
+      "dist_mean": 22.0,
+      "dist_std": 3.0
+    },
+    "ambient_temp_c": {
+      "symbol": "T_amb",
+      "units": "deg C",
+      "nominal": 24.0,
+      "train_min": 16.0,
+      "train_max": 32.0,
+      "distribution": "truncated_normal",
+      "dist_mean": 24.0,
+      "dist_std": 2.5
+    },
+    "recycled_pct": {
+      "symbol": "C_rec",
+      "units": "wt %",
+      "nominal": 25.0,
+      "train_min": 10.0,
+      "train_max": 40.0,
+      "distribution": "beta",
+      "beta_a": 2.5,
+      "beta_b": 2.5
+    }
+  },
+
+  "process_parameters": {
+    "melt_temp_c": {
+      "symbol": "T_melt",
+      "units": "deg C",
+      "nominal_sop": 230.0,
+      "min_bound": 205.0,
+      "max_bound": 255.0
+    },
+    "injection_pressure_mpa": {
+      "symbol": "P_inj",
+      "units": "MPa",
+      "nominal_sop": 100.0,
+      "min_bound": 65.0,
+      "max_bound": 145.0
+    },
+    "cooling_time_s": {
+      "symbol": "t_cool",
+      "units": "s",
+      "nominal_sop": 20.0,
+      "min_bound": 12.0,
+      "max_bound": 32.0
+    }
+  },
+
+  "quality_targets": {
+    "tensile_strength_mpa": {
+      "symbol": "S",
+      "units": "MPa",
+      "target": 52.0,
+      "spec_min": 49.0,
+      "spec_max": 55.0,
+      "tolerance_half_width": 3.0
+    },
+    "volumetric_shrinkage_pct": {
+      "symbol": "V_sh",
+      "units": "%",
+      "target": 1.20,
+      "spec_min": 0.80,
+      "spec_max": 1.60,
+      "tolerance_half_width": 0.40
+    },
+    "energy_kwh": {
+      "symbol": "E_proc",
+      "units": "kWh/cycle",
+      "max_acceptable": 4.20,
+      "nominal": 3.15
+    }
+  },
+
+  "physical_coefficients": {
+    "tensile": {
+      "S_base": 53.5,
+      "T_ref": 230.0,
+      "beta_T": 0.06,
+      "gamma_T": 0.0035,
+      "P_ref": 100.0,
+      "beta_P": 4.50,
+      "alpha_M": 1.40,
+      "lambda_M": 14.0,
+      "t_ref": 20.0,
+      "kappa_cool": 2.50,
+      "C_ref": 25.0,
+      "theta_rec": 0.08,
+      "MFI_ref": 22.0,
+      "T_span": 25.0,
+      "MFI_span": 8.0,
+      "kappa_int": 1.80,
+      "noise_sigma": 0.35
+    },
+    "shrinkage": {
+      "V_0": 1.15,
+      "T_ref": 230.0,
+      "alpha_V": 0.008,
+      "P_ref": 100.0,
+      "beta_V": 0.45,
+      "gamma_V": 1.20,
+      "tau_cool": 8.0,
+      "M_ref": 0.15,
+      "delta_M": 0.60,
+      "C_ref": 25.0,
+      "eta_rec": 0.005,
+      "noise_sigma": 0.035
+    },
+    "energy": {
+      "E_0": 0.20,
+      "c_thermal": 0.008,
+      "c_hydraulic": 0.009,
+      "c_dwell": 0.030
+    }
+  },
+
+  "optimization": {
+    "weights": {
+      "tensile": 0.50,
+      "shrinkage": 0.35,
+      "energy": 0.15
+    },
+    "penalty_scale": 100.0,
+    "max_iterations": 150
+  },
+
+  "random_seeds": {
+    "train": 42,
+    "val": 101,
+    "test_id": 202,
+    "ood_1_feedstock": 301,
+    "ood_2_thermal": 302,
+    "ood_3_extrap": 303,
+    "ood_4_sensor": 304
+  }
+}
