@@ -1,0 +1,117 @@
+{
+  "Nominal ID Test Set": {
+    "stream_name": "Nominal ID Test Set",
+    "n_samples": 750,
+    "feasibility_pct": 100.0,
+    "tuning_time_sec": 0.31746239998028614,
+    "sop_yield_mean": 100.0,
+    "sop_yield_std": 0.0,
+    "adaptive_yield_mean": 100.0,
+    "adaptive_yield_std": 0.0,
+    "delta_yield": 0.0,
+    "sop_energy_mean": 2.457584644487716,
+    "adaptive_energy_mean": 2.167362644487716,
+    "delta_energy_pct": -11.809237197626485,
+    "sop_tensile_viol_pct": 0.0,
+    "adaptive_tensile_viol_pct": 0.0,
+    "sop_shrinkage_viol_pct": 0.0,
+    "adaptive_shrinkage_viol_pct": 0.0,
+    "seeds_evaluated": [
+      1001,
+      1002,
+      1003
+    ]
+  },
+  "OOD-1 (Feedstock Degradation)": {
+    "stream_name": "OOD-1 (Feedstock Degradation)",
+    "n_samples": 500,
+    "feasibility_pct": 99.8,
+    "tuning_time_sec": 0.24079239999991842,
+    "sop_yield_mean": 68.2,
+    "sop_yield_std": 1.2754084313139307,
+    "adaptive_yield_mean": 70.13333333333333,
+    "adaptive_yield_std": 1.1115554667022007,
+    "delta_yield": 1.933333333333323,
+    "sop_energy_mean": 2.457006660465855,
+    "adaptive_energy_mean": 2.178170960465855,
+    "delta_energy_pct": -11.348593574717135,
+    "sop_tensile_viol_pct": 31.799999999999997,
+    "adaptive_tensile_viol_pct": 29.866666666666664,
+    "sop_shrinkage_viol_pct": 0.0,
+    "adaptive_shrinkage_viol_pct": 0.8000000000000007,
+    "seeds_evaluated": [
+      1001,
+      1002,
+      1003
+    ]
+  },
+  "OOD-2 (Shop-Floor Heatwave)": {
+    "stream_name": "OOD-2 (Shop-Floor Heatwave)",
+    "n_samples": 500,
+    "feasibility_pct": 100.0,
+    "tuning_time_sec": 0.2079360999923665,
+    "sop_yield_mean": 100.0,
+    "sop_yield_std": 0.0,
+    "adaptive_yield_mean": 100.0,
+    "adaptive_yield_std": 0.0,
+    "delta_yield": 0.0,
+    "sop_energy_mean": 2.3571489195074835,
+    "adaptive_energy_mean": 2.0669919861741506,
+    "delta_energy_pct": -12.309656421451725,
+    "sop_tensile_viol_pct": 0.0,
+    "adaptive_tensile_viol_pct": 0.0,
+    "sop_shrinkage_viol_pct": 0.0,
+    "adaptive_shrinkage_viol_pct": 0.0,
+    "seeds_evaluated": [
+      1001,
+      1002,
+      1003
+    ]
+  },
+  "OOD-3 (Moisture Extrapolation)": {
+    "stream_name": "OOD-3 (Moisture Extrapolation)",
+    "n_samples": 500,
+    "feasibility_pct": 0.0,
+    "tuning_time_sec": 28.040020400017966,
+    "sop_yield_mean": 0.0,
+    "sop_yield_std": 0.0,
+    "adaptive_yield_mean": 0.0,
+    "adaptive_yield_std": 0.0,
+    "delta_yield": 0.0,
+    "sop_energy_mean": 2.458102123044684,
+    "adaptive_energy_mean": 2.458102123044684,
+    "delta_energy_pct": 0.0,
+    "sop_tensile_viol_pct": 100.0,
+    "adaptive_tensile_viol_pct": 100.0,
+    "sop_shrinkage_viol_pct": 9.466666666666663,
+    "adaptive_shrinkage_viol_pct": 9.466666666666663,
+    "seeds_evaluated": [
+      1001,
+      1002,
+      1003
+    ]
+  },
+  "OOD-4 (Sensor Noise 15%)": {
+    "stream_name": "OOD-4 (Sensor Noise 15%)",
+    "n_samples": 500,
+    "feasibility_pct": 100.0,
+    "tuning_time_sec": 0.24475620000157505,
+    "sop_yield_mean": 99.66666666666667,
+    "sop_yield_std": 0.18856180831640867,
+    "adaptive_yield_mean": 99.8,
+    "adaptive_yield_std": 0.0,
+    "delta_yield": 0.13333333333332575,
+    "sop_energy_mean": 2.4567241316402697,
+    "adaptive_energy_mean": 2.1588327983069364,
+    "delta_energy_pct": -12.125550829935534,
+    "sop_tensile_viol_pct": 0.33333333333333365,
+    "adaptive_tensile_viol_pct": 0.20000000000000018,
+    "sop_shrinkage_viol_pct": 0.0,
+    "adaptive_shrinkage_viol_pct": 0.0,
+    "seeds_evaluated": [
+      1001,
+      1002,
+      1003
+    ]
+  }
+}

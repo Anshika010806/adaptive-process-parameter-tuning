@@ -71,6 +71,145 @@
 - **Interpretation & Engineering Decision:**  
   Proceed with automated unit test execution once dependencies complete. Confirm 100% pass rate before advancing to Phase 2.
 - **Next Steps:**  
-  1. Execute `pytest tests/test_simulation.py` and record exact passing assertions.
-  2. Generate initial in-distribution synthetic datasets (`train`, `val`, `test`) with locked seeds.
-  3. Inspect baseline fixed SOP yield metrics on held-out dataset.
+  1. Execute `pytest tests/test_simulation.py` and record exact passing assertions (Completed: 16/16 passed).
+  2. Generate initial in-distribution synthetic datasets (`train`, `val`, `test`) with locked seeds (Completed).
+  3. Proceed with Phase 2: Mode B profiler, dynamic pipeline, and baseline models.
+
+---
+
+### [EXP-002] 2026-10-18: Phase 2 — Baseline Surrogate Models, Static SOP Controller & Mode B Ingestion Engine
+- **Date & Experiment ID:** 2026-10-18 | EXP-002
+- **Research Question / Hypothesis:**  
+  *Hypothesis 1:* A multi-output linear regression baseline fitted on process inputs ($x_{\text{mat}}, u$) will achieve moderate accuracy on shrinkage ($R^2 > 0.90$) due to predominantly linear thermal-pressure relationships, but will exhibit significant residual error on tensile strength ($R^2 \approx 0.75$) due to unmodeled parabolic thermal degradation and non-linear moisture void kinetics, leaving a clear gap for non-linear models in Phase 3.  
+  *Hypothesis 2:* A dynamic dataset profiler and schema-agnostic preprocessing pipeline can ingest arbitrary tabular datasets (CSV / Excel) with unknown column names, missing values, and unseen categorical levels, validating configurations defensively without source-code modifications.
+- **Simulator / Dataset Configuration:**  
+  - In-Distribution Data: `dataset_train.csv` ($N = 3,500$) and held-out `dataset_test_id.csv` ($N = 750$).
+  - Examiner Test Samples: `examiner_chemical_reactor.csv` ($N = 400$), `examiner_machining_wear.xlsx` ($N = 250$), and `examiner_malformed_unsupported.csv` ($N = 80$).
+- **Model / Optimization Strategy:**  
+  - Model 1: `DummyRegressor(strategy='mean')`
+  - Model 2: `LinearRegression()` with `StandardScaler()`
+  - Model 3: `Ridge(alpha=1.0)` with `StandardScaler()`
+  - Controller: `StaticSOPController` holding $T_{\text{melt}}=230^\circ\text{C}, P_{\text{inj}}=100\text{ MPa}, t_{\text{cool}}=20\text{ s}$.
+  - Mode B Pipeline: `DatasetProfiler` + `SchemaValidator` + `DynamicPipelineBuilder` (`SimpleImputer` + `OneHotEncoder(handle_unknown='ignore')` + `StandardScaler`).
+- **Evaluation Protocol:**  
+  - Fit on training fold ($N = 3,500$), evaluate on untouched held-out test fold ($N = 750$).
+  - Measure dual-target MAE, RMSE, and $R^2$ for tensile strength and shrinkage.
+  - Measure realized yield and energy of the Static SOP controller via true simulator evaluation.
+  - Execute full unit test suite: `pytest tests/ -v` (28 tests across simulation, baselines, and profiler).
+- **Code & Configuration Changes:**  
+  - Authored Mode B modules: [src/profiling/dataset_profiler.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/src/profiling/dataset_profiler.py), [src/profiling/schema_validator.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/src/profiling/schema_validator.py), [src/profiling/dynamic_pipeline.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/src/profiling/dynamic_pipeline.py).
+  - Authored Mode A baseline models: [src/models/baseline.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/src/models/baseline.py).
+  - Authored static controller: [src/optimization/static_controller.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/src/optimization/static_controller.py).
+  - Authored experiment runner: [experiments/run_baseline_benchmarks.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/experiments/run_baseline_benchmarks.py).
+  - Authored test suites: [tests/test_profiler.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/tests/test_profiler.py) and [tests/test_baselines.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/tests/test_baselines.py).
+- **Actual Observed Results:**  
+  - **Surrogate Prediction Metrics on Held-Out Test Set ($N = 750$):**
+    - `Dummy (Mean)`: Tensile MAE = 1.410 MPa ($R^2 = -0.001$) | Shrinkage MAE = 0.146% ($R^2 = -0.001$)
+    - `Linear Regression`: Tensile MAE = 0.674 MPa ($R^2 = 0.759$) | Shrinkage MAE = 0.033% ($R^2 = 0.946$)
+    - `Ridge Regression`: Tensile MAE = 0.674 MPa ($R^2 = 0.759$) | Shrinkage MAE = 0.033% ($R^2 = 0.946$)
+  - **Static SOP Realized Performance under Nominal Stream:**
+    - Realized in-spec yield = 100.0% ($S = 52.48\text{ MPa}$, $V_{\text{sh}} = 1.25\%$, $E = 2.46\text{ kWh}$).
+    - (Contrasted with Phase 1 findings where the identical static SOP collapsed to 67.8% yield under OOD-1 and 0.0% under OOD-3).
+  - **Automated Test Suite:** 28 of 28 tests PASSED in 4.04s (`pytest tests/ -v`).
+- **Expected vs. Observed Behavior:**  
+  - Confirmed: Linear baseline achieved $R^2 = 0.946$ on volumetric shrinkage but plateaued at $R^2 = 0.759$ on tensile strength, verifying Hypothesis 1. Non-linear terms (quadratic thermal degradation and moisture void coalescence) cannot be captured by linear hyperplanes.
+  - Confirmed: The dynamic pipeline successfully handled missing values in `examiner_machining_wear.xlsx` and executed inference on previously unseen category levels (`BrandNew-Exotic-Grade`) without crashing.
+- **Errors, Failures & Limitations Discovered:**  
+  - *Bug 1 (Fixed):* Variable naming typo in `dataset_profiler.py` (`candidate_ids` vs `candidate_identifiers`) caught during initial test execution.
+  - *Bug 2 (Fixed):* The identifier heuristic initially flagged continuous floating-point variables as IDs because random floats in small datasets had 100% unique values. Added explicit type-guard `if pd.api.types.is_float_dtype(series): return False`.
+  - *Scientific Limitation Enforced:* When user maps controllable variables on purely observational tabular data without a causal simulator, `SchemaValidator` injects an explicit warning advising that recommendations assume unconfoundedness and require physical validation.
+- **Interpretation & Engineering Decision:**  
+  Phase 2 deliverables are complete and verified. Baseline models and dynamic ingestion are solid. We are now ready to advance to Phase 3: implementing the constrained adaptive parameter tuner (SciPy SLSQP + derivative-free fallback) and comparative benchmarking against non-linear Tree and Random Forest models.
+- **Next Steps:**  
+  1. Complete Phase 2 documentation checkpoint and rubric reconciliation.
+  2. Await user authorization before implementing Phase 3 adaptive tuner.
+
+---
+
+### [EXP-002-CHK] 2026-10-18: Phase 2 Documentation Checkpoint, Rubric Reconciliation & Dataset Audit
+- **Date & Experiment ID:** 2026-10-18 | EXP-002-CHK
+- **Audit Purpose & Objectives:**  
+  1. Reconcile every criterion, timeline, and mark split from the official course rubric `Mark Split 21CSE732P rubrics .pdf` (Faculty: Dr. Udendharn) into [docs/assessment_traceability.md](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/docs/assessment_traceability.md) without falsely claiming marks as earned.
+  2. Compile a rigorous, genuine literature and public dataset survey in [docs/literature_survey.md](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/docs/literature_survey.md) citing peer-reviewed literature and verifiable datasets (UCI AI4I 2020, NIST), identifying key research gaps and justifying model comparisons, OOD stress testing, and adaptive parameter tuning.
+  3. Perform a physical audit of all 7 synthetic CSV datasets in `data/synthetic/` to verify row counts, column schemas, generation methods, random seeds, and specific train/val/test/OOD roles without overwriting or regenerating them.
+  4. Preserve all existing experimental outputs and the 28-test passing baseline with zero source code modifications.
+- **Simulator & Dataset Verification:**  
+  - Verified 7 synthetic CSV files on disk:
+    - `dataset_train.csv` ($N = 3,500$, 15 columns, seed 42, LHS exploration) — Role: Surrogate fitting & transformer learning.
+    - `dataset_val.csv` ($N = 750$, 15 columns, seed 101, LHS exploration) — Role: Hyperparameter tuning & model selection.
+    - `dataset_test_id.csv` ($N = 750$, 15 columns, seed 202, LHS exploration) — Role: Held-out In-Distribution test evaluation.
+    - `dataset_ood_1_feedstock.csv` ($N = 500$, 15 columns, seed 301, fixed SOP) — Role: Raw material degradation OOD stress test ($M \uparrow 180\%, \text{MFI} \downarrow 27\%$).
+    - `dataset_ood_2_thermal.csv` ($N = 500$, 15 columns, seed 302, fixed SOP) — Role: Shop-floor heatwave OOD stress test ($T_{\text{amb}} \uparrow 12.5^\circ\text{C}$).
+    - `dataset_ood_3_extrap.csv` ($N = 500$, 15 columns, seed 303, fixed SOP) — Role: Extreme support extrapolation OOD stress test ($M \in [0.55, 0.70]\%$).
+    - `dataset_ood_4_sensor.csv` ($N = 500$, 15 columns, seed 304, fixed SOP) — Role: Noisy sensor telemetry OOD stress test ($15\%$ measurement noise).
+  - Verified 3 examiner test files in `data/examiner_samples/`:
+    - `examiner_chemical_reactor.csv` ($N = 400$, 6 features, regression target).
+    - `examiner_machining_wear.xlsx` ($N = 250$, 6 features with missing values, classification target).
+    - `examiner_malformed_unsupported.csv` ($N = 80$, malformed schema for rejection testing).
+- **Discrepancies Caught & Reconciled:**  
+  - *Discrepancy 1 (Distribution Role Clarification):* Confirmed that `dataset_test_id.csv` is strictly held-out In-Distribution (ID) data used to evaluate nominal generalization, whereas the four `dataset_ood_*.csv` datasets represent genuine distribution shifts. Clarified this distinction across all documentation files.
+  - *Discrepancy 2 (Schema Documentation Synchronization):* Discovered that `docs/dataset_documentation.md` previously listed only 12 columns, omitting `tensile_in_spec`, `shrinkage_in_spec`, and `target_infeasible_flag`. Replaced with the complete 15-column schema and updated column explanations.
+  - *Discrepancy 3 (Linear vs. Ridge 3-Decimal Metric Equivalence):* Unrounded metrics were analyzed to explain why OLS and Ridge ($\alpha=1.0$) appeared identical at 3 decimal places. Proved mathematically that the high sample-to-feature ratio ($N/p = 500$) yields eigenvalues $\approx 3500$, making an $L_2$ penalty of $\alpha=1.0$ perturb the solution by only $0.0286\%$. Unrounded values (OLS Tensile MAE = 0.674228 vs. Ridge MAE = 0.674243) confirm the regularization is functioning correctly.
+  - *Rubric Reconciliation Policy:* Formally instituted rubric separation in [docs/assessment_traceability.md](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/docs/assessment_traceability.md): no marks are claimed as earned; 32 / 100 marks are recorded as technically implemented and verified by automated tests, while 68 marks remain planned for Phases 3–6, awaiting official faculty assessment.
+- **Verification Evidence & Test Results:**  
+  - Zero modifications to simulator (`process_simulator.py`), baselines (`baseline.py`), static controller (`static_controller.py`), or profiler (`dataset_profiler.py`).
+  - Executed automated test suite: `pytest tests/ -v` — **28 of 28 tests PASSED** in 4.31 seconds.
+- **Status & Next Steps:**  
+  - Phase 2 documentation checkpoint is complete and locked.
+  - Authorized by user to proceed with Phase 3 (Gate 0 & Gate 1).
+
+---
+
+### [EXP-003] 2026-10-18: Gate 1 — Comparative Surrogate Benchmarking (Ridge vs. Decision Tree vs. Random Forest)
+- **Date & Experiment ID:** 2026-10-18 | EXP-003
+- **Research Question / Hypothesis:**  
+  *Hypothesis 1 (In-Distribution Representation):* Non-linear tree ensembles (Random Forest) will significantly outperform parametric linear baselines ($R^2 \approx 0.76$) on tensile strength, achieving $R^2 > 0.90$ by resolving parabolic thermal degradation ($-\gamma_T \Delta T^2$) and non-linear moisture voiding ($-\lambda_M M^{1.4}$).  
+  *Hypothesis 2 (OOD Extrapolation Vulnerability):* Decision trees and random forests will fail under distribution shifts outside their training convex hull (OOD-1 feedstock shift and OOD-3 moisture extrapolation) because piece-wise constant tree leaf boundaries cannot extrapolate trends, whereas parametric models (Ridge) will retain monotonic slope sensitivity.
+- **Simulator / Dataset Configuration:**  
+  - Training Set: `dataset_train.csv` ($N = 3,500$, seed 42)
+  - Validation Set: `dataset_val.csv` ($N = 750$, seed 101) for hyperparameter tuning
+  - In-Distribution Test Set: `dataset_test_id.csv` ($N = 750$, seed 202)
+  - OOD Stress Datasets ($N = 500$ each): `dataset_ood_1_feedstock.csv`, `dataset_ood_2_thermal.csv`, `dataset_ood_3_extrap.csv`, `dataset_ood_4_sensor.csv`.
+- **Model / Optimization Strategy:**  
+  - Models compared: Dummy (Mean), Linear Regression, Ridge Regression ($\alpha$ tuned on val), Decision Tree Regressor (`max_depth` & `min_samples_leaf` tuned on val), Random Forest Regressor (100 trees, `max_depth` & `min_samples_leaf` tuned on val).
+  - Multi-output targets: Tensile Strength ($S$, MPa) and Volumetric Shrinkage ($V_{\text{sh}}$, %).
+  - Strict leakage prevention: all feature scaling fit exclusively on `X_train`. Validation fold used strictly for model selection.
+- **Evaluation Protocol:**  
+  - Compute Tensile MAE, RMSE, $R^2$; Shrinkage MAE, RMSE, $R^2$; Composite Mean $R^2$; and per-sample inference latency.
+  - Evaluate on held-out ID test set ($N = 750$).
+  - Evaluate on all 4 OOD stress datasets ($N = 500$ each) without any tuning on OOD data.
+  - Automated tests: 6 new unit tests in `tests/test_surrogate_benchmark.py` covering leakage prevention, target handling, reproducibility, metric calculation, input validation, and joblib serialization.
+- **Code & Configuration Changes:**  
+  - Authored: [src/models/surrogate_benchmark.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/src/models/surrogate_benchmark.py)
+  - Updated: [src/models/__init__.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/src/models/__init__.py)
+  - Authored: `experiments/run_surrogate_benchmarks.py`
+  - Authored: [tests/test_surrogate_benchmark.py](file:///c:/Users/SHANTI%20MISHRA/AppliedAI/tests/test_surrogate_benchmark.py)
+  - Serialized pipelines saved to `models/`: `surrogate_dummy.joblib`, `surrogate_linearregression.joblib`, `surrogate_ridge.joblib`, `surrogate_decisiontree.joblib`, `surrogate_randomforest.joblib`.
+  - Saved comprehensive results payload to: `data/surrogate_benchmark_results.json`.
+- **Actual Observed Results:**  
+  - **Hyperparameter Selection on Validation Set ($N = 750$):**
+    - Ridge: best $\alpha = 10.0$ (Val Mean $R^2 = 0.8470$)
+    - Decision Tree: best `max_depth = 16`, `min_samples_leaf = 5` (Val Mean $R^2 = 0.7540$)
+    - Random Forest: best `max_depth = 18`, `min_samples_leaf = 1`, `n_estimators = 100` (Val Mean $R^2 = 0.8783$)
+  - **In-Distribution Test Performance ($N = 750$):**
+    - *Dummy:* Tensile MAE = 1.4096 ($R^2 = -0.0005$) | Shrinkage MAE = 0.1458 ($R^2 = -0.0007$)
+    - *Linear Regression:* Tensile MAE = 0.6742 ($R^2 = 0.7587$) | Shrinkage MAE = 0.0334 ($R^2 = 0.9459$) | Mean $R^2 = 0.8523$
+    - *Ridge ($\alpha=10$):* Tensile MAE = 0.6744 ($R^2 = 0.7588$) | Shrinkage MAE = 0.0334 ($R^2 = 0.9458$) | Mean $R^2 = 0.8523$
+    - *Decision Tree:* Tensile MAE = 0.5591 ($R^2 = 0.8345$) | Shrinkage MAE = 0.0776 ($R^2 = 0.6963$) | Mean $R^2 = 0.7654$
+    - *Random Forest:* **Tensile MAE = 0.4234 ($R^2 = 0.9065$)** | Shrinkage MAE = 0.0545 ($R^2 = 0.8511$) | **Mean $R^2 = 0.8788$**
+  - **OOD Stress Test Findings ($N = 500$ each):**
+    - *OOD-1 (Feedstock Shift, $M \sim 0.42\%$):* Random Forest collapses to $R^2 = -6.7323$ (MAE = 2.3951 MPa) because inputs fall outside training leaf ranges. Conversely, Ridge maintains $R^2 = 0.7134$ (MAE = 0.3914 MPa) by extrapolating the downward physical slope!
+    - *OOD-2 (Thermal Shift, $T_{\text{amb}} \sim 36.5^\circ\text{C}$):* Random Forest maintains strong fidelity: Tensile MAE = 0.3372 ($R^2 = 0.7041$), outperforming Ridge ($R^2 = -0.7417$).
+    - *OOD-3 (Extrapolation, $M \in [0.55, 0.70]\%$):* Tree models flatline at leaf boundary values: Tensile MAE $\approx 5.33$ MPa ($R^2 \approx -33.58$).
+    - *OOD-4 (Sensor Noise, 15%):* Random Forest shows superior noise filtering inside the domain envelope: Tensile MAE = 0.4205 ($R^2 = 0.6750$) vs. Ridge MAE = 0.8688 ($R^2 = 0.1524$).
+  - **Unit Tests:** **34 of 34 tests PASSED** in 4.21 seconds (`pytest tests/ -v`).
+- **Interpretation & Engineering Decision:**  
+  1. Hypothesis 1 is verified: Random Forest breaks through the $R^2 \approx 0.76$ tensile barrier to achieve $R^2 = 0.9065$, reducing tensile prediction error by $37.2\%$.
+  2. Hypothesis 2 is verified: Tree models cannot extrapolate beyond training support. Therefore, the Gate 2 Adaptive Tuner **must not rely on unconstrained tree gradient optimization**. 
+  3. Crucial Architectural Insight for Gate 2: The optimizer must implement domain boundary defense (rejecting or penalizing recommendations outside the valid training support) and should utilize a derivative-free or bounded algorithm suitable for piece-wise constant surrogates (or hybrid regularization).
+- **Next Steps:**  
+  - Present Gate 1 benchmark tables, OOD findings, and test outputs to the user.
+  - Await user approval before implementing Gate 2 (`src/optimization/adaptive_tuner.py`).
+
+
+

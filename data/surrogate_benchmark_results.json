@@ -1,0 +1,777 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-18T15:52:15Z",
+    "python_version": "3.11.17 (main, Oct  9 2026, 15:19:27) [MSC v.1944 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "sklearn_version": "1.9.1",
+    "random_state": 42,
+    "n_train": 3500,
+    "n_val": 750,
+    "n_test_id": 750,
+    "features": [
+      "moisture_pct",
+      "melt_flow_index",
+      "ambient_temp_c",
+      "recycled_pct",
+      "melt_temp_c",
+      "injection_pressure_mpa",
+      "cooling_time_s"
+    ],
+    "targets": [
+      "tensile_strength_mpa",
+      "volumetric_shrinkage_pct"
+    ]
+  },
+  "tuning_summary": {
+    "Ridge": {
+      "model_type": "Ridge",
+      "best_param": {
+        "alpha": 10.0
+      },
+      "best_val_mean_r2": 0.8469861636946687,
+      "grid_evaluated": [
+        {
+          "alpha": 0.001,
+          "val_tensile_r2": 0.7529198400473556,
+          "val_shrinkage_r2": 0.9410434637488112,
+          "val_mean_r2": 0.8469816518980834
+        },
+        {
+          "alpha": 0.01,
+          "val_tensile_r2": 0.7529198155723488,
+          "val_shrinkage_r2": 0.9410435086656184,
+          "val_mean_r2": 0.8469816621189836
+        },
+        {
+          "alpha": 0.1,
+          "val_tensile_r2": 0.752919570290882,
+          "val_shrinkage_r2": 0.9410439571373472,
+          "val_mean_r2": 0.8469817637141146
+        },
+        {
+          "alpha": 1.0,
+          "val_tensile_r2": 0.7529170643669744,
+          "val_shrinkage_r2": 0.941048372259466,
+          "val_mean_r2": 0.8469827183132201
+        },
+        {
+          "alpha": 10.0,
+          "val_tensile_r2": 0.7528867245683264,
+          "val_shrinkage_r2": 0.9410856028210112,
+          "val_mean_r2": 0.8469861636946687
+        },
+        {
+          "alpha": 100.0,
+          "val_tensile_r2": 0.7520843779371498,
+          "val_shrinkage_r2": 0.9408031127618827,
+          "val_mean_r2": 0.8464437453495162
+        },
+        {
+          "alpha": 1000.0,
+          "val_tensile_r2": 0.7142343207921751,
+          "val_shrinkage_r2": 0.8983173881121814,
+          "val_mean_r2": 0.8062758544521782
+        }
+      ]
+    },
+    "DecisionTree": {
+      "model_type": "DecisionTree",
+      "best_param": {
+        "max_depth": 16,
+        "min_samples_leaf": 5
+      },
+      "best_val_mean_r2": 0.7540052851785766,
+      "grid_evaluated": [
+        {
+          "max_depth": 4,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.6760897473255253,
+          "val_shrinkage_r2": 0.5470982883282809,
+          "val_mean_r2": 0.611594017826903
+        },
+        {
+          "max_depth": 4,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.6760897473255253,
+          "val_shrinkage_r2": 0.5470982883282809,
+          "val_mean_r2": 0.611594017826903
+        },
+        {
+          "max_depth": 4,
+          "min_samples_leaf": 5,
+          "val_tensile_r2": 0.6760897473255253,
+          "val_shrinkage_r2": 0.5470982883282809,
+          "val_mean_r2": 0.611594017826903
+        },
+        {
+          "max_depth": 4,
+          "min_samples_leaf": 10,
+          "val_tensile_r2": 0.6760897473255253,
+          "val_shrinkage_r2": 0.5470982883282809,
+          "val_mean_r2": 0.611594017826903
+        },
+        {
+          "max_depth": 6,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.7772589991394577,
+          "val_shrinkage_r2": 0.6009464196719796,
+          "val_mean_r2": 0.6891027094057187
+        },
+        {
+          "max_depth": 6,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.7772791904592258,
+          "val_shrinkage_r2": 0.6009588009675063,
+          "val_mean_r2": 0.6891189957133661
+        },
+        {
+          "max_depth": 6,
+          "min_samples_leaf": 5,
+          "val_tensile_r2": 0.7792543833653636,
+          "val_shrinkage_r2": 0.6007361653536791,
+          "val_mean_r2": 0.6899952743595213
+        },
+        {
+          "max_depth": 6,
+          "min_samples_leaf": 10,
+          "val_tensile_r2": 0.7793659041541601,
+          "val_shrinkage_r2": 0.6003393987252479,
+          "val_mean_r2": 0.689852651439704
+        },
+        {
+          "max_depth": 8,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.8094956330386951,
+          "val_shrinkage_r2": 0.6466008061089612,
+          "val_mean_r2": 0.7280482195738281
+        },
+        {
+          "max_depth": 8,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.8073134940957677,
+          "val_shrinkage_r2": 0.6460665947671721,
+          "val_mean_r2": 0.7266900444314699
+        },
+        {
+          "max_depth": 8,
+          "min_samples_leaf": 5,
+          "val_tensile_r2": 0.8140267522878597,
+          "val_shrinkage_r2": 0.6504106776087766,
+          "val_mean_r2": 0.7322187149483181
+        },
+        {
+          "max_depth": 8,
+          "min_samples_leaf": 10,
+          "val_tensile_r2": 0.8183807258710541,
+          "val_shrinkage_r2": 0.6519650647865258,
+          "val_mean_r2": 0.7351728953287899
+        },
+        {
+          "max_depth": 10,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.8086503504109365,
+          "val_shrinkage_r2": 0.649613820335672,
+          "val_mean_r2": 0.7291320853733043
+        },
+        {
+          "max_depth": 10,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.8136323612749208,
+          "val_shrinkage_r2": 0.6453734057209253,
+          "val_mean_r2": 0.729502883497923
+        },
+        {
+          "max_depth": 10,
+          "min_samples_leaf": 5,
+          "val_tensile_r2": 0.8259709982481186,
+          "val_shrinkage_r2": 0.6511103428543066,
+          "val_mean_r2": 0.7385406705512125
+        },
+        {
+          "max_depth": 10,
+          "min_samples_leaf": 10,
+          "val_tensile_r2": 0.8287267887486149,
+          "val_shrinkage_r2": 0.6597414723880094,
+          "val_mean_r2": 0.7442341305683122
+        },
+        {
+          "max_depth": 12,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.8031406399963685,
+          "val_shrinkage_r2": 0.6209529494127837,
+          "val_mean_r2": 0.7120467947045761
+        },
+        {
+          "max_depth": 12,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.810555103580122,
+          "val_shrinkage_r2": 0.6640338910166504,
+          "val_mean_r2": 0.7372944972983861
+        },
+        {
+          "max_depth": 12,
+          "min_samples_leaf": 5,
+          "val_tensile_r2": 0.8318202634312135,
+          "val_shrinkage_r2": 0.6742858080786232,
+          "val_mean_r2": 0.7530530357549183
+        },
+        {
+          "max_depth": 12,
+          "min_samples_leaf": 10,
+          "val_tensile_r2": 0.8311060772304251,
+          "val_shrinkage_r2": 0.6707052557694886,
+          "val_mean_r2": 0.7509056664999568
+        },
+        {
+          "max_depth": 16,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.8002370162145376,
+          "val_shrinkage_r2": 0.5864582354645569,
+          "val_mean_r2": 0.6933476258395472
+        },
+        {
+          "max_depth": 16,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.8049584596309047,
+          "val_shrinkage_r2": 0.667889084721154,
+          "val_mean_r2": 0.7364237721760294
+        },
+        {
+          "max_depth": 16,
+          "min_samples_leaf": 5,
+          "val_tensile_r2": 0.8313283757099205,
+          "val_shrinkage_r2": 0.6766821946472326,
+          "val_mean_r2": 0.7540052851785766
+        },
+        {
+          "max_depth": 16,
+          "min_samples_leaf": 10,
+          "val_tensile_r2": 0.8311825902471696,
+          "val_shrinkage_r2": 0.6705466099297775,
+          "val_mean_r2": 0.7508646000884736
+        },
+        {
+          "max_depth": null,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.8027462995651697,
+          "val_shrinkage_r2": 0.5726718027216653,
+          "val_mean_r2": 0.6877090511434175
+        },
+        {
+          "max_depth": null,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.8027068638061517,
+          "val_shrinkage_r2": 0.6628637889619888,
+          "val_mean_r2": 0.7327853263840702
+        },
+        {
+          "max_depth": null,
+          "min_samples_leaf": 5,
+          "val_tensile_r2": 0.8313283757099205,
+          "val_shrinkage_r2": 0.6766821946472326,
+          "val_mean_r2": 0.7540052851785766
+        },
+        {
+          "max_depth": null,
+          "min_samples_leaf": 10,
+          "val_tensile_r2": 0.8311825902471696,
+          "val_shrinkage_r2": 0.6705466099297775,
+          "val_mean_r2": 0.7508646000884736
+        }
+      ]
+    },
+    "RandomForest": {
+      "model_type": "RandomForest",
+      "best_param": {
+        "n_estimators": 100,
+        "max_depth": 18,
+        "min_samples_leaf": 1
+      },
+      "best_val_mean_r2": 0.878335905259108,
+      "grid_evaluated": [
+        {
+          "n_estimators": 100,
+          "max_depth": 6,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.8504379046043216,
+          "val_shrinkage_r2": 0.6611816360825451,
+          "val_mean_r2": 0.7558097703434333
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 6,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.8505331773989134,
+          "val_shrinkage_r2": 0.6610323200279842,
+          "val_mean_r2": 0.7557827487134487
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 6,
+          "min_samples_leaf": 4,
+          "val_tensile_r2": 0.8502556726756252,
+          "val_shrinkage_r2": 0.6612711730821668,
+          "val_mean_r2": 0.755763422878896
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 10,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.9102434867806356,
+          "val_shrinkage_r2": 0.7754957661689478,
+          "val_mean_r2": 0.8428696264747917
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 10,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.9091745663817946,
+          "val_shrinkage_r2": 0.7749583297506436,
+          "val_mean_r2": 0.8420664480662191
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 10,
+          "min_samples_leaf": 4,
+          "val_tensile_r2": 0.9067156553786535,
+          "val_shrinkage_r2": 0.7693074529112597,
+          "val_mean_r2": 0.8380115541449566
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 14,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.9149890597864196,
+          "val_shrinkage_r2": 0.8303600387767618,
+          "val_mean_r2": 0.8726745492815907
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 14,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.9136653519485646,
+          "val_shrinkage_r2": 0.8198701409960831,
+          "val_mean_r2": 0.8667677464723238
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 14,
+          "min_samples_leaf": 4,
+          "val_tensile_r2": 0.9094921091361492,
+          "val_shrinkage_r2": 0.7940619699944728,
+          "val_mean_r2": 0.851777039565311
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 18,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.9158610169664526,
+          "val_shrinkage_r2": 0.8408107935517634,
+          "val_mean_r2": 0.878335905259108
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 18,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.9137313342665039,
+          "val_shrinkage_r2": 0.8230588130762081,
+          "val_mean_r2": 0.8683950736713559
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": 18,
+          "min_samples_leaf": 4,
+          "val_tensile_r2": 0.9095363305062556,
+          "val_shrinkage_r2": 0.7945592112707136,
+          "val_mean_r2": 0.8520477708884846
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": null,
+          "min_samples_leaf": 1,
+          "val_tensile_r2": 0.9159856370534709,
+          "val_shrinkage_r2": 0.8400971662562718,
+          "val_mean_r2": 0.8780414016548714
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": null,
+          "min_samples_leaf": 2,
+          "val_tensile_r2": 0.9135110940355237,
+          "val_shrinkage_r2": 0.8227464463378981,
+          "val_mean_r2": 0.8681287701867109
+        },
+        {
+          "n_estimators": 100,
+          "max_depth": null,
+          "min_samples_leaf": 4,
+          "val_tensile_r2": 0.9095363305062556,
+          "val_shrinkage_r2": 0.7945592112707136,
+          "val_mean_r2": 0.8520477708884846
+        }
+      ]
+    }
+  },
+  "id_test_benchmarks": [
+    {
+      "model_name": "Dummy",
+      "dataset_role": "test_id",
+      "n_samples": 750,
+      "tensile_mae": 1.4095730988563921,
+      "tensile_rmse": 1.747360985619566,
+      "tensile_r2": -0.0005164947218894156,
+      "shrinkage_mae": 0.145751188748822,
+      "shrinkage_rmse": 0.17917124732239045,
+      "shrinkage_r2": -0.0006712322004025495,
+      "mean_r2": -0.0005938634611459825,
+      "mean_rmse": 0.9632661164709783,
+      "inference_latency_ms": 0.0002244000012675921
+    },
+    {
+      "model_name": "LinearRegression",
+      "dataset_role": "test_id",
+      "n_samples": 750,
+      "tensile_mae": 0.6742280082345199,
+      "tensile_rmse": 0.8580519685793889,
+      "tensile_r2": 0.7587395311363865,
+      "shrinkage_mae": 0.03341450099920281,
+      "shrinkage_rmse": 0.04167902154323375,
+      "shrinkage_r2": 0.9458510785985752,
+      "mean_r2": 0.8522953048674808,
+      "mean_rmse": 0.44986549506131135,
+      "inference_latency_ms": 0.001313733325029413
+    },
+    {
+      "model_name": "Ridge",
+      "dataset_role": "test_id",
+      "n_samples": 750,
+      "tensile_mae": 0.6743873069612808,
+      "tensile_rmse": 0.8579844864115426,
+      "tensile_r2": 0.7587774778805078,
+      "shrinkage_mae": 0.03344641804918061,
+      "shrinkage_rmse": 0.0417133271359477,
+      "shrinkage_r2": 0.9457619030246152,
+      "mean_r2": 0.8522696904525615,
+      "mean_rmse": 0.4498489067737451,
+      "inference_latency_ms": 0.0007485333286846677
+    },
+    {
+      "model_name": "DecisionTree",
+      "dataset_role": "test_id",
+      "n_samples": 750,
+      "tensile_mae": 0.5590959665446751,
+      "tensile_rmse": 0.7107417979471624,
+      "tensile_r2": 0.8344677201384745,
+      "shrinkage_mae": 0.07759052339339834,
+      "shrinkage_rmse": 0.0987087033313486,
+      "shrinkage_r2": 0.6962853967076106,
+      "mean_r2": 0.7653765584230425,
+      "mean_rmse": 0.4047252506392555,
+      "inference_latency_ms": 0.0009426666656509042
+    },
+    {
+      "model_name": "RandomForest",
+      "dataset_role": "test_id",
+      "n_samples": 750,
+      "tensile_mae": 0.4234376252618125,
+      "tensile_rmse": 0.5340464052665479,
+      "tensile_r2": 0.9065418939536014,
+      "shrinkage_mae": 0.05449720757828417,
+      "shrinkage_rmse": 0.06911269540808608,
+      "shrinkage_r2": 0.8511083159064852,
+      "mean_r2": 0.8788251049300433,
+      "mean_rmse": 0.301579550337317,
+      "inference_latency_ms": 0.060538933340770505
+    }
+  ],
+  "ood_benchmarks": {
+    "ood_1_feedstock": [
+      {
+        "model_name": "Dummy",
+        "dataset_role": "ood_1_feedstock",
+        "n_samples": 500,
+        "tensile_mae": 2.438683543463873,
+        "tensile_rmse": 2.601788003646489,
+        "tensile_r2": -7.233923145871687,
+        "shrinkage_mae": 0.187582818521043,
+        "shrinkage_rmse": 0.1957900944915204,
+        "shrinkage_r2": -11.175139485762367,
+        "mean_r2": -9.204531315817027,
+        "mean_rmse": 1.3987890490690047,
+        "inference_latency_ms": 0.000311999989207834
+      },
+      {
+        "model_name": "LinearRegression",
+        "dataset_role": "ood_1_feedstock",
+        "n_samples": 500,
+        "tensile_mae": 0.3950643331797239,
+        "tensile_rmse": 0.48915759465981823,
+        "tensile_r2": 0.7089546957264168,
+        "shrinkage_mae": 0.03254958152430951,
+        "shrinkage_rmse": 0.040467974163312624,
+        "shrinkage_r2": 0.47986576284184823,
+        "mean_r2": 0.5944102292841325,
+        "mean_rmse": 0.2648127844115654,
+        "inference_latency_ms": 0.0023116000229492784
+      },
+      {
+        "model_name": "Ridge",
+        "dataset_role": "ood_1_feedstock",
+        "n_samples": 500,
+        "tensile_mae": 0.3914471482270865,
+        "tensile_rmse": 0.48539899033554557,
+        "tensile_r2": 0.7134101979488241,
+        "shrinkage_mae": 0.032340132384689114,
+        "shrinkage_rmse": 0.04021013363817913,
+        "shrinkage_r2": 0.48647268810831645,
+        "mean_r2": 0.5999414430285703,
+        "mean_rmse": 0.26280456198686236,
+        "inference_latency_ms": 0.001579199975822121
+      },
+      {
+        "model_name": "DecisionTree",
+        "dataset_role": "ood_1_feedstock",
+        "n_samples": 500,
+        "tensile_mae": 2.345985333419737,
+        "tensile_rmse": 2.519082207355704,
+        "tensile_r2": -6.718762461643276,
+        "shrinkage_mae": 0.08258674534421684,
+        "shrinkage_rmse": 0.09670119987812623,
+        "shrinkage_r2": -1.9699985634851438,
+        "mean_r2": -4.34438051256421,
+        "mean_rmse": 1.3078917036169153,
+        "inference_latency_ms": 0.0008647999493405223
+      },
+      {
+        "model_name": "RandomForest",
+        "dataset_role": "ood_1_feedstock",
+        "n_samples": 500,
+        "tensile_mae": 2.3951488518506,
+        "tensile_rmse": 2.521298063077547,
+        "tensile_r2": -6.732347716105159,
+        "shrinkage_mae": 0.08859362891463533,
+        "shrinkage_rmse": 0.10209458653479343,
+        "shrinkage_r2": -2.310533163435334,
+        "mean_r2": -4.521440439770247,
+        "mean_rmse": 1.3116963248061702,
+        "inference_latency_ms": 0.08423639996908605
+      }
+    ],
+    "ood_2_thermal": [
+      {
+        "model_name": "Dummy",
+        "dataset_role": "ood_2_thermal",
+        "n_samples": 500,
+        "tensile_mae": 0.8445468969080057,
+        "tensile_rmse": 1.01952587671251,
+        "tensile_r2": -0.6401994821382593,
+        "shrinkage_mae": 0.0515475734301285,
+        "shrinkage_rmse": 0.06518789486104888,
+        "shrinkage_r2": -0.15407132641899346,
+        "mean_r2": -0.39713540427862637,
+        "mean_rmse": 0.5423568857867794,
+        "inference_latency_ms": 0.000311999989207834
+      },
+      {
+        "model_name": "LinearRegression",
+        "dataset_role": "ood_2_thermal",
+        "n_samples": 500,
+        "tensile_mae": 0.9904940092446486,
+        "tensile_rmse": 1.051891762027361,
+        "tensile_r2": -0.7459920905441573,
+        "shrinkage_mae": 0.03360973217582971,
+        "shrinkage_rmse": 0.04150926704275502,
+        "shrinkage_r2": 0.5320614040269488,
+        "mean_r2": -0.10696534325860424,
+        "mean_rmse": 0.546700514535058,
+        "inference_latency_ms": 0.0015507999924011528
+      },
+      {
+        "model_name": "Ridge",
+        "dataset_role": "ood_2_thermal",
+        "n_samples": 500,
+        "tensile_mae": 0.989151087400565,
+        "tensile_rmse": 1.0506115627706143,
+        "tensile_r2": -0.7417447759870772,
+        "shrinkage_mae": 0.03354951928560655,
+        "shrinkage_rmse": 0.04144130856257708,
+        "shrinkage_r2": 0.5335923568212051,
+        "mean_r2": -0.10407620958293606,
+        "mean_rmse": 0.5460264356665957,
+        "inference_latency_ms": 0.001889800012577325
+      },
+      {
+        "model_name": "DecisionTree",
+        "dataset_role": "ood_2_thermal",
+        "n_samples": 500,
+        "tensile_mae": 0.5186344546741931,
+        "tensile_rmse": 0.6384741364221383,
+        "tensile_r2": 0.35673964967899807,
+        "shrinkage_mae": 0.058547187501474855,
+        "shrinkage_rmse": 0.07075114785301524,
+        "shrinkage_r2": -0.3594577608409255,
+        "mean_r2": -0.0013590555809637195,
+        "mean_rmse": 0.3546126421375768,
+        "inference_latency_ms": 0.0010287999757565558
+      },
+      {
+        "model_name": "RandomForest",
+        "dataset_role": "ood_2_thermal",
+        "n_samples": 500,
+        "tensile_mae": 0.33718153847765153,
+        "tensile_rmse": 0.4330064086658842,
+        "tensile_r2": 0.7041382563438086,
+        "shrinkage_mae": 0.042785538742211936,
+        "shrinkage_rmse": 0.05204781003318842,
+        "shrinkage_r2": 0.2642950811893434,
+        "mean_r2": 0.484216668766576,
+        "mean_rmse": 0.2425271093495363,
+        "inference_latency_ms": 0.08833460003370419
+      }
+    ],
+    "ood_3_extrap": [
+      {
+        "model_name": "Dummy",
+        "dataset_role": "ood_3_extrap",
+        "n_samples": 500,
+        "tensile_mae": 5.56777293170647,
+        "tensile_rmse": 5.642675087436467,
+        "tensile_r2": -36.91864424865208,
+        "shrinkage_mae": 0.30824808208267995,
+        "shrinkage_rmse": 0.3125094333579407,
+        "shrinkage_r2": -35.91959606790593,
+        "mean_r2": -36.419120158279,
+        "mean_rmse": 2.977592260397204,
+        "inference_latency_ms": 0.00046280003152787685
+      },
+      {
+        "model_name": "LinearRegression",
+        "dataset_role": "ood_3_extrap",
+        "n_samples": 500,
+        "tensile_mae": 0.878644152912763,
+        "tensile_rmse": 0.9770977523661638,
+        "tensile_r2": -0.13699549028181623,
+        "shrinkage_mae": 0.029593085209049845,
+        "shrinkage_rmse": 0.036084062162346886,
+        "shrinkage_r2": 0.5077774311585087,
+        "mean_r2": 0.18539097043834624,
+        "mean_rmse": 0.5065909072642554,
+        "inference_latency_ms": 0.002418800024315715
+      },
+      {
+        "model_name": "Ridge",
+        "dataset_role": "ood_3_extrap",
+        "n_samples": 500,
+        "tensile_mae": 0.8916928714077649,
+        "tensile_rmse": 0.9895323687030795,
+        "tensile_r2": -0.16611860292917813,
+        "shrinkage_mae": 0.029326113028334325,
+        "shrinkage_rmse": 0.035768307759669805,
+        "shrinkage_r2": 0.5163541503252267,
+        "mean_r2": 0.17511777369802428,
+        "mean_rmse": 0.5126503382313746,
+        "inference_latency_ms": 0.0015731999883428216
+      },
+      {
+        "model_name": "DecisionTree",
+        "dataset_role": "ood_3_extrap",
+        "n_samples": 500,
+        "tensile_mae": 5.301651955978694,
+        "tensile_rmse": 5.370226169071954,
+        "tensile_r2": -33.34534369260483,
+        "shrinkage_mae": 0.20270474048698145,
+        "shrinkage_rmse": 0.2082150834646781,
+        "shrinkage_r2": -15.38909802171904,
+        "mean_r2": -24.367220857161932,
+        "mean_rmse": 2.789220626268316,
+        "inference_latency_ms": 0.0008956000092439353
+      },
+      {
+        "model_name": "RandomForest",
+        "dataset_role": "ood_3_extrap",
+        "n_samples": 500,
+        "tensile_mae": 5.332818094135893,
+        "tensile_rmse": 5.38890491690064,
+        "tensile_r2": -33.58467949585891,
+        "shrinkage_mae": 0.21389448270930966,
+        "shrinkage_rmse": 0.22020627646027818,
+        "shrinkage_r2": -17.331164921739962,
+        "mean_r2": -25.457922208799435,
+        "mean_rmse": 2.804555596680459,
+        "inference_latency_ms": 0.08927699999185279
+      }
+    ],
+    "ood_4_sensor": [
+      {
+        "model_name": "Dummy",
+        "dataset_role": "ood_4_sensor",
+        "n_samples": 500,
+        "tensile_mae": 0.9401096667137493,
+        "tensile_rmse": 1.13166282253139,
+        "tensile_r2": -0.2324301091483123,
+        "shrinkage_mae": 0.05520772454351854,
+        "shrinkage_rmse": 0.07194016580714899,
+        "shrinkage_r2": -0.22664781416432178,
+        "mean_r2": -0.22953896165631704,
+        "mean_rmse": 0.6018014941692695,
+        "inference_latency_ms": 0.00031239999225363135
+      },
+      {
+        "model_name": "LinearRegression",
+        "dataset_role": "ood_4_sensor",
+        "n_samples": 500,
+        "tensile_mae": 0.8697727503077542,
+        "tensile_rmse": 0.9393689192969396,
+        "tensile_r2": 0.1508183988003885,
+        "shrinkage_mae": 0.03291835983376972,
+        "shrinkage_rmse": 0.04116666361651889,
+        "shrinkage_r2": 0.5983309567764008,
+        "mean_r2": 0.37457467778839465,
+        "mean_rmse": 0.4902677914567292,
+        "inference_latency_ms": 0.0013438000460155308
+      },
+      {
+        "model_name": "Ridge",
+        "dataset_role": "ood_4_sensor",
+        "n_samples": 500,
+        "tensile_mae": 0.8687616306145676,
+        "tensile_rmse": 0.9384744084420595,
+        "tensile_r2": 0.15243488936156324,
+        "shrinkage_mae": 0.03285523437817139,
+        "shrinkage_rmse": 0.04108435436304661,
+        "shrinkage_r2": 0.5999355574302742,
+        "mean_r2": 0.3761852233959187,
+        "mean_rmse": 0.48977938140255306,
+        "inference_latency_ms": 0.002435999980662018
+      },
+      {
+        "model_name": "DecisionTree",
+        "dataset_role": "ood_4_sensor",
+        "n_samples": 500,
+        "tensile_mae": 0.559416467944443,
+        "tensile_rmse": 0.7226594901297136,
+        "tensile_r2": 0.49743108476484954,
+        "shrinkage_mae": 0.056211102619126575,
+        "shrinkage_rmse": 0.06983120014995114,
+        "shrinkage_r2": -0.15578228215840673,
+        "mean_r2": 0.1708244013032214,
+        "mean_rmse": 0.3962453451398324,
+        "inference_latency_ms": 0.0011837999918498099
+      },
+      {
+        "model_name": "RandomForest",
+        "dataset_role": "ood_4_sensor",
+        "n_samples": 500,
+        "tensile_mae": 0.42054030284161104,
+        "tensile_rmse": 0.581122148282972,
+        "tensile_r2": 0.6750151927273049,
+        "shrinkage_mae": 0.04320701600453799,
+        "shrinkage_rmse": 0.05327280590184753,
+        "shrinkage_r2": 0.3273515215770284,
+        "mean_r2": 0.5011833571521667,
+        "mean_rmse": 0.3171974770924098,
+        "inference_latency_ms": 0.08258460002252832
+      }
+    ]
+  }
+}

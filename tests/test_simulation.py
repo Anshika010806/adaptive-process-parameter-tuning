@@ -6,6 +6,12 @@ Worklet: No. 28 - AI-Based Adaptive Process Parameter Tuning
 """
 
 import math
+import os
+import sys
+
+# Ensure repository root is in sys.path when script is executed directly
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -310,3 +316,9 @@ def test_data_generator_ood_scenarios_execute(sim):
 
     df_ood4 = generator.generate_ood_4_sensor_noise(n=50, seed=304)
     assert len(df_ood4) == 50
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(pytest.main(["-v", __file__]))
+

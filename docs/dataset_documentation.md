@@ -88,14 +88,14 @@ To satisfy the official worklet requirement of a generalization study on input-v
 
 ## 4. Tabular Data Schema
 
-Every generated dataset is persisted to CSV with the following standardized header columns:
+Every generated dataset is persisted to CSV with the following standardized 15-column schema:
 
 ```csv
-cycle_id,moisture_pct,melt_flow_index,ambient_temp_c,recycled_pct,melt_temp_c,injection_pressure_mpa,cooling_time_s,tensile_strength_mpa,volumetric_shrinkage_pct,energy_kwh,in_spec_flag
+cycle_id,moisture_pct,melt_flow_index,ambient_temp_c,recycled_pct,melt_temp_c,injection_pressure_mpa,cooling_time_s,tensile_strength_mpa,volumetric_shrinkage_pct,energy_kwh,in_spec_flag,tensile_in_spec,shrinkage_in_spec,target_infeasible_flag
 ```
 
 Where:
-- `cycle_id`: Unique integer sequential identifier.
+- `cycle_id`: Unique integer sequential identifier ($1 \dots N$).
 - `moisture_pct`: Feedstock moisture content ($M$, wt %).
 - `melt_flow_index`: Melt Flow Index ($\text{MFI}$, g/10 min).
 - `ambient_temp_c`: Ambient factory temperature ($T_{\text{amb}}$, °C).
@@ -106,4 +106,24 @@ Where:
 - `tensile_strength_mpa`: Realized part tensile yield strength ($S$, MPa).
 - `volumetric_shrinkage_pct`: Realized volumetric shrinkage ($V_{\text{sh}}$, %).
 - `energy_kwh`: Realized specific process energy ($E_{\text{proc}}$, kWh).
-- `in_spec_flag`: Boolean integer ($1$ if $S \in [49.0, 55.0]$ and $V_{\text{sh}} \in [0.80, 1.60]$; $0$ otherwise).
+- `in_spec_flag`: Composite boolean flag ($1$ if both tensile and shrinkage are within specification; $0$ otherwise).
+- `tensile_in_spec`: Individual boolean flag ($1$ if $S \in [49.0, 55.0]\text{ MPa}$; $0$ otherwise).
+- `shrinkage_in_spec`: Individual boolean flag ($1$ if $V_{\text{sh}} \in [0.80, 1.60]\%$; $0$ otherwise).
+- `target_infeasible_flag`: Physical infeasibility flag ($1$ if physical state cannot achieve nominal target under safe actuator limits; $0$ otherwise).
+
+---
+
+## 5. Dataset Inventory, Generation Methods, and Experimental Roles
+
+The following table provides complete traceability for the 7 synthetic CSV files located in `data/synthetic/`:
+
+| Filename | Records ($N$) | Generation Method | Seed | Actuator Policy | Intended Experimental Role |
+| :--- | :---: | :--- | :---: | :--- | :--- |
+| `dataset_train.csv` | 3,500 | `generate_in_distribution_dataset` | `42` | Uniform exploration: $T \in [205, 255]$, $P \in [65, 145]$, $t \in [12, 32]$ | Fitting ML surrogate models and learning preprocessing transformers without data leakage. |
+| `dataset_val.csv` | 750 | `generate_in_distribution_dataset` | `101` | Uniform exploration across safe operating envelope | Hyperparameter tuning, tree depth selection, and surrogate early stopping. |
+| `dataset_test_id.csv` | 750 | `generate_in_distribution_dataset` | `202` | Uniform exploration across safe operating envelope | Unbiased out-of-sample evaluation of surrogate accuracy under nominal distributions. |
+| `dataset_ood_1_feedstock.csv` | 500 | `generate_ood_1_feedstock_shift` | `301` | Fixed SOP: $T=230^\circ\text{C}, P=100\text{ MPa}, t=20\text{ s}$ | OOD stress test for raw material degradation ($M \uparrow 180\%, \text{MFI} \downarrow 27\%$). Evaluates quality drift under static SOP vs. adaptive recovery. |
+| `dataset_ood_2_thermal.csv` | 500 | `generate_ood_2_thermal_shift` | `302` | Fixed SOP: $T=230^\circ\text{C}, P=100\text{ MPa}, t=20\text{ s}$ | OOD stress test for summer shop-floor heatwaves ($T_{\text{amb}} \uparrow 12.5^\circ\text{C}$). Evaluates thermal drift and energy sensitivity. |
+| `dataset_ood_3_extrap.csv` | 500 | `generate_ood_3_extrap` | `303` | Fixed SOP: $T=230^\circ\text{C}, P=100\text{ MPa}, t=20\text{ s}$ | OOD stress test for extreme support extrapolation ($M \in [0.55, 0.70]\%$). Tests physical infeasibility detection and surrogate boundary defense. |
+| `dataset_ood_4_sensor.csv` | 500 | `generate_ood_4_sensor_noise` | `304` | Fixed SOP: $T=230^\circ\text{C}, P=100\text{ MPa}, t=20\text{ s}$ | OOD stress test for noisy telemetry ($15\%$ zero-mean Gaussian noise on $M$ and $\text{MFI}$). Tests controller robustness against sensor corruption. |
+

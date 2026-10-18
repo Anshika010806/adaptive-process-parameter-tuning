@@ -1,0 +1,172 @@
+{
+  "ablation": [
+    {
+      "ablated_feature": "NONE (Baseline)",
+      "tensile_mae": 0.4234376252618127,
+      "tensile_rmse": 0.5340464052665482,
+      "tensile_r2": 0.9065418939536014,
+      "shrinkage_mae": 0.05449720757828417,
+      "shrinkage_rmse": 0.06911269540808608,
+      "shrinkage_r2": 0.8511083159064852
+    },
+    {
+      "tensile_mae": 0.5849127209962335,
+      "tensile_rmse": 0.7248010490742078,
+      "tensile_r2": 0.8278541291728987,
+      "shrinkage_mae": 0.05706509993141427,
+      "shrinkage_rmse": 0.07256064578407595,
+      "shrinkage_r2": 0.8358816813918035,
+      "ablated_feature": "moisture_pct",
+      "tensile_r2_drop": 0.07868776478070272,
+      "shrinkage_r2_drop": 0.015226634514681647
+    },
+    {
+      "tensile_mae": 0.49250167981573484,
+      "tensile_rmse": 0.6261209843825967,
+      "tensile_r2": 0.8715377565625122,
+      "shrinkage_mae": 0.05139381056661401,
+      "shrinkage_rmse": 0.06495783502925859,
+      "shrinkage_r2": 0.8684721066064969,
+      "ablated_feature": "melt_flow_index",
+      "tensile_r2_drop": 0.03500413739108921,
+      "shrinkage_r2_drop": -0.017363790700011705
+    },
+    {
+      "tensile_mae": 0.42016394825232023,
+      "tensile_rmse": 0.5301076660492359,
+      "tensile_r2": 0.9079153688360482,
+      "shrinkage_mae": 0.05273094080516169,
+      "shrinkage_rmse": 0.06699017251425661,
+      "shrinkage_r2": 0.8601131235569787,
+      "ablated_feature": "ambient_temp_c",
+      "tensile_r2_drop": -0.001373474882446768,
+      "shrinkage_r2_drop": -0.009004807650493496
+    },
+    {
+      "tensile_mae": 0.5580002750672235,
+      "tensile_rmse": 0.694914189320706,
+      "tensile_r2": 0.8417581533052214,
+      "shrinkage_mae": 0.05481157000077324,
+      "shrinkage_rmse": 0.0696098444930221,
+      "shrinkage_r2": 0.8489585634363715,
+      "ablated_feature": "recycled_pct",
+      "tensile_r2_drop": 0.06478374064838,
+      "shrinkage_r2_drop": 0.0021497524701136195
+    },
+    {
+      "tensile_mae": 0.9820866895781558,
+      "tensile_rmse": 1.2461324503898878,
+      "tensile_r2": 0.4911527935541429,
+      "shrinkage_mae": 0.11261757714646414,
+      "shrinkage_rmse": 0.13374165414390815,
+      "shrinkage_r2": 0.44244442698611375,
+      "ablated_feature": "melt_temp_c",
+      "tensile_r2_drop": 0.41538910039945853,
+      "shrinkage_r2_drop": 0.4086638889203714
+    },
+    {
+      "tensile_mae": 0.9461173978105294,
+      "tensile_rmse": 1.135597346425964,
+      "tensile_r2": 0.5774211844394755,
+      "shrinkage_mae": 0.10079966561602403,
+      "shrinkage_rmse": 0.11982202743646829,
+      "shrinkage_r2": 0.5524638639129709,
+      "ablated_feature": "injection_pressure_mpa",
+      "tensile_r2_drop": 0.32912070951412586,
+      "shrinkage_r2_drop": 0.2986444519935143
+    },
+    {
+      "tensile_mae": 0.42201373579208795,
+      "tensile_rmse": 0.5292586799061368,
+      "tensile_r2": 0.9082100862226428,
+      "shrinkage_mae": 0.06852200192590187,
+      "shrinkage_rmse": 0.08534830486311816,
+      "shrinkage_r2": 0.7729379365988456,
+      "ablated_feature": "cooling_time_s",
+      "tensile_r2_drop": -0.0016681922690413575,
+      "shrinkage_r2_drop": 0.07817037930763959
+    }
+  ],
+  "noise_robustness": [
+    {
+      "noise_pct": "0%",
+      "tensile_mae": 0.4234376252618125,
+      "tensile_rmse": 0.5340464052665481,
+      "tensile_r2": 0.9065418939536014,
+      "shrinkage_mae": 0.05449720757828415,
+      "shrinkage_rmse": 0.06911269540808608,
+      "shrinkage_r2": 0.8511083159064852
+    },
+    {
+      "noise_pct": "5%",
+      "tensile_mae": 0.8386769790960458,
+      "tensile_rmse": 1.1246836770451907,
+      "tensile_r2": 0.5855045499203515,
+      "shrinkage_mae": 0.08095330969420192,
+      "shrinkage_rmse": 0.1031863367316651,
+      "shrinkage_r2": 0.6681061769636799
+    },
+    {
+      "noise_pct": "10%",
+      "tensile_mae": 1.200434886652756,
+      "tensile_rmse": 1.612016623136067,
+      "tensile_r2": 0.14847379936241334,
+      "shrinkage_mae": 0.11586046402766029,
+      "shrinkage_rmse": 0.14809968790092856,
+      "shrinkage_r2": 0.31630395587118365
+    },
+    {
+      "noise_pct": "15%",
+      "tensile_mae": 1.5113989787576774,
+      "tensile_rmse": 2.004816347846482,
+      "tensile_r2": -0.31706792539868167,
+      "shrinkage_mae": 0.131168078895075,
+      "shrinkage_rmse": 0.16728354321749625,
+      "shrinkage_r2": 0.1277093491215734
+    },
+    {
+      "noise_pct": "20%",
+      "tensile_mae": 1.6851581806976466,
+      "tensile_rmse": 2.1833065672378793,
+      "tensile_r2": -0.5620266013294561,
+      "shrinkage_mae": 0.15314308171490226,
+      "shrinkage_rmse": 0.19030835961257683,
+      "shrinkage_r2": -0.12893909301526296
+    },
+    {
+      "noise_pct": "30%",
+      "tensile_mae": 1.9065589998501673,
+      "tensile_rmse": 2.413168684666231,
+      "tensile_r2": -0.9082459321154681,
+      "shrinkage_mae": 0.16635852387816666,
+      "shrinkage_rmse": 0.21024183761811974,
+      "shrinkage_r2": -0.3778218515240579
+    }
+  ],
+  "weight_sensitivity": [
+    {
+      "config": "Quality-First  (w_S=0.70, w_V=0.25, w_E=0.05)",
+      "mean_yield_pct": 100.0,
+      "mean_energy_kwh": 2.297,
+      "mean_T_melt": 223.7,
+      "mean_P_inj": 105.8,
+      "mean_t_cool": 16.2
+    },
+    {
+      "config": "Balanced       (w_S=0.50, w_V=0.35, w_E=0.15)",
+      "mean_yield_pct": 100.0,
+      "mean_energy_kwh": 2.183,
+      "mean_T_melt": 222.1,
+      "mean_P_inj": 109.4,
+      "mean_t_cool": 12.8
+    },
+    {
+      "config": "Energy-First   (w_S=0.30, w_V=0.25, w_E=0.45)",
+      "mean_yield_pct": 100.0,
+      "mean_energy_kwh": 2.151,
+      "mean_T_melt": 221.3,
+      "mean_P_inj": 110.2,
+      "mean_t_cool": 12.0
+    }
+  ]
+}
