@@ -1,18 +1,18 @@
 # Assessment Traceability & Reconciliation Matrix
-**Course:** 21CSE732P — Applied AI in Manufacturing, Industry 5.0  
-**Cohort & Slot:** Sem-5, Batch-1, Slot-B | AY 2026-27 (Odd)  
-**Faculty Guide:** Dr. Udendharn  
-**Project:** AI-Based Adaptive Process Parameter Tuning (Worklet No. 28, Tier 3)  
-**Reference Document:** `Mark Split 21CSE732P rubrics .pdf` (Reconciled & Rechecked)  
-**Checkpoint Phase:** Phase 2 Documentation Checkpoint  
+**Course:** 21CSE732P — Applied AI in Manufacturing, Industry 5.0
+**Cohort & Slot:** Sem-5, Batch-1, Slot-B | AY 2026-27 (Odd)
+**Faculty Guide:** Dr. Udendharn
+**Project:** AI-Based Adaptive Process Parameter Tuning (Worklet No. 28, Tier 3)
+**Reference Document:** `Mark Split 21CSE732P rubrics .pdf` (Reconciled & Rechecked)
+**Checkpoint Phase:** Phase 2 Documentation Checkpoint
 
 ---
 
 ## 1. Rubric Integrity & Assessment Policy
 
-> **Universal Anti-Shortcut Policy:**  
-> In strict compliance with the course rubric, **no marks are claimed as earned or awarded by this project**. Marks are strictly awarded by the faculty guide during official oral reviews and evaluation checkpoints.  
-> 
+> **Universal Anti-Shortcut Policy:**
+> In strict compliance with the course rubric, **no marks are claimed as earned or awarded by this project**. Marks are strictly awarded by the faculty guide during official oral reviews and evaluation checkpoints.
+>
 > This matrix tracks internal technical status across four distinct engineering dimensions:
 > 1. **Implementation Status:** The presence of concrete, executable code on disk.
 > 2. **Verification & Test Status:** Automated tests in `pytest` verifying correctness, bounds, and lack of leakage.
@@ -81,4 +81,12 @@ The table below reconciles every checkpoint, sub-criterion, and mark allocation 
   - Hyperparameters tuned on validation fold without target leakage.
   - Test suite expanded to 34 passing tests (`pytest tests/` — 34 passed).
   - Technical readiness confirmed: **39 / 100 marks** fully supported by verified code, models, and documentation on disk, awaiting official faculty assessment.
-
+- **Phase 3 Gate 2 Milestone (PBL-II.2 Completed):**
+  - Implemented Domain Guard ([src/optimization/domain_guard.py](file:///c:/AppliedAI/adaptive-process-parameter-tuning/src/optimization/domain_guard.py)) for physical bounds validation, extreme uncompensable condition detection, and strict out-of-training-support rejection (`OOD_REJECTED`).
+  - Implemented surrogate loading and training interface ([src/optimization/surrogate_loader.py](file:///c:/AppliedAI/adaptive-process-parameter-tuning/src/optimization/surrogate_loader.py)) utilizing `dataset_train.csv` exclusively.
+  - Implemented constrained derivative-free adaptive tuning engine in [src/optimization/adaptive_tuner.py](file:///c:/AppliedAI/adaptive-process-parameter-tuning/src/optimization/adaptive_tuner.py) minimizing energy subject to hard quality constraints (Tensile 49–55 MPa, Shrinkage 0.80–1.60%, machine actuator bounds).
+  - Implemented authoritative simulator validation with matched noise realization in [src/optimization/simulator_validator.py](file:///c:/AppliedAI/adaptive-process-parameter-tuning/src/optimization/simulator_validator.py).
+  - Implemented Gate 2 execution entry point: [src/optimization/run_gate2.py](file:///c:/AppliedAI/adaptive-process-parameter-tuning/src/optimization/run_gate2.py).
+  - Saved verified Gate 2 report artifacts in `reports/gate2/` (`.json`, `.csv`, `.md`).
+  - Verified default smoke-test run: Baseline energy 2.449 kWh -> Tuned energy 2.013 kWh (17.82% reduction), Tensile 49.22 MPa (in spec), Shrinkage 1.036% (in spec), 159.3 ms execution latency.
+  - Full automated test suite expanded to **55 tests — 100% PASS** (`pytest tests/`).

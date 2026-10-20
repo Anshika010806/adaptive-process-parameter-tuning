@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-20T08:21:36Z",
+    "execution_mode": "single_cycle_evaluation",
+    "milestone": "Gate 2 - Adaptive Tuning Verification",
+    "worklet": "No. 28 - AI-Based Adaptive Process Parameter Tuning"
+  },
+  "optimizer_configuration": {
+    "surrogate_model": "RandomForest",
+    "search_strategy": "grid",
+    "candidate_count": 1090,
+    "random_state": 42,
+    "reject_ood": true,
+    "local_refinement": true,
+    "machine_bounds": {
+      "melt_temp_c": [
+        205.0,
+        255.0
+      ],
+      "injection_pressure_mpa": [
+        65.0,
+        145.0
+      ],
+      "cooling_time_s": [
+        12.0,
+        32.0
+      ]
+    }
+  },
+  "material_inputs": {
+    "moisture_pct": 0.18,
+    "melt_flow_index": 21.0,
+    "ambient_temp_c": 25.0,
+    "recycled_pct": 28.0
+  },
+  "validation_results": {
+    "overall_status": "OPTIMAL",
+    "is_feasible": true,
+    "domain_guard_status": "VALID",
+    "domain_guard_message": "Optimal in-spec setpoints determined minimizing energy.",
+    "rejection_reason": null,
+    "execution_time_ms": 159.3021999578923,
+    "performance_comparison": {
+      "baseline_melt_temp_c": 230.0,
+      "baseline_injection_pressure_mpa": 100.0,
+      "baseline_cooling_time_s": 20.0,
+      "tuned_melt_temp_c": 205.0,
+      "tuned_injection_pressure_mpa": 141.0,
+      "tuned_cooling_time_s": 12.0,
+      "baseline_energy_kwh": 2.449,
+      "tuned_energy_kwh": 2.01269,
+      "energy_reduction_kwh": 0.43630999999999975,
+      "energy_reduction_pct": 17.81584320130665,
+      "predicted_tensile_mpa": 49.78960151725935,
+      "simulated_tensile_mpa": 49.22451363859744,
+      "baseline_tensile_mpa": 51.990859968842095,
+      "tensile_prediction_error": 0.565087878661906,
+      "predicted_shrinkage_pct": 0.8923815551730621,
+      "simulated_shrinkage_pct": 1.036256192178116,
+      "baseline_shrinkage_pct": 1.2515019983486786,
+      "shrinkage_prediction_error": 0.14387463700505387,
+      "predicted_energy_kwh": 2.01269,
+      "all_specs_met": true
+    }
+  }
+}
