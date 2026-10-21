@@ -1,0 +1,570 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-21T14:23:58Z",
+    "milestone": "Gate 3 - Systematic Validation",
+    "worklet": "No. 28 - AI-Based Adaptive Process Parameter Tuning",
+    "course": "21CSE732P - Applied AI in Manufacturing, Industry 5.0",
+    "protocol": "Decoupled Closed-Loop Evaluation under Matched Noise Realizations",
+    "random_seed": 42,
+    "add_noise": true
+  },
+  "optimizer_configuration": {
+    "surrogate_model": "RandomForestRegressor",
+    "search_strategy": "grid",
+    "candidate_count": 1090,
+    "random_state": 42,
+    "reject_ood": true,
+    "local_refinement": true,
+    "bounds": {
+      "melt_temp_c": [
+        205.0,
+        255.0
+      ],
+      "injection_pressure_mpa": [
+        65.0,
+        145.0
+      ],
+      "cooling_time_s": [
+        12.0,
+        32.0
+      ]
+    }
+  },
+  "sample_counts": {
+    "n_contexts": 50,
+    "repetitions_per_context": 5,
+    "total_cycle_evaluations": 250,
+    "unique_seeds": 250
+  },
+  "feasibility_metrics": {
+    "total_cycles": 250,
+    "feasible_count": 250,
+    "feasible_rate_pct": 100.0,
+    "infeasible_count": 0,
+    "infeasible_rate_pct": 0.0,
+    "ood_rejected_count": 0,
+    "invalid_input_count": 0,
+    "status_distribution": {
+      "OPTIMAL": 250
+    }
+  },
+  "energy_metrics": {
+    "feasible_cycles_count": 250,
+    "baseline_mean_kwh": 2.458230124362519,
+    "baseline_median_kwh": 2.46046228444284,
+    "baseline_std_kwh": 0.019348467338359546,
+    "tuned_mean_kwh": 2.0265673243625186,
+    "tuned_median_kwh": 2.0272465526310315,
+    "tuned_std_kwh": 0.023774741619933214,
+    "reduction_kwh_mean": 0.43166279999999996,
+    "reduction_kwh_median": 0.4384699999999999,
+    "reduction_kwh_std": 0.01213280313065491,
+    "reduction_kwh_min": 0.37918999999999947,
+    "reduction_kwh_max": 0.44062999999999963,
+    "reduction_kwh_ci_95": [
+      0.43015148406625775,
+      0.43317411593374217
+    ],
+    "reduction_pct_mean": 17.56135668174206,
+    "reduction_pct_median": 17.756574221294372,
+    "reduction_pct_std": 0.5258776430741182,
+    "reduction_pct_min": 15.487816636007997,
+    "reduction_pct_max": 18.200169645628463,
+    "reduction_pct_ci_95": [
+      17.495851023023455,
+      17.62686234046066
+    ]
+  },
+  "compliance_metrics": {
+    "baseline_tensile_compliance_pct": 100.0,
+    "baseline_shrinkage_compliance_pct": 100.0,
+    "baseline_overall_compliance_pct": 100.0,
+    "tuned_tensile_compliance_pct": 62.8,
+    "tuned_shrinkage_compliance_pct": 100.0,
+    "tuned_overall_compliance_pct": 62.8,
+    "compliance_improvement_pct": -37.2
+  },
+  "quality_violation_metrics": {
+    "baseline_quality_violation_count": 0,
+    "baseline_quality_violation_rate_pct": 0.0,
+    "tuned_quality_violation_count": 93,
+    "tuned_quality_violation_rate_pct": 37.2,
+    "false_positive_quality_count": 93,
+    "false_positive_quality_rate_pct": 37.2
+  },
+  "surrogate_prediction_errors": {
+    "tensile_mae_mpa": 0.5728756916779502,
+    "tensile_rmse_mpa": 0.7186675666944539,
+    "tensile_mean_bias_mpa": 0.4708154934070682,
+    "tensile_max_error_mpa": 2.2259230070518186,
+    "shrinkage_mae_pct": 0.1435421494008699,
+    "shrinkage_rmse_pct": 0.15055596609132724,
+    "shrinkage_mean_bias_pct": -0.1435421494008699,
+    "shrinkage_max_error_pct": 0.27720394830783945,
+    "energy_mae_kwh": 0.0,
+    "energy_rmse_kwh": 0.0,
+    "energy_max_error_kwh": 0.0
+  },
+  "latency_and_compute_metrics": {
+    "optimization_latency_mean_ms": 55.913385996827856,
+    "optimization_latency_median_ms": 55.22929996368475,
+    "optimization_latency_p95_ms": 69.20848500158172,
+    "optimization_latency_min_ms": 43.92540000844747,
+    "optimization_latency_max_ms": 88.69920001598075,
+    "total_optimization_time_s": 2.795669299841393,
+    "simulator_evals_during_optimization": 0,
+    "simulator_evals_during_validation": 500,
+    "surrogate_candidates_per_cycle": 1090,
+    "total_surrogate_evaluations": 54500
+  },
+  "stratified_regimes": {
+    "moisture_strata": {
+      "low_moisture_sub_015": {
+        "sample_count": 105,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 17.76249690084614,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 60.0,
+        "tensile_mae_mpa": 0.7225780535310804,
+        "shrinkage_mae_pct": 0.14422149818854682
+      },
+      "mid_moisture_015_to_028": {
+        "sample_count": 145,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 17.415703419632205,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 64.82758620689654,
+        "tensile_mae_mpa": 0.46447053309464886,
+        "shrinkage_mae_pct": 0.14305020717531078
+      },
+      "high_moisture_gte_028": {
+        "sample_count": 0
+      }
+    },
+    "recycled_content_strata": {
+      "low_recycled_sub_25": {
+        "sample_count": 115,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 17.749318284740067,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 81.73913043478261,
+        "tensile_mae_mpa": 0.44380967329592486,
+        "shrinkage_mae_pct": 0.15365221708721244
+      },
+      "high_recycled_gte_25": {
+        "sample_count": 135,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 17.401241242151162,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 46.666666666666664,
+        "tensile_mae_mpa": 0.6828208184478235,
+        "shrinkage_mae_pct": 0.13492986951991146
+      }
+    }
+  },
+  "failure_breakdown": {
+    "total_anomalies_or_failures": 93,
+    "failure_records": [
+      {
+        "context_id": 0,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 0,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 0,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 0,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 1,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 2,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 2,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 2,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 2,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 3,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 3,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 3,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 3,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 3,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 5,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 8,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 9,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 9,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 9,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 10,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 10,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 10,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 10,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 10,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 11,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 11,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 13,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 14,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 15,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 15,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 16,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 17,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 18,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 18,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 19,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 20,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 21,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 21,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 21,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 21,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 21,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 22,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 23,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 23,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 23,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 23,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 26,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 28,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 30,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 30,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy.",
+        "quality_violation": true,
+        "false_positive": true
+      }
+    ]
+  }
+}
