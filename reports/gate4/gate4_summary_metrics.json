@@ -1,0 +1,1045 @@
+{
+  "metadata": {
+    "worklet": "No. 28 - AI-Based Adaptive Process Parameter Tuning",
+    "milestone": "Gate 4 - Robustness and Ablation Evaluation",
+    "contexts_count": 50,
+    "repetitions_per_context": 5,
+    "base_seed": 42,
+    "total_wall_time_s": 52.45,
+    "supported_bounds": {
+      "moisture_pct": [
+        0.05,
+        0.5
+      ],
+      "melt_flow_index": [
+        14.0,
+        30.0
+      ],
+      "ambient_temp_c": [
+        16.0,
+        32.0
+      ],
+      "recycled_pct": [
+        10.0,
+        40.0
+      ]
+    },
+    "actuator_hard_bounds": {
+      "melt_temp_c": [
+        205.0,
+        255.0
+      ],
+      "injection_pressure_mpa": [
+        65.0,
+        145.0
+      ],
+      "cooling_time_s": [
+        12.0,
+        32.0
+      ]
+    }
+  },
+  "robustness_summary": {
+    "noise_level_evaluations": {
+      "sigma_0.0": {
+        "noise_sigma": 0.0,
+        "cycles_evaluated": 250,
+        "feasible_pct": 100.0,
+        "tensile_compliance_pct": 100.0,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 100.0,
+        "quality_violations_count": 0,
+        "energy_reduction_pct": {
+          "mean": 16.319672673620666,
+          "median": 16.213136056927517,
+          "std": 1.1845891760997505,
+          "se": 0.07491999776115014,
+          "ci_lower": 16.17211497590655,
+          "ci_upper": 16.467230371334782,
+          "ci_half_width": 0.1475576977141177,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 50.13973500713226,
+        "min_sim_tensile_mpa": 49.55549915405402
+      },
+      "sigma_0.35": {
+        "noise_sigma": 0.35,
+        "cycles_evaluated": 250,
+        "feasible_pct": 100.0,
+        "tensile_compliance_pct": 100.0,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 100.0,
+        "quality_violations_count": 0,
+        "energy_reduction_pct": {
+          "mean": 16.319672673620666,
+          "median": 16.213136056927517,
+          "std": 1.1845891760997505,
+          "se": 0.07491999776115014,
+          "ci_lower": 16.17211497590655,
+          "ci_upper": 16.467230371334782,
+          "ci_half_width": 0.1475576977141177,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 50.170543890052656,
+        "min_sim_tensile_mpa": 49.01570527408277
+      },
+      "sigma_0.5": {
+        "noise_sigma": 0.5,
+        "cycles_evaluated": 250,
+        "feasible_pct": 100.0,
+        "tensile_compliance_pct": 98.4,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 98.4,
+        "quality_violations_count": 4,
+        "energy_reduction_pct": {
+          "mean": 16.319672673620666,
+          "median": 16.213136056927517,
+          "std": 1.1845891760997505,
+          "se": 0.07491999776115014,
+          "ci_lower": 16.17211497590655,
+          "ci_upper": 16.467230371334782,
+          "ci_half_width": 0.1475576977141177,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 50.183747697018546,
+        "min_sim_tensile_mpa": 48.69756543941284
+      }
+    },
+    "seed_stability_evaluations": {
+      "seed_42": {
+        "base_seed": 42,
+        "cycles_evaluated": 250,
+        "overall_compliance_pct": 100.0,
+        "energy_reduction_pct_mean": 16.319672673620666,
+        "energy_reduction_pct_std": 1.1845891760997505,
+        "quality_violations_count": 0
+      },
+      "seed_1337": {
+        "base_seed": 1337,
+        "cycles_evaluated": 250,
+        "overall_compliance_pct": 99.6,
+        "energy_reduction_pct_mean": 16.319672673620666,
+        "energy_reduction_pct_std": 1.1845891760997505,
+        "quality_violations_count": 1
+      },
+      "seed_2026": {
+        "base_seed": 2026,
+        "cycles_evaluated": 250,
+        "overall_compliance_pct": 100.0,
+        "energy_reduction_pct_mean": 16.319672673620666,
+        "energy_reduction_pct_std": 1.1845891760997505,
+        "quality_violations_count": 0
+      }
+    },
+    "total_cycles": 1250
+  },
+  "sensitivity_summary": {
+    "tensile_margin_sweep": {
+      "0.00_mpa": {
+        "margin_mpa": 0.0,
+        "cycles": 250,
+        "tensile_compliance_pct": 18.4,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 18.4,
+        "quality_violations": 204,
+        "energy_reduction_pct_mean": 17.798458034186538,
+        "energy_reduction_pct_ci": {
+          "mean": 17.798458034186538,
+          "median": 17.870682981463624,
+          "std": 0.34855135537831294,
+          "se": 0.022044323290684974,
+          "ci_lower": 17.75504092674335,
+          "ci_upper": 17.841875141629725,
+          "ci_half_width": 0.0434171074431869,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 48.589794068564096,
+        "min_sim_tensile_mpa": 47.25870161422685
+      },
+      "0.40_mpa": {
+        "margin_mpa": 0.4,
+        "cycles": 250,
+        "tensile_compliance_pct": 47.599999999999994,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 47.599999999999994,
+        "quality_violations": 131,
+        "energy_reduction_pct_mean": 17.610161548899082,
+        "energy_reduction_pct_ci": {
+          "mean": 17.610161548899082,
+          "median": 17.826712603330584,
+          "std": 0.5848220368087527,
+          "se": 0.03698739324348976,
+          "ci_lower": 17.537313514268117,
+          "ci_upper": 17.683009583530048,
+          "ci_half_width": 0.07284803463096468,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 48.933938384725494,
+        "min_sim_tensile_mpa": 47.46217770748931
+      },
+      "0.80_mpa": {
+        "margin_mpa": 0.8,
+        "cycles": 250,
+        "tensile_compliance_pct": 78.8,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 78.8,
+        "quality_violations": 53,
+        "energy_reduction_pct_mean": 17.382021932200427,
+        "energy_reduction_pct_ci": {
+          "mean": 17.382021932200427,
+          "median": 17.742939827977146,
+          "std": 0.7772988990455213,
+          "se": 0.04916069887450257,
+          "ci_lower": 17.28519812332813,
+          "ci_upper": 17.478845741072725,
+          "ci_half_width": 0.09682380887229829,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 49.3512561757197,
+        "min_sim_tensile_mpa": 47.73964365629117
+      },
+      "1.20_mpa": {
+        "margin_mpa": 1.2,
+        "cycles": 250,
+        "tensile_compliance_pct": 95.19999999999999,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 95.19999999999999,
+        "quality_violations": 12,
+        "energy_reduction_pct_mean": 16.98286726553655,
+        "energy_reduction_pct_ci": {
+          "mean": 16.98286726553655,
+          "median": 17.608653848252864,
+          "std": 1.0253622671062839,
+          "se": 0.06484960381699609,
+          "ci_lower": 16.85514357996711,
+          "ci_upper": 17.110590951105994,
+          "ci_half_width": 0.12772368556944416,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 49.79367309810536,
+        "min_sim_tensile_mpa": 48.244846514711035
+      },
+      "1.50_mpa": {
+        "margin_mpa": 1.5,
+        "cycles": 250,
+        "tensile_compliance_pct": 99.2,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 99.2,
+        "quality_violations": 2,
+        "energy_reduction_pct_mean": 16.473687869207787,
+        "energy_reduction_pct_ci": {
+          "mean": 16.473687869207787,
+          "median": 16.22723106925624,
+          "std": 1.0843535961493107,
+          "se": 0.0685805430565242,
+          "ci_lower": 16.338615961255165,
+          "ci_upper": 16.608759777160408,
+          "ci_half_width": 0.13507190795262083,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 50.090673153987225,
+        "min_sim_tensile_mpa": 48.834049547930206
+      },
+      "1.80_mpa": {
+        "margin_mpa": 1.8,
+        "cycles": 250,
+        "tensile_compliance_pct": 99.6,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 99.6,
+        "quality_violations": 1,
+        "energy_reduction_pct_mean": 16.245144456483768,
+        "energy_reduction_pct_ci": {
+          "mean": 16.245144456483768,
+          "median": 16.18877704165472,
+          "std": 1.1702153560197093,
+          "se": 0.07401091755854226,
+          "ci_lower": 16.099377225744327,
+          "ci_upper": 16.39091168722321,
+          "ci_half_width": 0.14576723073943954,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 50.382115632702785,
+        "min_sim_tensile_mpa": 48.9781724075034
+      },
+      "2.20_mpa": {
+        "margin_mpa": 2.2,
+        "cycles": 250,
+        "tensile_compliance_pct": 100.0,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_compliance_pct": 100.0,
+        "quality_violations": 0,
+        "energy_reduction_pct_mean": 15.452738821085363,
+        "energy_reduction_pct_ci": {
+          "mean": 15.452738821085363,
+          "median": 15.362143652060016,
+          "std": 1.2104501517930872,
+          "se": 0.07655558947525407,
+          "ci_lower": 15.301959765189912,
+          "ci_upper": 15.603517876980815,
+          "ci_half_width": 0.15077905589545246,
+          "n": 250
+        },
+        "mean_sim_tensile_mpa": 50.80808910164562,
+        "min_sim_tensile_mpa": 49.70456658937506
+      }
+    },
+    "recycled_content_sweep": {
+      "10.0_wt_pct": {
+        "full_corrected": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 17.75783475783475,
+          "mean_sim_tensile_mpa": 51.24310686060502,
+          "min_sim_tensile_mpa": 50.66640387788124
+        },
+        "fixed_150": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 17.75783475783475,
+          "mean_sim_tensile_mpa": 51.24310686060502,
+          "min_sim_tensile_mpa": 50.66640387788124
+        },
+        "unpadded_000": {
+          "cycles": 10,
+          "overall_compliance_pct": 90.0,
+          "violations": 1,
+          "energy_reduction_pct_mean": 17.919006919006915,
+          "mean_sim_tensile_mpa": 49.55988675716848,
+          "min_sim_tensile_mpa": 48.9831837744447
+        }
+      },
+      "15.0_wt_pct": {
+        "full_corrected": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 17.75783475783475,
+          "mean_sim_tensile_mpa": 50.67629829947826,
+          "min_sim_tensile_mpa": 50.22254647593175
+        },
+        "fixed_150": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 17.75783475783475,
+          "mean_sim_tensile_mpa": 50.67629829947826,
+          "min_sim_tensile_mpa": 50.22254647593175
+        },
+        "unpadded_000": {
+          "cycles": 10,
+          "overall_compliance_pct": 40.0,
+          "violations": 6,
+          "energy_reduction_pct_mean": 17.919006919006915,
+          "mean_sim_tensile_mpa": 48.993078196041715,
+          "min_sim_tensile_mpa": 48.53932637249521
+        }
+      },
+      "20.0_wt_pct": {
+        "full_corrected": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 16.232397232397226,
+          "mean_sim_tensile_mpa": 50.25062317535015,
+          "min_sim_tensile_mpa": 49.416600153731295
+        },
+        "fixed_150": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 16.232397232397226,
+          "mean_sim_tensile_mpa": 50.25062317535015,
+          "min_sim_tensile_mpa": 49.416600153731295
+        },
+        "unpadded_000": {
+          "cycles": 10,
+          "overall_compliance_pct": 30.0,
+          "violations": 7,
+          "energy_reduction_pct_mean": 17.904354904354896,
+          "mean_sim_tensile_mpa": 48.65792031693028,
+          "min_sim_tensile_mpa": 47.82389729531143
+        }
+      },
+      "25.0_wt_pct": {
+        "full_corrected": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 16.566137566137563,
+          "mean_sim_tensile_mpa": 50.54713018609164,
+          "min_sim_tensile_mpa": 49.781464008820066
+        },
+        "fixed_150": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 16.566137566137563,
+          "mean_sim_tensile_mpa": 50.54713018609164,
+          "min_sim_tensile_mpa": 49.781464008820066
+        },
+        "unpadded_000": {
+          "cycles": 10,
+          "overall_compliance_pct": 20.0,
+          "violations": 8,
+          "energy_reduction_pct_mean": 17.875050875050874,
+          "mean_sim_tensile_mpa": 48.81959332912489,
+          "min_sim_tensile_mpa": 48.053927151853316
+        }
+      },
+      "30.0_wt_pct": {
+        "full_corrected": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 15.403744403744406,
+          "mean_sim_tensile_mpa": 50.367696379289654,
+          "min_sim_tensile_mpa": 50.08182325881964
+        },
+        "fixed_150": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 16.95115995115995,
+          "mean_sim_tensile_mpa": 50.14304637178786,
+          "min_sim_tensile_mpa": 49.857173251317846
+        },
+        "unpadded_000": {
+          "cycles": 10,
+          "overall_compliance_pct": 10.0,
+          "violations": 9,
+          "energy_reduction_pct_mean": 17.86772486772487,
+          "mean_sim_tensile_mpa": 48.565174578605266,
+          "min_sim_tensile_mpa": 48.279301458135244
+        }
+      },
+      "35.0_wt_pct": {
+        "full_corrected": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 14.98209198209197,
+          "mean_sim_tensile_mpa": 50.18311738580404,
+          "min_sim_tensile_mpa": 49.759462445474654
+        },
+        "fixed_150": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 15.01139601139601,
+          "mean_sim_tensile_mpa": 49.875305114824236,
+          "min_sim_tensile_mpa": 49.45165017449485
+        },
+        "unpadded_000": {
+          "cycles": 10,
+          "overall_compliance_pct": 0.0,
+          "violations": 10,
+          "energy_reduction_pct_mean": 17.860398860398853,
+          "mean_sim_tensile_mpa": 48.08702386482424,
+          "min_sim_tensile_mpa": 47.663368924494854
+        }
+      },
+      "40.0_wt_pct": {
+        "full_corrected": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 14.582417582417573,
+          "mean_sim_tensile_mpa": 50.12633955569689,
+          "min_sim_tensile_mpa": 49.47847723192977
+        },
+        "fixed_150": {
+          "cycles": 10,
+          "overall_compliance_pct": 100.0,
+          "violations": 0,
+          "energy_reduction_pct_mean": 15.01139601139601,
+          "mean_sim_tensile_mpa": 49.681810270900534,
+          "min_sim_tensile_mpa": 49.03394794713342
+        },
+        "unpadded_000": {
+          "cycles": 10,
+          "overall_compliance_pct": 0.0,
+          "violations": 10,
+          "energy_reduction_pct_mean": 17.860398860398853,
+          "mean_sim_tensile_mpa": 47.89352902090054,
+          "min_sim_tensile_mpa": 47.24566669713342
+        }
+      }
+    },
+    "total_cycles": 1960
+  },
+  "ablation_summary": {
+    "variants_evaluated": [
+      {
+        "variant_id": "full_corrected",
+        "variant_name": "Full Corrected Tuner",
+        "total_cycles": 250,
+        "optimizer_feasible_pct": 100.0,
+        "tensile_compliance_pct": 100.0,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_quality_compliance_pct": 100.0,
+        "total_defects": 0,
+        "false_positive_count": 0,
+        "mean_energy_kwh": 2.057092924362519,
+        "std_energy_kwh": 0.03555902279210608,
+        "energy_reduction_pct_mean": 16.319672673620666,
+        "energy_reduction_pct_ci_lower": 16.17211497590655,
+        "energy_reduction_pct_ci_upper": 16.467230371334782,
+        "energy_reduction_pct_std": 1.1845891760997505,
+        "mean_sim_tensile_mpa": 50.170543890052656,
+        "min_sim_tensile_mpa": 49.01570527408277,
+        "mean_sim_shrinkage_pct": 1.1537576356623875,
+        "latency_mean_ms": 77.35590999713168,
+        "latency_p95_ms": 91.45079995505512,
+        "actuator_limits_strictly_respected": true
+      },
+      {
+        "variant_id": "no_recycled_protection",
+        "variant_name": "Ablation A: No Recycled Protection",
+        "total_cycles": 250,
+        "optimizer_feasible_pct": 100.0,
+        "tensile_compliance_pct": 99.2,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_quality_compliance_pct": 99.2,
+        "total_defects": 2,
+        "false_positive_count": 2,
+        "mean_energy_kwh": 2.0533253243625187,
+        "std_energy_kwh": 0.03466061432375758,
+        "energy_reduction_pct_mean": 16.473687869207787,
+        "energy_reduction_pct_ci_lower": 16.338615961255165,
+        "energy_reduction_pct_ci_upper": 16.608759777160408,
+        "energy_reduction_pct_std": 1.0843535961493107,
+        "mean_sim_tensile_mpa": 50.090673153987225,
+        "min_sim_tensile_mpa": 48.834049547930206,
+        "mean_sim_shrinkage_pct": 1.1483376356623873,
+        "latency_mean_ms": 72.34813599381596,
+        "latency_p95_ms": 87.89580001030117,
+        "actuator_limits_strictly_respected": true
+      },
+      {
+        "variant_id": "initial_baseline_margin",
+        "variant_name": "Ablation B: Initial Baseline Margin (0.80 MPa)",
+        "total_cycles": 250,
+        "optimizer_feasible_pct": 100.0,
+        "tensile_compliance_pct": 78.8,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_quality_compliance_pct": 78.8,
+        "total_defects": 53,
+        "false_positive_count": 53,
+        "mean_energy_kwh": 2.030981524362519,
+        "std_energy_kwh": 0.028063044750035324,
+        "energy_reduction_pct_mean": 17.382021932200427,
+        "energy_reduction_pct_ci_lower": 17.28519812332813,
+        "energy_reduction_pct_ci_upper": 17.478845741072725,
+        "energy_reduction_pct_std": 0.7772988990455213,
+        "mean_sim_tensile_mpa": 49.3512561757197,
+        "min_sim_tensile_mpa": 47.73964365629117,
+        "mean_sim_shrinkage_pct": 1.1435276356623874,
+        "latency_mean_ms": 70.25797799462453,
+        "latency_p95_ms": 75.59150003362447,
+        "actuator_limits_strictly_respected": true
+      },
+      {
+        "variant_id": "candidate_margin_120",
+        "variant_name": "Ablation C: Candidate Margin (1.20 MPa)",
+        "total_cycles": 250,
+        "optimizer_feasible_pct": 100.0,
+        "tensile_compliance_pct": 95.19999999999999,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_quality_compliance_pct": 95.19999999999999,
+        "total_defects": 12,
+        "false_positive_count": 12,
+        "mean_energy_kwh": 2.040815324362519,
+        "std_energy_kwh": 0.033912561299130735,
+        "energy_reduction_pct_mean": 16.98286726553655,
+        "energy_reduction_pct_ci_lower": 16.85514357996711,
+        "energy_reduction_pct_ci_upper": 17.110590951105994,
+        "energy_reduction_pct_std": 1.0253622671062839,
+        "mean_sim_tensile_mpa": 49.79367309810536,
+        "min_sim_tensile_mpa": 48.244846514711035,
+        "mean_sim_shrinkage_pct": 1.1312376356623874,
+        "latency_mean_ms": 73.45223400276154,
+        "latency_p95_ms": 89.17390007991344,
+        "actuator_limits_strictly_respected": true
+      },
+      {
+        "variant_id": "unpadded_zero_margin",
+        "variant_name": "Ablation D: Unpadded (0.00 MPa Margin)",
+        "total_cycles": 250,
+        "optimizer_feasible_pct": 100.0,
+        "tensile_compliance_pct": 18.4,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_quality_compliance_pct": 18.4,
+        "total_defects": 204,
+        "false_positive_count": 204,
+        "mean_energy_kwh": 2.020733924362519,
+        "std_energy_kwh": 0.021229514287911262,
+        "energy_reduction_pct_mean": 17.798458034186538,
+        "energy_reduction_pct_ci_lower": 17.75504092674335,
+        "energy_reduction_pct_ci_upper": 17.841875141629725,
+        "energy_reduction_pct_std": 0.34855135537831294,
+        "mean_sim_tensile_mpa": 48.589794068564096,
+        "min_sim_tensile_mpa": 47.25870161422685,
+        "mean_sim_shrinkage_pct": 1.1867076356623876,
+        "latency_mean_ms": 70.40121200261638,
+        "latency_p95_ms": 80.14390000607818,
+        "actuator_limits_strictly_respected": true
+      },
+      {
+        "variant_id": "static_sop",
+        "variant_name": "Reference: Static SOP Baseline",
+        "total_cycles": 250,
+        "optimizer_feasible_pct": 100.0,
+        "tensile_compliance_pct": 100.0,
+        "shrinkage_compliance_pct": 100.0,
+        "overall_quality_compliance_pct": 100.0,
+        "total_defects": 0,
+        "false_positive_count": 0,
+        "mean_energy_kwh": 2.458230124362519,
+        "std_energy_kwh": 0.019348467338359546,
+        "energy_reduction_pct_mean": 0.0,
+        "energy_reduction_pct_ci_lower": 0.0,
+        "energy_reduction_pct_ci_upper": 0.0,
+        "energy_reduction_pct_std": 0.0,
+        "mean_sim_tensile_mpa": 52.451998851451926,
+        "min_sim_tensile_mpa": 50.52478469615758,
+        "mean_sim_shrinkage_pct": 1.2508434418329502,
+        "latency_mean_ms": 0.0,
+        "latency_p95_ms": 0.0,
+        "actuator_limits_strictly_respected": true
+      }
+    ],
+    "total_cycles": 1500,
+    "contexts_count": 50,
+    "repetitions_count": 5
+  },
+  "tradeoffs_summary": {
+    "tradeoffs_matrix": [
+      {
+        "variant_id": "full_corrected",
+        "variant_name": "Full Corrected Tuner",
+        "energy_reduction_pct": 16.319672673620666,
+        "quality_compliance_pct": 100.0,
+        "defect_count": 0,
+        "false_positive_count": 0,
+        "runtime_mean_ms": 77.35590999713168,
+        "runtime_p95_ms": 91.45079995505512,
+        "energy_variability_std_kwh": 0.03555902279210608,
+        "tensile_margin_over_spec_min": 0.01570527408276945
+      },
+      {
+        "variant_id": "no_recycled_protection",
+        "variant_name": "Ablation A: No Recycled Protection",
+        "energy_reduction_pct": 16.473687869207787,
+        "quality_compliance_pct": 99.2,
+        "defect_count": 2,
+        "false_positive_count": 2,
+        "runtime_mean_ms": 72.34813599381596,
+        "runtime_p95_ms": 87.89580001030117,
+        "energy_variability_std_kwh": 0.03466061432375758,
+        "tensile_margin_over_spec_min": -0.16595045206979364
+      },
+      {
+        "variant_id": "initial_baseline_margin",
+        "variant_name": "Ablation B: Initial Baseline Margin (0.80 MPa)",
+        "energy_reduction_pct": 17.382021932200427,
+        "quality_compliance_pct": 78.8,
+        "defect_count": 53,
+        "false_positive_count": 53,
+        "runtime_mean_ms": 70.25797799462453,
+        "runtime_p95_ms": 75.59150003362447,
+        "energy_variability_std_kwh": 0.028063044750035324,
+        "tensile_margin_over_spec_min": -1.2603563437088283
+      },
+      {
+        "variant_id": "candidate_margin_120",
+        "variant_name": "Ablation C: Candidate Margin (1.20 MPa)",
+        "energy_reduction_pct": 16.98286726553655,
+        "quality_compliance_pct": 95.19999999999999,
+        "defect_count": 12,
+        "false_positive_count": 12,
+        "runtime_mean_ms": 73.45223400276154,
+        "runtime_p95_ms": 89.17390007991344,
+        "energy_variability_std_kwh": 0.033912561299130735,
+        "tensile_margin_over_spec_min": -0.7551534852889645
+      },
+      {
+        "variant_id": "unpadded_zero_margin",
+        "variant_name": "Ablation D: Unpadded (0.00 MPa Margin)",
+        "energy_reduction_pct": 17.798458034186538,
+        "quality_compliance_pct": 18.4,
+        "defect_count": 204,
+        "false_positive_count": 204,
+        "runtime_mean_ms": 70.40121200261638,
+        "runtime_p95_ms": 80.14390000607818,
+        "energy_variability_std_kwh": 0.021229514287911262,
+        "tensile_margin_over_spec_min": -1.741298385773149
+      },
+      {
+        "variant_id": "static_sop",
+        "variant_name": "Reference: Static SOP Baseline",
+        "energy_reduction_pct": 0.0,
+        "quality_compliance_pct": 100.0,
+        "defect_count": 0,
+        "false_positive_count": 0,
+        "runtime_mean_ms": 0.0,
+        "runtime_p95_ms": 0.0,
+        "energy_variability_std_kwh": 0.019348467338359546,
+        "tensile_margin_over_spec_min": 1.5247846961575817
+      }
+    ]
+  },
+  "failure_analysis": {
+    "recycled_quartile_failures": {
+      "full_corrected": {
+        "Q1_recycled_le_17.5": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q2_recycled_17.5_25.0": {
+          "total": 75,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q3_recycled_25.0_32.5": {
+          "total": 95,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q4_recycled_gt_32.5": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        }
+      },
+      "no_recycled_protection": {
+        "Q1_recycled_le_17.5": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q2_recycled_17.5_25.0": {
+          "total": 75,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q3_recycled_25.0_32.5": {
+          "total": 95,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q4_recycled_gt_32.5": {
+          "total": 40,
+          "violations": 2,
+          "compliance_pct": 95.0
+        }
+      },
+      "initial_baseline_margin": {
+        "Q1_recycled_le_17.5": {
+          "total": 40,
+          "violations": 1,
+          "compliance_pct": 97.5
+        },
+        "Q2_recycled_17.5_25.0": {
+          "total": 75,
+          "violations": 8,
+          "compliance_pct": 89.33333333333333
+        },
+        "Q3_recycled_25.0_32.5": {
+          "total": 95,
+          "violations": 24,
+          "compliance_pct": 74.73684210526315
+        },
+        "Q4_recycled_gt_32.5": {
+          "total": 40,
+          "violations": 20,
+          "compliance_pct": 50.0
+        }
+      },
+      "candidate_margin_120": {
+        "Q1_recycled_le_17.5": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q2_recycled_17.5_25.0": {
+          "total": 75,
+          "violations": 2,
+          "compliance_pct": 97.33333333333334
+        },
+        "Q3_recycled_25.0_32.5": {
+          "total": 95,
+          "violations": 2,
+          "compliance_pct": 97.89473684210527
+        },
+        "Q4_recycled_gt_32.5": {
+          "total": 40,
+          "violations": 8,
+          "compliance_pct": 80.0
+        }
+      },
+      "unpadded_zero_margin": {
+        "Q1_recycled_le_17.5": {
+          "total": 40,
+          "violations": 21,
+          "compliance_pct": 47.5
+        },
+        "Q2_recycled_17.5_25.0": {
+          "total": 75,
+          "violations": 56,
+          "compliance_pct": 25.333333333333336
+        },
+        "Q3_recycled_25.0_32.5": {
+          "total": 95,
+          "violations": 87,
+          "compliance_pct": 8.421052631578947
+        },
+        "Q4_recycled_gt_32.5": {
+          "total": 40,
+          "violations": 40,
+          "compliance_pct": 0.0
+        }
+      },
+      "static_sop": {
+        "Q1_recycled_le_17.5": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q2_recycled_17.5_25.0": {
+          "total": 75,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q3_recycled_25.0_32.5": {
+          "total": 95,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "Q4_recycled_gt_32.5": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        }
+      }
+    },
+    "moisture_failures": {
+      "full_corrected": {
+        "moisture_le_0.20": {
+          "total": 210,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "moisture_0.20_0.35": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "moisture_gt_0.35": {
+          "total": 0,
+          "violations": 0,
+          "compliance_pct": 100.0
+        }
+      },
+      "no_recycled_protection": {
+        "moisture_le_0.20": {
+          "total": 210,
+          "violations": 2,
+          "compliance_pct": 99.04761904761905
+        },
+        "moisture_0.20_0.35": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "moisture_gt_0.35": {
+          "total": 0,
+          "violations": 0,
+          "compliance_pct": 100.0
+        }
+      },
+      "initial_baseline_margin": {
+        "moisture_le_0.20": {
+          "total": 210,
+          "violations": 43,
+          "compliance_pct": 79.52380952380952
+        },
+        "moisture_0.20_0.35": {
+          "total": 40,
+          "violations": 10,
+          "compliance_pct": 75.0
+        },
+        "moisture_gt_0.35": {
+          "total": 0,
+          "violations": 0,
+          "compliance_pct": 100.0
+        }
+      },
+      "candidate_margin_120": {
+        "moisture_le_0.20": {
+          "total": 210,
+          "violations": 11,
+          "compliance_pct": 94.76190476190476
+        },
+        "moisture_0.20_0.35": {
+          "total": 40,
+          "violations": 1,
+          "compliance_pct": 97.5
+        },
+        "moisture_gt_0.35": {
+          "total": 0,
+          "violations": 0,
+          "compliance_pct": 100.0
+        }
+      },
+      "unpadded_zero_margin": {
+        "moisture_le_0.20": {
+          "total": 210,
+          "violations": 171,
+          "compliance_pct": 18.571428571428573
+        },
+        "moisture_0.20_0.35": {
+          "total": 40,
+          "violations": 33,
+          "compliance_pct": 17.5
+        },
+        "moisture_gt_0.35": {
+          "total": 0,
+          "violations": 0,
+          "compliance_pct": 100.0
+        }
+      },
+      "static_sop": {
+        "moisture_le_0.20": {
+          "total": 210,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "moisture_0.20_0.35": {
+          "total": 40,
+          "violations": 0,
+          "compliance_pct": 100.0
+        },
+        "moisture_gt_0.35": {
+          "total": 0,
+          "violations": 0,
+          "compliance_pct": 100.0
+        }
+      }
+    },
+    "actuator_audit": {
+      "full_corrected": {
+        "all_actuators_within_hard_bounds": true,
+        "min_melt_temp_c": 205.0,
+        "max_melt_temp_c": 220.0,
+        "min_injection_pressure_mpa": 101.0,
+        "max_injection_pressure_mpa": 141.0,
+        "min_cooling_time_s": 12.0,
+        "max_cooling_time_s": 12.0
+      },
+      "no_recycled_protection": {
+        "all_actuators_within_hard_bounds": true,
+        "min_melt_temp_c": 205.0,
+        "max_melt_temp_c": 215.0,
+        "min_injection_pressure_mpa": 101.0,
+        "max_injection_pressure_mpa": 141.0,
+        "min_cooling_time_s": 12.0,
+        "max_cooling_time_s": 12.0
+      },
+      "initial_baseline_margin": {
+        "all_actuators_within_hard_bounds": true,
+        "min_melt_temp_c": 205.0,
+        "max_melt_temp_c": 213.75,
+        "min_injection_pressure_mpa": 93.0,
+        "max_injection_pressure_mpa": 144.0,
+        "min_cooling_time_s": 12.0,
+        "max_cooling_time_s": 12.0
+      },
+      "candidate_margin_120": {
+        "all_actuators_within_hard_bounds": true,
+        "min_melt_temp_c": 205.0,
+        "max_melt_temp_c": 213.75,
+        "min_injection_pressure_mpa": 101.0,
+        "max_injection_pressure_mpa": 145.0,
+        "min_cooling_time_s": 12.0,
+        "max_cooling_time_s": 12.0
+      },
+      "unpadded_zero_margin": {
+        "all_actuators_within_hard_bounds": true,
+        "min_melt_temp_c": 205.0,
+        "max_melt_temp_c": 208.75,
+        "min_injection_pressure_mpa": 79.0,
+        "max_injection_pressure_mpa": 142.0,
+        "min_cooling_time_s": 12.0,
+        "max_cooling_time_s": 12.0
+      },
+      "static_sop": {
+        "all_actuators_within_hard_bounds": true,
+        "min_melt_temp_c": 230.0,
+        "max_melt_temp_c": 230.0,
+        "min_injection_pressure_mpa": 100.0,
+        "max_injection_pressure_mpa": 100.0,
+        "min_cooling_time_s": 20.0,
+        "max_cooling_time_s": 20.0
+      }
+    }
+  },
+  "actuator_safety_verification": {
+    "full_corrected": {
+      "all_actuators_within_hard_bounds": true,
+      "min_melt_temp_c": 205.0,
+      "max_melt_temp_c": 220.0,
+      "min_injection_pressure_mpa": 101.0,
+      "max_injection_pressure_mpa": 141.0,
+      "min_cooling_time_s": 12.0,
+      "max_cooling_time_s": 12.0
+    },
+    "no_recycled_protection": {
+      "all_actuators_within_hard_bounds": true,
+      "min_melt_temp_c": 205.0,
+      "max_melt_temp_c": 215.0,
+      "min_injection_pressure_mpa": 101.0,
+      "max_injection_pressure_mpa": 141.0,
+      "min_cooling_time_s": 12.0,
+      "max_cooling_time_s": 12.0
+    },
+    "initial_baseline_margin": {
+      "all_actuators_within_hard_bounds": true,
+      "min_melt_temp_c": 205.0,
+      "max_melt_temp_c": 213.75,
+      "min_injection_pressure_mpa": 93.0,
+      "max_injection_pressure_mpa": 144.0,
+      "min_cooling_time_s": 12.0,
+      "max_cooling_time_s": 12.0
+    },
+    "candidate_margin_120": {
+      "all_actuators_within_hard_bounds": true,
+      "min_melt_temp_c": 205.0,
+      "max_melt_temp_c": 213.75,
+      "min_injection_pressure_mpa": 101.0,
+      "max_injection_pressure_mpa": 145.0,
+      "min_cooling_time_s": 12.0,
+      "max_cooling_time_s": 12.0
+    },
+    "unpadded_zero_margin": {
+      "all_actuators_within_hard_bounds": true,
+      "min_melt_temp_c": 205.0,
+      "max_melt_temp_c": 208.75,
+      "min_injection_pressure_mpa": 79.0,
+      "max_injection_pressure_mpa": 142.0,
+      "min_cooling_time_s": 12.0,
+      "max_cooling_time_s": 12.0
+    },
+    "static_sop": {
+      "all_actuators_within_hard_bounds": true,
+      "min_melt_temp_c": 230.0,
+      "max_melt_temp_c": 230.0,
+      "min_injection_pressure_mpa": 100.0,
+      "max_injection_pressure_mpa": 100.0,
+      "min_cooling_time_s": 20.0,
+      "max_cooling_time_s": 20.0
+    }
+  }
+}

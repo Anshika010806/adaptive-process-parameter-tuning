@@ -12,10 +12,18 @@ from .evaluator import (
     Gate3ValidationSummary,
     compute_confidence_interval
 )
+from .gate4_evaluator import (
+    Gate4Evaluator,
+    AblationVariantConfig,
+    Gate4SummaryResult
+)
 
 __all__ = [
     "Gate3Evaluator",
     "EvaluationRecord",
     "Gate3ValidationSummary",
-    "compute_confidence_interval"
+    "compute_confidence_interval",
+    "Gate4Evaluator",
+    "AblationVariantConfig",
+    "Gate4SummaryResult"
 ]
