@@ -144,7 +144,14 @@
       "energy": 0.15
     },
     "penalty_scale": 100.0,
-    "max_iterations": 150
+    "max_iterations": 150,
+    "safety_margins": {
+      "tensile_mpa": 1.50,
+      "shrinkage_pct": 0.05,
+      "recycled_margin_slope": 0.035,
+      "recycled_margin_threshold": 25.0,
+      "allow_fallback_to_strict": false
+    }
   },
 
   "random_seeds": {

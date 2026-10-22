@@ -1,0 +1,174 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-22T08:36:40Z",
+    "milestone": "Gate 3 - Systematic Validation",
+    "worklet": "No. 28 - AI-Based Adaptive Process Parameter Tuning",
+    "course": "21CSE732P - Applied AI in Manufacturing, Industry 5.0",
+    "protocol": "Decoupled Closed-Loop Evaluation under Matched Noise Realizations",
+    "random_seed": 42,
+    "add_noise": true
+  },
+  "optimizer_configuration": {
+    "surrogate_model": "RandomForestRegressor",
+    "search_strategy": "grid",
+    "candidate_count": 1090,
+    "random_state": 42,
+    "reject_ood": true,
+    "local_refinement": true,
+    "safety_margin_tensile_base": 1.5,
+    "safety_margin_shrinkage": 0.05,
+    "recycled_margin_slope": 0.035,
+    "recycled_margin_threshold": 25.0,
+    "use_chance_constraint": false,
+    "bounds": {
+      "melt_temp_c": [
+        205.0,
+        255.0
+      ],
+      "injection_pressure_mpa": [
+        65.0,
+        145.0
+      ],
+      "cooling_time_s": [
+        12.0,
+        32.0
+      ]
+    }
+  },
+  "sample_counts": {
+    "n_contexts": 50,
+    "repetitions_per_context": 5,
+    "total_cycle_evaluations": 250,
+    "unique_seeds": 250
+  },
+  "feasibility_metrics": {
+    "total_cycles": 250,
+    "feasible_count": 250,
+    "feasible_rate_pct": 100.0,
+    "infeasible_count": 0,
+    "infeasible_rate_pct": 0.0,
+    "ood_rejected_count": 0,
+    "invalid_input_count": 0,
+    "status_distribution": {
+      "OPTIMAL": 250
+    }
+  },
+  "energy_metrics": {
+    "feasible_cycles_count": 250,
+    "baseline_mean_kwh": 2.458230124362519,
+    "baseline_median_kwh": 2.46046228444284,
+    "baseline_std_kwh": 0.019348467338359546,
+    "tuned_mean_kwh": 2.057092924362519,
+    "tuned_median_kwh": 2.0593156235482875,
+    "tuned_std_kwh": 0.03555902279210608,
+    "reduction_kwh_mean": 0.4011371999999999,
+    "reduction_kwh_median": 0.3982899999999998,
+    "reduction_kwh_std": 0.02877145415959767,
+    "reduction_kwh_min": 0.31954999999999956,
+    "reduction_kwh_max": 0.4399099999999998,
+    "reduction_kwh_ci_95": [
+      0.39755329967292147,
+      0.40472110032707836
+    ],
+    "reduction_pct_mean": 16.319672673620666,
+    "reduction_pct_median": 16.213136056927517,
+    "reduction_pct_std": 1.1845891760997505,
+    "reduction_pct_min": 13.051852121723556,
+    "reduction_pct_max": 18.066122795927765,
+    "reduction_pct_ci_95": [
+      16.17211497590655,
+      16.467230371334782
+    ]
+  },
+  "compliance_metrics": {
+    "baseline_tensile_compliance_pct": 100.0,
+    "baseline_shrinkage_compliance_pct": 100.0,
+    "baseline_overall_compliance_pct": 100.0,
+    "tuned_tensile_compliance_pct": 100.0,
+    "tuned_shrinkage_compliance_pct": 100.0,
+    "tuned_overall_compliance_pct": 100.0,
+    "compliance_improvement_pct": 0.0
+  },
+  "quality_violation_metrics": {
+    "baseline_quality_violation_count": 0,
+    "baseline_quality_violation_rate_pct": 0.0,
+    "tuned_quality_violation_count": 0,
+    "tuned_quality_violation_rate_pct": 0.0,
+    "false_positive_quality_count": 0,
+    "false_positive_quality_rate_pct": 0.0
+  },
+  "surrogate_prediction_errors": {
+    "tensile_mae_mpa": 0.5620161444569326,
+    "tensile_rmse_mpa": 0.6806637307498674,
+    "tensile_mean_bias_mpa": 0.5010046077670997,
+    "tensile_max_error_mpa": 1.7773940709820195,
+    "shrinkage_mae_pct": 0.1560063317496649,
+    "shrinkage_rmse_pct": 0.16280875464488395,
+    "shrinkage_mean_bias_pct": -0.1560063317496649,
+    "shrinkage_max_error_pct": 0.2885447188618451,
+    "energy_mae_kwh": 0.0,
+    "energy_rmse_kwh": 0.0,
+    "energy_max_error_kwh": 0.0
+  },
+  "latency_and_compute_metrics": {
+    "optimization_latency_mean_ms": 78.24125999995886,
+    "optimization_latency_median_ms": 76.74609999958193,
+    "optimization_latency_p95_ms": 86.96758999931262,
+    "optimization_latency_min_ms": 66.80810000034398,
+    "optimization_latency_max_ms": 116.54490000000806,
+    "total_optimization_time_s": 3.912062999997943,
+    "simulator_evals_during_optimization": 0,
+    "simulator_evals_during_validation": 500,
+    "surrogate_candidates_per_cycle": 1090,
+    "total_surrogate_evaluations": 54500
+  },
+  "stratified_regimes": {
+    "moisture_strata": {
+      "low_moisture_sub_015": {
+        "sample_count": 105,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 17.28349431421011,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 100.0,
+        "tensile_mae_mpa": 0.6652536303402864,
+        "shrinkage_mae_pct": 0.1448315754028535
+      },
+      "mid_moisture_015_to_028": {
+        "sample_count": 145,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 15.621732864917965,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 100.0,
+        "tensile_mae_mpa": 0.48725796502415913,
+        "shrinkage_mae_pct": 0.16409839669045934
+      },
+      "high_moisture_gte_028": {
+        "sample_count": 0
+      }
+    },
+    "recycled_content_strata": {
+      "low_recycled_sub_25": {
+        "sample_count": 115,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 16.6840846805404,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 100.0,
+        "tensile_mae_mpa": 0.4113404665367158,
+        "shrinkage_mae_pct": 0.16747713599180733
+      },
+      "high_recycled_gte_25": {
+        "sample_count": 135,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 16.009247630689032,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 100.0,
+        "tensile_mae_mpa": 0.6903694997223024,
+        "shrinkage_mae_pct": 0.14623490591376578
+      }
+    }
+  },
+  "failure_breakdown": {
+    "total_anomalies_or_failures": 0,
+    "failure_records": []
+  }
+}

@@ -556,6 +556,11 @@ class Gate3Evaluator:
             "random_state": self.tuner.random_state,
             "reject_ood": self.tuner.reject_ood,
             "local_refinement": self.tuner.refine_local,
+            "safety_margin_tensile_base": float(getattr(self.tuner, "safety_margin_tensile", 1.50)),
+            "safety_margin_shrinkage": float(getattr(self.tuner, "safety_margin_shrinkage", 0.05)),
+            "recycled_margin_slope": float(getattr(self.tuner, "recycled_margin_slope", 0.035)),
+            "recycled_margin_threshold": float(getattr(self.tuner, "recycled_margin_threshold", 25.0)),
+            "use_chance_constraint": bool(getattr(self.tuner, "use_chance_constraint", False)),
             "bounds": self.tuner.bounds
         }
 
@@ -941,6 +946,12 @@ class Gate3Evaluator:
                     f"{t_data['tensile_mae_mpa']:.3f} | {t_data['shrinkage_mae_pct']:.3f} |"
                 )
 
+        t_margin_base = opt.get("safety_margin_tensile_base", 1.50)
+        v_margin = opt.get("safety_margin_shrinkage", 0.05)
+        rec_slope = opt.get("recycled_margin_slope", 0.035)
+        rec_thresh = opt.get("recycled_margin_threshold", 25.0)
+        rec_str = f" + {rec_slope:.3f} \\times \\max(0, C_{{\\text{{rec}}}} - {rec_thresh:.1f})" if rec_slope > 0 else ""
+
         md.extend([
             "",
             "---",
@@ -948,7 +959,7 @@ class Gate3Evaluator:
             "## 6. Engineering Limitations & Guardrail Discussion",
             "",
             "1. **Simulation Fidelity vs. Industrial Reality:** The reported physical metrics originate from an authoritative phenomenological polymer physics simulator (`PolymerInjectionSimulator`) capturing non-linear viscoelastic shear thinning, thermal degradation, and packing compressibility. They do NOT represent physical plant trials on production molding presses.",
-            "2. **Safety Margin Filtering:** The adaptive tuner incorporates safety margin offsets ($\\Delta_S = 0.80$ MPa, $\\Delta_V = 0.05%$) to absorb surrogate prediction residuals. This conservative filtering prevents quality defects on the boundary of specification tolerances.",
+            f"2. **Safety Margin Filtering:** The adaptive tuner incorporates conservative safety margin offsets ($\\Delta_S = {t_margin_base:.2f}{rec_str}$ MPa, $\\Delta_V = {v_margin:.2f}\\%$) to absorb surrogate prediction residuals and process noise without double-counting uncertainty. This conservative filtering prevents quality defects on the boundary of specification tolerances.",
             "3. **Zero In-Loop Physical Simulator Calls:** The optimization search relies exclusively on ML surrogate inference. Physical simulator evaluations are strictly reserved for post-decision validation under matched stochastic noise realizations.",
             "4. **Graceful Fallback on Infeasibility:** When severe material degradation renders quality specifications unreachable within safe machine actuator bounds, the system rejects deployment and retains standard operating procedures, logging the condition without claiming false savings.",
             ""

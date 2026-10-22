@@ -58,7 +58,14 @@ def run_gate3_validation(
     output_dir: str = "reports/gate3",
     input_file: Optional[str] = None,
     add_noise: bool = True,
-    reject_ood: bool = True
+    reject_ood: bool = True,
+    safety_margin_tensile: Optional[float] = None,
+    safety_margin_shrinkage: Optional[float] = None,
+    recycled_margin_slope: Optional[float] = None,
+    recycled_margin_threshold: Optional[float] = None,
+    allow_fallback_to_strict: Optional[bool] = None,
+    use_chance_constraint: bool = False,
+    chance_confidence: float = 0.95
 ) -> Tuple[int, Dict[str, str], Gate3ValidationSummary]:
     """Execute Gate 3 systematic validation workflow."""
     print("=" * 85)
@@ -84,9 +91,17 @@ def run_gate3_validation(
         random_state=seed,
         search_strategy=search_strategy,
         candidate_budget=candidate_budget,
-        reject_ood=reject_ood
+        reject_ood=reject_ood,
+        safety_margin_tensile=safety_margin_tensile,
+        safety_margin_shrinkage=safety_margin_shrinkage,
+        recycled_margin_slope=recycled_margin_slope,
+        recycled_margin_threshold=recycled_margin_threshold,
+        allow_fallback_to_strict=allow_fallback_to_strict,
+        use_chance_constraint=use_chance_constraint,
+        chance_confidence=chance_confidence
     )
     print(f"      Precomputed actuator search space: {tuner.n_candidates} candidates.")
+    print(f"      Tensile safety margin: base={tuner.safety_margin_tensile:.2f} MPa, recycled_slope={tuner.recycled_margin_slope:.3f} MPa/wt%")
 
     # 3. Instantiate Evaluator & Acquire Scenarios
     print(f"\n[3/5] Setting up Systematic Evaluator and material disturbance scenarios...")
@@ -192,6 +207,20 @@ def main() -> int:
                         help="Disable stochastic physical noise in simulator")
     parser.add_argument("--allow-ood", action="store_true", default=False,
                         help="Allow OOD inputs without strict domain rejection")
+    parser.add_argument("--tensile-margin", type=float, default=None,
+                        help="Base tensile safety margin in MPa (e.g. 1.20 or 1.50)")
+    parser.add_argument("--shrinkage-margin", type=float, default=None,
+                        help="Volumetric shrinkage safety margin in % (e.g. 0.05)")
+    parser.add_argument("--recycled-margin-slope", type=float, default=None,
+                        help="Linear margin expansion slope per wt % recycled content above threshold")
+    parser.add_argument("--recycled-margin-threshold", type=float, default=None,
+                        help="Threshold in wt % above which recycled margin expansion applies (default 25.0)")
+    parser.add_argument("--allow-fallback-to-strict", action="store_true", default=False,
+                        help="Allow fallback to raw spec boundaries when margin is unreachable")
+    parser.add_argument("--use-chance-constraint", action="store_true", default=False,
+                        help="Use statistically justified chance constraint based on calibrated bias and composite noise")
+    parser.add_argument("--chance-confidence", type=float, default=0.95,
+                        help="Confidence level for chance constraint (e.g. 0.95 or 0.99)")
 
     args = parser.parse_args()
 
@@ -205,7 +234,14 @@ def main() -> int:
         output_dir=args.output_dir,
         input_file=args.input_file,
         add_noise=not args.no_noise,
-        reject_ood=not args.allow_ood
+        reject_ood=not args.allow_ood,
+        safety_margin_tensile=args.tensile_margin,
+        safety_margin_shrinkage=args.shrinkage_margin,
+        recycled_margin_slope=args.recycled_margin_slope,
+        recycled_margin_threshold=args.recycled_margin_threshold,
+        allow_fallback_to_strict=args.allow_fallback_to_strict,
+        use_chance_constraint=args.use_chance_constraint,
+        chance_confidence=args.chance_confidence
     )
 
     return exit_code

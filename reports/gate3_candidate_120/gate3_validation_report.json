@@ -1,0 +1,271 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-22T08:36:23Z",
+    "milestone": "Gate 3 - Systematic Validation",
+    "worklet": "No. 28 - AI-Based Adaptive Process Parameter Tuning",
+    "course": "21CSE732P - Applied AI in Manufacturing, Industry 5.0",
+    "protocol": "Decoupled Closed-Loop Evaluation under Matched Noise Realizations",
+    "random_seed": 42,
+    "add_noise": true
+  },
+  "optimizer_configuration": {
+    "surrogate_model": "RandomForestRegressor",
+    "search_strategy": "grid",
+    "candidate_count": 1090,
+    "random_state": 42,
+    "reject_ood": true,
+    "local_refinement": true,
+    "safety_margin_tensile_base": 1.2,
+    "safety_margin_shrinkage": 0.05,
+    "recycled_margin_slope": 0.0,
+    "recycled_margin_threshold": 25.0,
+    "use_chance_constraint": false,
+    "bounds": {
+      "melt_temp_c": [
+        205.0,
+        255.0
+      ],
+      "injection_pressure_mpa": [
+        65.0,
+        145.0
+      ],
+      "cooling_time_s": [
+        12.0,
+        32.0
+      ]
+    }
+  },
+  "sample_counts": {
+    "n_contexts": 50,
+    "repetitions_per_context": 5,
+    "total_cycle_evaluations": 250,
+    "unique_seeds": 250
+  },
+  "feasibility_metrics": {
+    "total_cycles": 250,
+    "feasible_count": 250,
+    "feasible_rate_pct": 100.0,
+    "infeasible_count": 0,
+    "infeasible_rate_pct": 0.0,
+    "ood_rejected_count": 0,
+    "invalid_input_count": 0,
+    "status_distribution": {
+      "OPTIMAL": 250
+    }
+  },
+  "energy_metrics": {
+    "feasible_cycles_count": 250,
+    "baseline_mean_kwh": 2.458230124362519,
+    "baseline_median_kwh": 2.46046228444284,
+    "baseline_std_kwh": 0.019348467338359546,
+    "tuned_mean_kwh": 2.040815324362519,
+    "tuned_median_kwh": 2.0415427094375014,
+    "tuned_std_kwh": 0.033912561299130735,
+    "reduction_kwh_mean": 0.4174148,
+    "reduction_kwh_median": 0.4367599999999998,
+    "reduction_kwh_std": 0.024362872391503008,
+    "reduction_kwh_min": 0.3677499999999996,
+    "reduction_kwh_max": 0.4399099999999998,
+    "reduction_kwh_ci_95": [
+      0.4143800522306262,
+      0.42044954776937377
+    ],
+    "reduction_pct_mean": 16.98286726553655,
+    "reduction_pct_median": 17.608653848252864,
+    "reduction_pct_std": 1.0253622671062839,
+    "reduction_pct_min": 14.979576818084178,
+    "reduction_pct_max": 18.155487362394894,
+    "reduction_pct_ci_95": [
+      16.85514357996711,
+      17.110590951105994
+    ]
+  },
+  "compliance_metrics": {
+    "baseline_tensile_compliance_pct": 100.0,
+    "baseline_shrinkage_compliance_pct": 100.0,
+    "baseline_overall_compliance_pct": 100.0,
+    "tuned_tensile_compliance_pct": 95.19999999999999,
+    "tuned_shrinkage_compliance_pct": 100.0,
+    "tuned_overall_compliance_pct": 95.19999999999999,
+    "compliance_improvement_pct": -4.800000000000011
+  },
+  "quality_violation_metrics": {
+    "baseline_quality_violation_count": 0,
+    "baseline_quality_violation_rate_pct": 0.0,
+    "tuned_quality_violation_count": 12,
+    "tuned_quality_violation_rate_pct": 4.8,
+    "false_positive_quality_count": 12,
+    "false_positive_quality_rate_pct": 4.8
+  },
+  "surrogate_prediction_errors": {
+    "tensile_mae_mpa": 0.5585671379661167,
+    "tensile_rmse_mpa": 0.6829351317797007,
+    "tensile_mean_bias_mpa": 0.4892599133229916,
+    "tensile_max_error_mpa": 1.9680614239551986,
+    "shrinkage_mae_pct": 0.15176808356984742,
+    "shrinkage_rmse_pct": 0.15852865442234879,
+    "shrinkage_mean_bias_pct": -0.15176808356984742,
+    "shrinkage_max_error_pct": 0.2885447188618451,
+    "energy_mae_kwh": 0.0,
+    "energy_rmse_kwh": 0.0,
+    "energy_max_error_kwh": 0.0
+  },
+  "latency_and_compute_metrics": {
+    "optimization_latency_mean_ms": 81.93811200009804,
+    "optimization_latency_median_ms": 78.96820000041771,
+    "optimization_latency_p95_ms": 97.62066999974193,
+    "optimization_latency_min_ms": 68.15390000156185,
+    "optimization_latency_max_ms": 128.78009999985807,
+    "total_optimization_time_s": 4.096905600004902,
+    "simulator_evals_during_optimization": 0,
+    "simulator_evals_during_validation": 500,
+    "surrogate_candidates_per_cycle": 1090,
+    "total_surrogate_evaluations": 54500
+  },
+  "stratified_regimes": {
+    "moisture_strata": {
+      "low_moisture_sub_015": {
+        "sample_count": 105,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 17.632184897914602,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 90.47619047619048,
+        "tensile_mae_mpa": 0.6875373663441654,
+        "shrinkage_mae_pct": 0.14673172378765986
+      },
+      "mid_moisture_015_to_028": {
+        "sample_count": 145,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 16.512671738642098,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 98.62068965517241,
+        "tensile_mae_mpa": 0.46517490362339164,
+        "shrinkage_mae_pct": 0.15541510272246592
+      },
+      "high_moisture_gte_028": {
+        "sample_count": 0
+      }
+    },
+    "recycled_content_strata": {
+      "low_recycled_sub_25": {
+        "sample_count": 115,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 17.242456479012887,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 98.26086956521739,
+        "tensile_mae_mpa": 0.4185540826142093,
+        "shrinkage_mae_pct": 0.16570606145770644
+      },
+      "high_recycled_gte_25": {
+        "sample_count": 135,
+        "feasibility_pct": 100.0,
+        "energy_reduction_pct_mean": 16.76173571331597,
+        "baseline_compliance_pct": 100.0,
+        "tuned_compliance_pct": 92.5925925925926,
+        "tensile_mae_mpa": 0.6778375184510748,
+        "shrinkage_mae_pct": 0.1398949912950045
+      }
+    }
+  },
+  "failure_breakdown": {
+    "total_anomalies_or_failures": 12,
+    "failure_records": [
+      {
+        "context_id": 1,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 23,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 23,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 31,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 32,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 38,
+        "repetition_id": 0,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 38,
+        "repetition_id": 1,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 38,
+        "repetition_id": 2,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 38,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 38,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 39,
+        "repetition_id": 3,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      },
+      {
+        "context_id": 46,
+        "repetition_id": 4,
+        "status": "OPTIMAL",
+        "message": "Optimal in-spec setpoints determined minimizing energy (tensile margin=1.20 MPa).",
+        "quality_violation": true,
+        "false_positive": true
+      }
+    ]
+  }
+}

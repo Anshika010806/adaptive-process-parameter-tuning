@@ -14,6 +14,7 @@ from typing import Dict, Any, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
+from scipy import stats
 
 from .domain_guard import DomainGuard, GuardResult
 
@@ -74,8 +75,16 @@ class AdaptiveProcessTuner:
         candidate_budget: int = 1000,
         reject_ood: bool = True,
         refine_local: bool = True,
-        safety_margin_tensile: float = 0.80,
-        safety_margin_shrinkage: float = 0.05
+        safety_margin_tensile: Optional[float] = None,
+        safety_margin_shrinkage: Optional[float] = None,
+        recycled_margin_slope: Optional[float] = None,
+        recycled_margin_threshold: Optional[float] = None,
+        allow_fallback_to_strict: Optional[bool] = None,
+        use_chance_constraint: bool = False,
+        chance_confidence: float = 0.95,
+        surrogate_bias: float = 0.4708,
+        surrogate_sigma: float = 0.43,
+        process_noise_sigma: float = 0.35
     ):
         self.surrogate = surrogate_pipeline
         self.random_state = random_state
@@ -84,8 +93,19 @@ class AdaptiveProcessTuner:
         self.candidate_budget = candidate_budget
         self.reject_ood = reject_ood
         self.refine_local = refine_local
-        self.safety_margin_tensile = safety_margin_tensile
-        self.safety_margin_shrinkage = safety_margin_shrinkage
+
+        self.use_chance_constraint = use_chance_constraint
+        self.chance_confidence = chance_confidence
+        self.surrogate_bias = surrogate_bias
+        self.surrogate_sigma = surrogate_sigma
+        self.process_noise_sigma = process_noise_sigma
+
+        # Explicit overrides or deferred to config loading
+        self._param_margin_tensile = safety_margin_tensile
+        self._param_margin_shrinkage = safety_margin_shrinkage
+        self._param_recycled_slope = recycled_margin_slope
+        self._param_recycled_threshold = recycled_margin_threshold
+        self._param_allow_fallback = allow_fallback_to_strict
 
         if config_path is None:
             base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -116,7 +136,14 @@ class AdaptiveProcessTuner:
             },
             "optimization": {
                 "weights": {"tensile": 0.50, "shrinkage": 0.35, "energy": 0.15},
-                "penalty_scale": 100.0
+                "penalty_scale": 100.0,
+                "safety_margins": {
+                    "tensile_mpa": 1.50,
+                    "shrinkage_pct": 0.05,
+                    "recycled_margin_slope": 0.035,
+                    "recycled_margin_threshold": 25.0,
+                    "allow_fallback_to_strict": False
+                }
             },
             "physical_coefficients": {
                 "energy": {"E_0": 0.20, "c_thermal": 0.008, "c_hydraulic": 0.009, "c_dwell": 0.030}
@@ -124,7 +151,7 @@ class AdaptiveProcessTuner:
         }
 
     def _load_config(self) -> None:
-        """Cache bounds, weights, and energy coefficients."""
+        """Cache bounds, weights, energy coefficients, and safety margins."""
         p_cfg = self.config["process_parameters"]
         self.bounds = {
             "melt_temp_c": (float(p_cfg["melt_temp_c"]["min_bound"]), float(p_cfg["melt_temp_c"]["max_bound"])),
@@ -157,11 +184,61 @@ class AdaptiveProcessTuner:
         self.w_E = float(w["energy"])
         self.penalty_scale = float(opt_cfg.get("penalty_scale", 100.0))
 
+        # Configurable safety margins
+        sm_cfg = opt_cfg.get("safety_margins", {})
+        self.safety_margin_tensile = (
+            float(self._param_margin_tensile)
+            if self._param_margin_tensile is not None
+            else float(sm_cfg.get("tensile_mpa", 1.50))
+        )
+        self.safety_margin_shrinkage = (
+            float(self._param_margin_shrinkage)
+            if self._param_margin_shrinkage is not None
+            else float(sm_cfg.get("shrinkage_pct", 0.05))
+        )
+        self.recycled_margin_slope = (
+            float(self._param_recycled_slope)
+            if self._param_recycled_slope is not None
+            else float(sm_cfg.get("recycled_margin_slope", 0.035))
+        )
+        self.recycled_margin_threshold = (
+            float(self._param_recycled_threshold)
+            if self._param_recycled_threshold is not None
+            else float(sm_cfg.get("recycled_margin_threshold", 25.0))
+        )
+        self.allow_fallback_to_strict = (
+            bool(self._param_allow_fallback)
+            if self._param_allow_fallback is not None
+            else bool(sm_cfg.get("allow_fallback_to_strict", False))
+        )
+
         e_cfg = self.config["physical_coefficients"]["energy"]
         self.E_0 = float(e_cfg["E_0"])
         self.c_thermal = float(e_cfg["c_thermal"])
         self.c_hydraulic = float(e_cfg["c_hydraulic"])
         self.c_dwell = float(e_cfg["c_dwell"])
+
+    def get_tensile_safety_margin(self, recycled_pct: Optional[float] = None) -> float:
+        """
+        Calculate effective tensile safety margin accounting for base conservative margin,
+        calibrated surrogate bias and process noise, and justified protection for
+        high recycled content blends (C_rec > threshold).
+        """
+        if self.use_chance_constraint:
+            # Statistically justified chance constraint:
+            # S_hat >= S_min + bias + z * sqrt(sigma_surr^2 + sigma_noise^2)
+            z_crit = float(stats.norm.ppf(self.chance_confidence))
+            composite_sigma = float(np.sqrt(self.surrogate_sigma ** 2 + self.process_noise_sigma ** 2))
+            margin = self.surrogate_bias + z_crit * composite_sigma
+        else:
+            margin = float(self.safety_margin_tensile)
+
+        # Strengthen protection for high recycled content only when justified (C_rec > threshold)
+        if recycled_pct is not None and self.recycled_margin_slope > 0.0:
+            excess_rec = max(0.0, float(recycled_pct) - self.recycled_margin_threshold)
+            margin += self.recycled_margin_slope * excess_rec
+
+        return float(margin)
 
     def _precompute_candidates(self) -> None:
         """
@@ -245,6 +322,7 @@ class AdaptiveProcessTuner:
     ) -> Tuple[np.ndarray, float, float, float]:
         """
         Optional local bounded grid search around a promising candidate to fine-tune energy.
+        Strictly preserves conservative quality safety margins to prevent defect migration.
         """
         t_span = np.linspace(max(self.bounds["melt_temp_c"][0], best_u[0] - 2.5),
                              min(self.bounds["melt_temp_c"][1], best_u[0] + 2.5), 5)
@@ -265,9 +343,16 @@ class AdaptiveProcessTuner:
         ref_V = ref_preds[:, 1]
         ref_E = self.compute_energy(refined_cands[:, 0], refined_cands[:, 1], refined_cands[:, 2], ambient_temp_c)
 
+        rec_pct = float(x_mat[3])
+        s_margin = self.get_tensile_safety_margin(rec_pct)
+        s_min_safe = self.spec_S_min + s_margin
+        s_max_safe = self.spec_S_max - s_margin
+        v_min_safe = self.spec_V_min + self.safety_margin_shrinkage
+        v_max_safe = self.spec_V_max - self.safety_margin_shrinkage
+
         in_spec_mask = (
-            (self.spec_S_min <= ref_S) & (ref_S <= self.spec_S_max) &
-            (self.spec_V_min <= ref_V) & (ref_V <= self.spec_V_max)
+            (s_min_safe <= ref_S) & (ref_S <= s_max_safe) &
+            (v_min_safe <= ref_V) & (ref_V <= v_max_safe)
         )
 
         if np.any(in_spec_mask):
@@ -291,6 +376,7 @@ class AdaptiveProcessTuner:
     ) -> TuningRecommendation:
         """
         Find optimal actuator setpoints minimizing energy subject to hard quality constraints.
+        Enforces conservative tensile and shrinkage safety margins.
         """
         guard_res = self.domain_guard.validate_material(
             moisture_pct=moisture_pct,
@@ -338,8 +424,9 @@ class AdaptiveProcessTuner:
         )
 
         # Hard quality constraint filtering with safety margins
-        s_min_safe = self.spec_S_min + self.safety_margin_tensile
-        s_max_safe = self.spec_S_max - self.safety_margin_tensile
+        s_margin = self.get_tensile_safety_margin(recycled_pct)
+        s_min_safe = self.spec_S_min + s_margin
+        s_max_safe = self.spec_S_max - s_margin
         v_min_safe = self.spec_V_min + self.safety_margin_shrinkage
         v_max_safe = self.spec_V_max - self.safety_margin_shrinkage
 
@@ -348,15 +435,9 @@ class AdaptiveProcessTuner:
             (v_min_safe <= V_preds) & (V_preds <= v_max_safe) &
             np.isfinite(S_preds) & np.isfinite(V_preds)
         )
-        feasible_strict = (
-            (self.spec_S_min <= S_preds) & (S_preds <= self.spec_S_max) &
-            (self.spec_V_min <= V_preds) & (V_preds <= self.spec_V_max) &
-            np.isfinite(S_preds) & np.isfinite(V_preds)
-        )
-        feasible_mask = feasible_safe if np.any(feasible_safe) else feasible_strict
 
-        if np.any(feasible_mask):
-            feasible_indices = np.where(feasible_mask)[0]
+        if np.any(feasible_safe):
+            feasible_indices = np.where(feasible_safe)[0]
             # Among feasible candidates, minimize energy (with mild centering tie-breaker)
             centering_penalty = 1e-4 * (
                 ((S_preds[feasible_indices] - self.target_S) / self.tol_S) ** 2 +
@@ -386,10 +467,40 @@ class AdaptiveProcessTuner:
                 predicted_in_spec=True,
                 is_feasible=True,
                 status="OPTIMAL",
-                message="Optimal in-spec setpoints determined minimizing energy."
+                message=f"Optimal in-spec setpoints determined minimizing energy (tensile margin={s_margin:.2f} MPa)."
             )
 
-        # No candidate satisfied hard constraints -> Explicit failure status
+        # Fallback to strict specification boundaries only if explicitly allowed
+        if self.allow_fallback_to_strict:
+            feasible_strict = (
+                (self.spec_S_min <= S_preds) & (S_preds <= self.spec_S_max) &
+                (self.spec_V_min <= V_preds) & (V_preds <= self.spec_V_max) &
+                np.isfinite(S_preds) & np.isfinite(V_preds)
+            )
+            if np.any(feasible_strict):
+                feasible_indices = np.where(feasible_strict)[0]
+                centering_penalty = 1e-4 * (
+                    ((S_preds[feasible_indices] - self.target_S) / self.tol_S) ** 2 +
+                    ((V_preds[feasible_indices] - self.target_V) / self.tol_V) ** 2
+                )
+                scores = E_preds[feasible_indices] + centering_penalty
+                best_idx = feasible_indices[int(np.argmin(scores))]
+
+                best_u = self.candidate_actuators[best_idx]
+                return TuningRecommendation(
+                    melt_temp_c=float(best_u[0]),
+                    injection_pressure_mpa=float(best_u[1]),
+                    cooling_time_s=float(best_u[2]),
+                    predicted_tensile_mpa=float(S_preds[best_idx]),
+                    predicted_shrinkage_pct=float(V_preds[best_idx]),
+                    predicted_energy_kwh=float(E_preds[best_idx]),
+                    predicted_in_spec=True,
+                    is_feasible=True,
+                    status="SUBOPTIMAL",
+                    message="No candidate satisfied safety margins; fell back to raw specification boundaries."
+                )
+
+        # No candidate satisfied conservative safety constraints -> Explicit failure status
         return TuningRecommendation(
             melt_temp_c=float(sop_u[0]),
             injection_pressure_mpa=float(sop_u[1]),
@@ -400,13 +511,13 @@ class AdaptiveProcessTuner:
             predicted_in_spec=False,
             is_feasible=False,
             status="INFEASIBLE",
-            message=f"No candidate setpoint satisfies hard quality constraints (tensile: [{self.spec_S_min}, {self.spec_S_max}], shrinkage: [{self.spec_V_min}, {self.spec_V_max}])."
+            message=f"No candidate setpoint satisfies conservative safety constraints (tensile: [{s_min_safe:.2f}, {s_max_safe:.2f}] MPa, shrinkage: [{v_min_safe:.2f}, {v_max_safe:.2f}]%)."
         )
 
     def tune_batch(self, df_material: pd.DataFrame) -> pd.DataFrame:
         """
         Apply adaptive tuning across an entire batch of incoming material disturbances.
-        Enforces domain guard screens and vectorized candidate evaluation.
+        Enforces domain guard screens, vectorized candidate evaluation, and conservative margins.
         """
         missing = [col for col in self.MATERIAL_COLS if col not in df_material.columns]
         if missing:
@@ -459,9 +570,11 @@ class AdaptiveProcessTuner:
                 s_row = matrix_S[row_idx]
                 v_row = matrix_V[row_idx]
                 e_row = matrix_E[row_idx]
+                rec_pct_row = mat_feas[row_idx, 3]
 
-                s_min_safe = self.spec_S_min + self.safety_margin_tensile
-                s_max_safe = self.spec_S_max - self.safety_margin_tensile
+                s_margin = self.get_tensile_safety_margin(rec_pct_row)
+                s_min_safe = self.spec_S_min + s_margin
+                s_max_safe = self.spec_S_max - s_margin
                 v_min_safe = self.spec_V_min + self.safety_margin_shrinkage
                 v_max_safe = self.spec_V_max - self.safety_margin_shrinkage
 
@@ -470,15 +583,9 @@ class AdaptiveProcessTuner:
                     (v_min_safe <= v_row) & (v_row <= v_max_safe) &
                     np.isfinite(s_row) & np.isfinite(v_row)
                 )
-                in_spec_strict = (
-                    (self.spec_S_min <= s_row) & (s_row <= self.spec_S_max) &
-                    (self.spec_V_min <= v_row) & (v_row <= self.spec_V_max) &
-                    np.isfinite(s_row) & np.isfinite(v_row)
-                )
-                in_spec = in_spec_safe if np.any(in_spec_safe) else in_spec_strict
 
-                if np.any(in_spec):
-                    spec_cand_idx = np.where(in_spec)[0]
+                if np.any(in_spec_safe):
+                    spec_cand_idx = np.where(in_spec_safe)[0]
                     centering_penalty = 1e-4 * (
                         ((s_row[spec_cand_idx] - self.target_S) / self.tol_S) ** 2 +
                         ((v_row[spec_cand_idx] - self.target_V) / self.tol_V) ** 2
@@ -495,11 +602,40 @@ class AdaptiveProcessTuner:
                     pred_E[orig_idx] = float(e_row[best_cand_idx])
                     pred_in_spec[orig_idx] = True
                     status_list[orig_idx] = "OPTIMAL"
-                    msg_list[orig_idx] = "Optimal in-spec setpoints determined."
+                    msg_list[orig_idx] = f"Optimal in-spec setpoints determined (tensile margin={s_margin:.2f} MPa)."
+                elif self.allow_fallback_to_strict:
+                    in_spec_strict = (
+                        (self.spec_S_min <= s_row) & (s_row <= self.spec_S_max) &
+                        (self.spec_V_min <= v_row) & (v_row <= self.spec_V_max) &
+                        np.isfinite(s_row) & np.isfinite(v_row)
+                    )
+                    if np.any(in_spec_strict):
+                        spec_cand_idx = np.where(in_spec_strict)[0]
+                        centering_penalty = 1e-4 * (
+                            ((s_row[spec_cand_idx] - self.target_S) / self.tol_S) ** 2 +
+                            ((v_row[spec_cand_idx] - self.target_V) / self.tol_V) ** 2
+                        )
+                        best_cand_idx = spec_cand_idx[int(np.argmin(e_row[spec_cand_idx] + centering_penalty))]
+
+                        best_actuator = self.candidate_actuators[best_cand_idx]
+                        opt_T[orig_idx] = float(best_actuator[0])
+                        opt_P[orig_idx] = float(best_actuator[1])
+                        opt_C[orig_idx] = float(best_actuator[2])
+
+                        pred_S[orig_idx] = float(s_row[best_cand_idx])
+                        pred_V[orig_idx] = float(v_row[best_cand_idx])
+                        pred_E[orig_idx] = float(e_row[best_cand_idx])
+                        pred_in_spec[orig_idx] = True
+                        status_list[orig_idx] = "SUBOPTIMAL"
+                        msg_list[orig_idx] = "No candidate satisfied safety margins; fell back to raw specification boundaries."
+                    else:
+                        feasibility_mask[orig_idx] = False
+                        status_list[orig_idx] = "INFEASIBLE"
+                        msg_list[orig_idx] = "No candidate setpoint satisfies hard quality constraints."
                 else:
                     feasibility_mask[orig_idx] = False
                     status_list[orig_idx] = "INFEASIBLE"
-                    msg_list[orig_idx] = "No candidate setpoint satisfies hard quality constraints."
+                    msg_list[orig_idx] = f"No candidate setpoint satisfies conservative safety constraints (margin={s_margin:.2f} MPa)."
 
         res_df = pd.DataFrame({
             "melt_temp_c": opt_T,
