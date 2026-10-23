@@ -53,20 +53,36 @@ AppliedAI/
 │   ├── process_model.md            # Physics equations and coefficient calibration
 │   └── dataset_documentation.md    # Distribution specifications and OOD definitions
 ├── experiments/
-│   └── run_simulation_data.py      # Dataset generation script
+│   ├── run_simulation_data.py          # Dataset generation script
+│   ├── run_baseline_benchmarks.py      # Baseline benchmark runner
+│   ├── run_surrogate_benchmarks.py     # Gate 1 surrogate benchmark runner
+│   ├── run_closed_loop_evaluations.py  # Closed-loop evaluation runner
+│   └── run_ablations.py                # Standalone offline surrogate feature ablation (sensor value analysis)
 ├── src/
 │   ├── simulation/
-│   │   ├── process_simulator.py    # Ground-truth manufacturing physics simulator
-│   │   └── data_generator.py       # Reproducible ID & OOD data generation engine
-│   ├── models/                     # Surrogate regression models & baselines (Phase 2-3)
-│   ├── optimization/               # Static SOP vs. Adaptive optimization controllers (Phase 3)
-│   ├── profiling/                  # Dataset profiler & dynamic schema mapper (Phase 2)
-│   └── web/                        # Lightweight Flask UI (Phase 5)
-├── tests/
-│   ├── test_simulation.py          # Unit tests for physical simulator and data generator
-│   └── test_deliverables.py        # Compliance verification tests
-├── requirements.txt                # Pinned dependencies
-└── README.md                       # Project documentation
+│   │   ├── process_simulator.py        # Ground-truth manufacturing physics simulator
+│   │   └── data_generator.py           # Reproducible ID & OOD data generation engine
+│   ├── models/                         # Surrogate regression models & baselines (Phase 2-3)
+│   ├── optimization/                   # Adaptive process parameter tuning & domain guard (Gate 2)
+│   ├── profiling/                      # Dataset profiler & dynamic schema mapper (Phase 2)
+│   ├── validation/                     # Gate 3-4 closed-loop evaluators & validation runners
+│   │   ├── evaluator.py                # Gate 3 closed-loop evaluation engine
+│   │   ├── run_gate3.py                # Gate 3 validation runner (CLI)
+│   │   ├── gate4_evaluator.py          # Gate 4 robustness & ablation evaluator
+│   │   └── run_gate4.py                # Gate 4 closed-loop robustness, sensitivity & ablation runner
+│   └── web/                            # Lightweight Flask UI (Phase 5)
+├── tests/                              # Comprehensive test suite (96 tests passing)
+│   ├── test_simulation.py              # Simulator physics & data generation tests
+│   ├── test_baselines.py               # Baseline models & static controller tests
+│   ├── test_profiler.py                # Mode B profiler & schema validation tests
+│   ├── test_surrogate_benchmark.py     # Surrogate benchmarking & leakage prevention tests
+│   ├── test_adaptive_tuner.py          # Constrained optimizer unit tests
+│   ├── test_gate2_tuning.py            # Gate 2 tuning & domain guard tests
+│   ├── test_gate2_corrective_iteration.py # Gate 2 corrective iteration & adaptive margin tests
+│   ├── test_gate3_validation.py        # Gate 3 closed-loop validation tests
+│   └── test_gate4_evaluation.py        # Gate 4 robustness, sensitivity & ablation tests
+├── requirements.txt                    # Pinned dependencies
+└── README.md                           # Project documentation
 ```
 
 ---
@@ -75,7 +91,32 @@ AppliedAI/
 
 ### Running Automated Unit Tests
 ```bash
+# Run full test suite (96 passing tests)
+pytest tests/ -v
+
+# Run individual test modules
 pytest tests/test_simulation.py -v
+pytest tests/test_gate4_evaluation.py -v
+```
+
+### Ablation & Validation Runners Distinction
+This repository provides two distinct ablation/validation tools serving complementary engineering purposes:
+
+1. **`experiments/run_ablations.py` (Offline Surrogate Feature Ablation):**
+   - Evaluates machine learning surrogate accuracy degradation when individual input features (e.g., moisture, recycled content) are omitted from training.
+   - Used to quantify sensor value and input feature sensitivity in offline model evaluation.
+
+2. **`src/validation/run_gate4.py` (Gate 4 Closed-Loop System Validation):**
+   - Evaluates 6 closed-loop controller variants (full corrected tuner vs. ablated margin/recycled variants vs. static SOP) directly against the authoritative physics simulator (`PolymerInjectionSimulator`).
+   - Conducts systematic process noise robustness sweeps ($\sigma \in [0.0, 0.50]\text{ MPa}$), cross-seed stability checks, safety margin sweeps ($\Delta S \in [0.0, 2.20]\text{ MPa}$), and recycled content sensitivity sweeps.
+   - Generates formal Gate 4 summary reports in `reports/gate4/`.
+
+```bash
+# Run formal Gate 4 closed-loop robustness and ablation validation
+python -m src.validation.run_gate4
+
+# Run standalone offline feature ablation experiment
+python experiments/run_ablations.py
 ```
 
 ### Generating Synthetic Datasets

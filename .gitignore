@@ -228,3 +228,8 @@ flask_session/
 !src/**
 !experiments/**
 !tests/**
+
+# Re-ignore bytecode and cache files that could be un-ignored by directory whitelists above
+**/__pycache__/
+*.py[cod]
+*$py.class
