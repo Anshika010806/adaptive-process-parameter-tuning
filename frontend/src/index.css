@@ -47,8 +47,9 @@
 
 :root {
   --bg-main: #111918;
-  --bg-sidebar: #0B302F;
-  --bg-sidebar-active: #144443;
+  --bg-sidebar: #263431;
+  --bg-sidebar-hover: #35423F;
+  --bg-sidebar-active: #35423F;
   --bg-card: #1B2926;
   --bg-card-hover: #20322E;
   --bg-card-alt: #16221F;
@@ -68,7 +69,7 @@
   --text-muted: #5A6E67;
   --text-on-accent: #FFFFFF;
 
-  --border-subtle: #263B37;
+  --border-subtle: #212E2B;
   --border-focus: #35A86B;
 
   --font-heading: 'Boska', Georgia, serif;

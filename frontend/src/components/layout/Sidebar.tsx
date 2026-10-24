@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Activity,
   Sliders,
@@ -16,17 +16,68 @@ interface SidebarProps {
   apiStatus: string;
 }
 
+interface NavItemDef {
+  id: NavTab;
+  label: string;
+  icon: React.ReactNode;
+  desc: string;
+}
+
+const SidebarNavItem: React.FC<{
+  item: NavItemDef;
+  isActive: boolean;
+  onClick: () => void;
+}> = ({ item, isActive, onClick }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        width: '100%',
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '12px',
+        padding: '10px 12px',
+        marginBottom: '4px',
+        borderRadius: '6px',
+        border: 'none',
+        backgroundColor: isActive ? '#35423F' : (isHovered ? '#35423F' : 'transparent'),
+        borderLeft: isActive ? '3px solid #35A86B' : '3px solid transparent',
+        color: isActive ? '#E5ECE8' : (isHovered ? '#FFFFFF' : '#C2D1CC'),
+        cursor: 'pointer',
+        textAlign: 'left',
+        transition: 'background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease'
+      }}
+    >
+      <div style={{ marginTop: '2px', color: isActive ? '#35A86B' : 'inherit' }}>
+        {item.icon}
+      </div>
+      <div>
+        <div style={{ fontSize: '13px', fontWeight: isActive ? 600 : 500, lineHeight: 1.2 }}>
+          {item.label}
+        </div>
+        <div style={{ fontSize: '11px', color: '#7E968D', marginTop: '2px' }}>
+          {item.desc}
+        </div>
+      </div>
+    </button>
+  );
+};
+
 export const Sidebar: React.FC<SidebarProps> = ({
   currentTab,
   onSelectTab,
   apiStatus
 }) => {
-  const navItems: { id: NavTab; label: string; icon: React.ReactNode; desc: string }[] = [
+  const navItems: NavItemDef[] = [
     {
       id: 'overview',
       label: 'Overview',
       icon: <Activity size={18} />,
-      desc: 'System KPIs & Architecture'
+      desc: 'System KPIs & Operations'
     },
     {
       id: 'tuning',
@@ -42,9 +93,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'experiments',
-      label: 'Experiments & Gates',
+      label: 'Experiments & Traceability',
       icon: <FlaskConical size={18} />,
-      desc: 'Gates 1–4, Ablation & Robustness'
+      desc: 'Gates 1–4, Ablation & Architecture'
     }
   ];
 
@@ -64,49 +115,50 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div>
         <div
           style={{
-            padding: '20px 18px',
-            borderBottom: '1px solid rgba(38, 59, 55, 0.7)'
+            padding: '22px 20px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.06)'
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <Cpu size={20} color="#35A86B" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+            <Cpu size={18} color="#35A86B" />
             <span
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '11px',
                 fontWeight: 600,
                 color: '#35A86B',
-                letterSpacing: '0.08em',
+                letterSpacing: '0.06em',
                 textTransform: 'uppercase'
               }}
             >
-              Industry 5.0 Circular AI
+              Control Platform
             </span>
           </div>
           <h2
             style={{
               fontFamily: 'var(--font-heading)',
-              fontSize: '1.25rem',
+              fontSize: '1.35rem',
               fontWeight: 700,
               color: 'var(--text-primary)',
               lineHeight: 1.2
             }}
           >
-            Adaptive Parameter Tuning
+            Adaptive Process Tuning
           </h2>
           <p
             style={{
-              fontSize: '11px',
+              fontSize: '12px',
               color: 'var(--text-secondary)',
-              marginTop: '4px'
+              marginTop: '4px',
+              lineHeight: 1.35
             }}
           >
-            Worklet No. 28 — Closed-Loop Control
+            Closed-loop parameter optimization
           </p>
         </div>
 
         {/* Navigation Items */}
-        <nav style={{ padding: '12px 10px' }}>
+        <nav style={{ padding: '16px 12px' }}>
           <div
             style={{
               fontSize: '10px',
@@ -115,46 +167,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
               letterSpacing: '0.08em',
               color: 'var(--text-muted)',
               padding: '6px 10px',
-              marginBottom: '4px'
+              marginBottom: '6px'
             }}
           >
             Navigation
           </div>
-          {navItems.map((item) => {
-            const isActive = currentTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => onSelectTab(item.id)}
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '10px 12px',
-                  marginBottom: '4px',
-                  backgroundColor: isActive ? 'var(--bg-sidebar-active)' : 'transparent',
-                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  borderLeft: isActive ? '3px solid #35A86B' : '3px solid transparent',
-                  borderRadius: '0 4px 4px 0',
-                  textAlign: 'left',
-                  transition: 'background-color 0.15s ease'
-                }}
-              >
-                <div style={{ color: isActive ? '#35A86B' : 'inherit' }}>
-                  {item.icon}
-                </div>
-                <div>
-                  <div style={{ fontSize: '13px', fontWeight: isActive ? 600 : 500 }}>
-                    {item.label}
-                  </div>
-                  <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-                    {item.desc}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
+          {navItems.map((item) => (
+            <SidebarNavItem
+              key={item.id}
+              item={item}
+              isActive={currentTab === item.id}
+              onClick={() => onSelectTab(item.id)}
+            />
+          ))}
         </nav>
       </div>
 
@@ -162,8 +187,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div
         style={{
           padding: '16px',
-          borderTop: '1px solid rgba(38, 59, 55, 0.7)',
-          backgroundColor: 'rgba(11, 48, 47, 0.5)'
+          borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+          backgroundColor: '#1E2A27'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>

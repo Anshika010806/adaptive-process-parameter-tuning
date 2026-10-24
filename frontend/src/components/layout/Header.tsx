@@ -11,22 +11,22 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   title,
   subtitle,
-  badgeText = 'GATE 4 VERIFIED',
+  badgeText,
   badgeVariant = 'green'
 }) => {
   return (
     <header
       style={{
-        padding: '18px 28px',
+        padding: '20px 32px',
         borderBottom: '1px solid var(--border-subtle)',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#111918'
+        backgroundColor: 'var(--bg-main)'
       }}
     >
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <h1 className="page-title">{title}</h1>
           {badgeText && <Badge variant={badgeVariant}>{badgeText}</Badge>}
         </div>
@@ -43,33 +43,40 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </div>
 
-      {/* Right side operational info */}
+      {/* Right side operational bounds - compact and minimal borders */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '16px',
+          gap: '20px',
           fontSize: '11px',
-          color: 'var(--text-secondary)',
           fontFamily: 'var(--font-mono)'
         }}
       >
         <div style={{ textAlign: 'right' }}>
-          <div style={{ color: 'var(--text-muted)' }}>STANDARD OPERATING SPEC</div>
-          <div style={{ color: 'var(--text-primary)' }}>Tensile: 49–55 MPa | Shrink: 0.8–1.6%</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Quality Tolerance
+          </div>
+          <div style={{ color: 'var(--text-primary)', marginTop: '2px' }}>
+            49–55 MPa · 0.8–1.6%
+          </div>
         </div>
 
         <div
           style={{
-            height: '24px',
+            height: '22px',
             width: '1px',
             backgroundColor: 'var(--border-subtle)'
           }}
         />
 
         <div style={{ textAlign: 'right' }}>
-          <div style={{ color: 'var(--text-muted)' }}>OPTIMIZER BOUNDS</div>
-          <div style={{ color: 'var(--text-primary)' }}>Melt: 205–255°C | Press: 65–145 MPa</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Actuator Range
+          </div>
+          <div style={{ color: 'var(--text-primary)', marginTop: '2px' }}>
+            205–255°C · 65–145 MPa
+          </div>
         </div>
       </div>
     </header>

@@ -25,23 +25,23 @@ export const App: React.FC = () => {
 
   const pageHeaders: Record<NavTab, { title: string; subtitle: string; badge: string }> = {
     overview: {
-      title: 'Operational Overview & Key Performance Indicators',
-      subtitle: 'Real-time telemetry and validation benchmarks under raw material disturbance',
+      title: 'Adaptive Process Tuning',
+      subtitle: 'Real-time telemetry and closed-loop optimization under feedstock disturbance',
       badge: 'GATE 4 VERIFIED'
     },
     tuning: {
-      title: 'Adaptive Process Parameter Tuning Console',
+      title: 'Process Tuning',
       subtitle: 'Dynamic setpoint optimization with Domain Guard boundary defense',
       badge: 'INTERACTIVE CONSOLE'
     },
     results: {
-      title: 'Static SOP vs. Adaptive Optimization Benchmarks',
+      title: 'Optimization Results',
       subtitle: 'Direct comparative assessment against ground-truth manufacturing physics',
       badge: '16.32% ENERGY REDUCTION'
     },
     experiments: {
-      title: 'Empirical Research Protocol & Gates 1–4 Log',
-      subtitle: 'Quantitative multi-model benchmarks, robustness sweeps, and controller ablations',
+      title: 'Experiments & Traceability',
+      subtitle: 'Multi-model benchmarks, robustness sweeps, and Gate 1–4 verification',
       badge: 'EVIDENCE-BASED AUDIT'
     }
   };
@@ -56,7 +56,7 @@ export const App: React.FC = () => {
         backgroundColor: 'var(--bg-main)'
       }}
     >
-      {/* Deep Teal Industrial Sidebar */}
+      {/* Sidebar with muted grey-green theme */}
       <Sidebar
         currentTab={currentTab}
         onSelectTab={(tab) => setCurrentTab(tab)}
@@ -82,7 +82,7 @@ export const App: React.FC = () => {
 
         <main
           style={{
-            padding: '24px 28px',
+            padding: '32px 36px',
             flex: 1,
             maxWidth: '1600px',
             width: '100%',
