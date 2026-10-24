@@ -1,0 +1,214 @@
+/* ==============================================================================
+   AI-Based Adaptive Process Parameter Tuning — Industrial Theme
+   Palette:
+   - Main Background:    #111918
+   - Sidebar Teal:       #0B302F
+   - Card Background:    #1B2926
+   - Card Hover:         #20322E
+   - Accent Green:       #35A86B
+   - Text Primary:       #E5ECE8
+   - Text Secondary:     #7E968D
+   - Subtle Border:      #263B37
+   - Warning Amber:      #D9822B
+   - Error Red:          #D9534F
+   ============================================================================== */
+
+@font-face {
+  font-family: 'Boska';
+  src: url('./assets/fonts/Boska-Variable.woff2') format('woff2-variations');
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boska';
+  src: url('./assets/fonts/Boska-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boska';
+  src: url('./assets/fonts/Boska-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Boska';
+  src: url('./assets/fonts/Boska-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-main: #111918;
+  --bg-sidebar: #0B302F;
+  --bg-sidebar-active: #144443;
+  --bg-card: #1B2926;
+  --bg-card-hover: #20322E;
+  --bg-card-alt: #16221F;
+  --bg-input: #121E1C;
+
+  --accent-green: #35A86B;
+  --accent-green-dim: rgba(53, 168, 107, 0.15);
+  --accent-teal: #1F6B68;
+  --accent-amber: #D9822B;
+  --accent-amber-dim: rgba(217, 130, 43, 0.15);
+  --accent-red: #D9534F;
+  --accent-red-dim: rgba(217, 83, 79, 0.15);
+  --accent-blue: #3E8E9E;
+
+  --text-primary: #E5ECE8;
+  --text-secondary: #7E968D;
+  --text-muted: #5A6E67;
+  --text-on-accent: #FFFFFF;
+
+  --border-subtle: #263B37;
+  --border-focus: #35A86B;
+
+  --font-heading: 'Boska', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Headings */
+h1.page-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.85rem;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+h2.section-heading {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+h3.card-heading {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Measurements & Numbers */
+.metric-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum' on, 'lnum' on;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: var(--radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Inputs & Form Controls */
+input[type="number"],
+input[type="text"],
+select {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+  border-color: var(--border-focus);
+}
+
+input[type="range"] {
+  accent-color: var(--accent-green);
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+  border: none;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  text-align: left;
+  padding: 8px 12px;
+  background-color: var(--bg-card-alt);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(38, 59, 55, 0.6);
+  color: var(--text-primary);
+}
+
+tr:hover td {
+  background-color: rgba(32, 50, 46, 0.4);
+}
