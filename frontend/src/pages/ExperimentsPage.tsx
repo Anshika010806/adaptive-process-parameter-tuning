@@ -8,7 +8,9 @@ import {
   NOISE_ROBUSTNESS_DATA,
   SENSITIVITY_MARGIN_SWEEP,
   RECYCLED_CONTENT_SWEEP,
-  OVERVIEW_METRICS
+  OVERVIEW_METRICS,
+  GATE3_EXPERIMENT_COMPARISONS,
+  TEST_SUITE_BREAKDOWN
 } from '../data/reportData';
 import {
   Zap,
@@ -116,9 +118,9 @@ export const ExperimentsPage: React.FC = () => {
               label="Verification Test Suite"
               value="108"
               unit="Tests Passing"
-              badgeText="100% COVERAGE"
+              badgeText="INTERNAL SUITE: 108 PASSING"
               badgeVariant="green"
-              secondaryText="Automated unit, regression, and closed-loop integration suites"
+              secondaryText="Internal automated verification suite across 9 test modules (no external certification implied)"
               icon={<CheckCircle2 size={18} color="#35A86B" />}
             />
             <StatCard
@@ -213,7 +215,7 @@ export const ExperimentsPage: React.FC = () => {
           {/* Full Gates 1–4 Traceability Table */}
           <Card
             title="Gate 1–4 Verification & Traceability Matrix"
-            subtitle="Progression verified by 108 automated unit and integration tests across all system components"
+            subtitle="Progression verified by 108 automated internal unit and integration tests across all system components"
           >
             <div style={{ overflowX: 'auto', marginTop: '8px' }}>
               <table>
@@ -253,30 +255,62 @@ export const ExperimentsPage: React.FC = () => {
                     <td>Systematic Closed-Loop Matched-Pair Validation (N=250)</td>
                     <td><code>src/validation/run_gate3.py</code></td>
                     <td className="metric-mono">
-                      17.56% energy reduction. Exposed optimizer boundary bias (37.2% defect).
+                      17.56% energy reduction. Exposed optimizer boundary bias (93/250 defects, 37.2% defect rate).
                     </td>
                     <td>11 tests in <code>test_gate3_validation.py</code></td>
-                    <td><Badge variant="amber" size="sm">PIVOTED (EXP-006)</Badge></td>
+                    <td><Badge variant="amber" size="sm">Corrected and revalidated (EXP-006)</Badge></td>
                   </tr>
                   <tr>
                     <td style={{ fontWeight: 600, fontFamily: 'var(--font-mono)' }}>EXP-006</td>
-                    <td>Gate 2 Corrective Iteration & Quadrature Adaptive Margin</td>
+                    <td>Gate 2 Corrective Iteration & Quadrature Adaptive Margin Calibration</td>
                     <td><code>adaptive_tuner.py</code>, <code>simulation_config.json</code></td>
                     <td className="metric-mono">
-                      0 defects (100% compliance); 16.32% energy reduction [16.17, 16.47]%.
+                      0 defects (100% compliance across 250 cycles); 16.32% energy reduction [16.17, 16.47]%.
                     </td>
                     <td>12 tests in <code>test_gate2_corrective_iteration.py</code></td>
-                    <td><Badge variant="green" size="sm">REVALIDATED</Badge></td>
+                    <td><Badge variant="green" size="sm">REVALIDATED (100%)</Badge></td>
                   </tr>
                   <tr>
                     <td style={{ fontWeight: 600, fontFamily: 'var(--font-mono)' }}>Gate 4</td>
                     <td>Noise Robustness, Sensitivity Sweeps & 6-Variant Ablation</td>
                     <td><code>src/validation/run_gate4.py</code></td>
                     <td className="metric-mono">
-                      100% compliance at nominal noise; 100% actuator safety; 53 defects without padding.
+                      0 defects with full corrected tuner (100% compliance); 100% actuator safety; 53 defects with initial 0.80 MPa margin (78.8% compliance); 204 defects without padding (18.4% compliance).
                     </td>
                     <td>30 tests in <code>test_gate4_evaluation.py</code></td>
                     <td><Badge variant="green" size="sm">ACCEPTED (100%)</Badge></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </Card>
+
+          {/* Automated Test Suite Breakdown Card */}
+          <Card
+            title="Internal Automated Verification Suite (108 Pytest Tests)"
+            subtitle="Per-module test collection verified directly against workspace test suite (internal engineering validation, not external accreditation)"
+          >
+            <div style={{ overflowX: 'auto', marginTop: '6px' }}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Test Module</th>
+                    <th>Tests Passing</th>
+                    <th>Component Scope & Verification Coverage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {TEST_SUITE_BREAKDOWN.map((row, idx) => (
+                    <tr key={idx}>
+                      <td><code>tests/{row.module}</code></td>
+                      <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>{row.tests} tests</td>
+                      <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{row.scope}</td>
+                    </tr>
+                  ))}
+                  <tr style={{ backgroundColor: 'var(--bg-card-alt)', fontWeight: 700 }}>
+                    <td>Total Automated Tests Passing</td>
+                    <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 700 }}>108 tests</td>
+                    <td style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>100% test pass rate across 9 modules</td>
                   </tr>
                 </tbody>
               </table>
@@ -684,6 +718,65 @@ export const ExperimentsPage: React.FC = () => {
                   </li>
                 </ul>
               </div>
+            </div>
+          </Card>
+
+          {/* Gate 3 Evolution Comparison Table */}
+          <Card
+            title="Gate 3 Configuration Evolution & Empirical Verification"
+            subtitle="Preserving experimental distinctions: Initial 0.80 MPa vs Candidate 1.20 MPa vs Corrected Adaptive Margin (N=250 cycles each)"
+          >
+            <div style={{ overflowX: 'auto', marginTop: '6px' }}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Experiment Configuration</th>
+                    <th>Safety Margin Buffer</th>
+                    <th>Observed Defects</th>
+                    <th>Quality Compliance %</th>
+                    <th>Energy Reduction %</th>
+                    <th>Evaluation Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {GATE3_EXPERIMENT_COMPARISONS.map((exp, idx) => {
+                    const isCorrected = exp.compliance_pct === 100.0;
+                    return (
+                      <tr
+                        key={idx}
+                        style={{
+                          backgroundColor: isCorrected ? 'rgba(53, 168, 107, 0.08)' : 'transparent'
+                        }}
+                      >
+                        <td style={{ fontWeight: 600 }}>
+                          {exp.configuration}
+                          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px', fontWeight: 400 }}>
+                            {exp.notes}
+                          </div>
+                        </td>
+                        <td className="metric-mono">{exp.margin_label}</td>
+                        <td className="metric-mono" style={{ color: exp.defects > 0 ? '#D9534F' : '#35A86B', fontWeight: 700 }}>
+                          {exp.defects} / {exp.total_cycles}
+                        </td>
+                        <td className="metric-mono" style={{ color: exp.compliance_pct < 90 ? '#D9534F' : exp.compliance_pct < 100 ? '#D9822B' : '#35A86B', fontWeight: 700 }}>
+                          {exp.compliance_pct.toFixed(1)}%
+                        </td>
+                        <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>
+                          {exp.energy_reduction_pct.toFixed(2)}%
+                        </td>
+                        <td>
+                          <Badge variant={isCorrected ? 'green' : exp.defects < 20 ? 'amber' : 'red'} size="sm">
+                            {exp.status}
+                          </Badge>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '8px', lineHeight: 1.4 }}>
+              Note: Results are evaluated across 250 matched-pair cycles under identical disturbance seeds. The initial 0.80 MPa and candidate 1.20 MPa runs are earlier baseline iterations; their metrics are never combined with the final corrected tuner.
             </div>
           </Card>
         </div>

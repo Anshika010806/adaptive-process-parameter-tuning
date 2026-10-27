@@ -27,7 +27,7 @@ export const App: React.FC = () => {
     overview: {
       title: 'Adaptive Process Tuning',
       subtitle: 'Real-time telemetry and closed-loop optimization under feedstock disturbance',
-      badge: 'GATE 4 VERIFIED'
+      badge: 'GATE 4 INTERNAL BENCHMARK'
     },
     tuning: {
       title: 'Process Tuning',

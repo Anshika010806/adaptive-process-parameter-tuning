@@ -46,14 +46,14 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({ onNavigate }) => {
           </h2>
           <p
             style={{
-              fontSize: '13px',
+              fontSize: '13.5px',
               color: 'var(--text-secondary)',
               marginTop: '8px',
               lineHeight: 1.6
             }}
           >
             Closed-loop parameter optimization mitigating feedstock variation and maximizing energy efficiency
-            while strictly maintaining tensile strength (49–55 MPa) and shrinkage (0.8–1.6%) tolerances.
+            while maintaining strict quality specifications and machine actuator safety.
           </p>
         </div>
 

@@ -30,6 +30,51 @@ export const OVERVIEW_METRICS = {
   domainGuardRejectionRateOOD: 100.0 // Correctly rejects unsupported OOD scenarios
 };
 
+export const GATE3_EXPERIMENT_COMPARISONS = [
+  {
+    configuration: 'Earlier Experiment: Initial Safety Margin (0.80 MPa)',
+    margin_label: '0.80 MPa (Initial)',
+    total_cycles: 250,
+    defects: 93,
+    compliance_pct: 62.8,
+    energy_reduction_pct: 17.56,
+    status: 'High Defect Rate (Boundary Bias Exposed)',
+    notes: 'Optimizer selected setpoints at the lower 49.0 MPa boundary, causing 37.2% defect rate under stochastic noise.'
+  },
+  {
+    configuration: 'Earlier Experiment: Candidate Safety Margin (1.20 MPa)',
+    margin_label: '1.20 MPa (Candidate)',
+    total_cycles: 250,
+    defects: 12,
+    compliance_pct: 95.2,
+    energy_reduction_pct: 16.98,
+    status: 'Partially Improved (Residual High-Recycled Defects)',
+    notes: 'Constant 1.20 MPa margin reduced defects but still yielded 12 defects concentrated at >32.5 wt% recycled content.'
+  },
+  {
+    configuration: 'Corrected Configuration: Adaptive Recycled Margin (EXP-006)',
+    margin_label: '1.50 MPa + 0.035·max(0, C_rec - 25.0)',
+    total_cycles: 250,
+    defects: 0,
+    compliance_pct: 100.0,
+    energy_reduction_pct: 16.32,
+    status: 'Fully Corrected & Revalidated',
+    notes: 'Quadrature uncertainty decomposition + adaptive slope achieved 100% compliance across all 250 cycles with 16.32% energy reduction.'
+  }
+];
+
+export const TEST_SUITE_BREAKDOWN = [
+  { module: 'test_gate4_evaluation.py', tests: 30, scope: 'Ablation, noise regimes, sensitivity sweeps, actuator limits' },
+  { module: 'test_simulation.py', tests: 16, scope: 'Physical simulator thermodynamics, transients, noise injection' },
+  { module: 'test_gate2_tuning.py', tests: 15, scope: 'Constrained tuning engine, Domain Guard OOD rejection' },
+  { module: 'test_gate2_corrective_iteration.py', tests: 12, scope: 'EXP-006 adaptive margin, chance constraints, quadrature decomposition' },
+  { module: 'test_gate3_validation.py', tests: 11, scope: 'Closed-loop matched validation, error analysis, confidence intervals' },
+  { module: 'test_profiler.py', tests: 7, scope: 'Dataset profiling, defensive validation, category handling' },
+  { module: 'test_adaptive_tuner.py', tests: 6, scope: 'Closed-loop actuator enforcement, tree surrogate optimization' },
+  { module: 'test_surrogate_benchmark.py', tests: 6, scope: 'Multi-output regression, leakage checks, model serialization' },
+  { module: 'test_baselines.py', tests: 5, scope: 'Static SOP controller, dummy & linear regression baselines' }
+];
+
 export const GATE1_SURROGATE_MODELS: SurrogateBenchmarkModel[] = [
   {
     model_name: 'Dummy (Mean)',
@@ -119,7 +164,7 @@ export const GATE4_ABLATION_VARIANTS: AblationRow[] = [
   },
   {
     variant_id: 'no_recycled_protection',
-    variant_name: 'Ablation A: No Recycled Slope',
+    variant_name: 'Ablation A: No Recycled Protection',
     total_cycles: 250,
     optimizer_feasible_pct: 100.0,
     tensile_compliance_pct: 99.2,
@@ -137,7 +182,7 @@ export const GATE4_ABLATION_VARIANTS: AblationRow[] = [
   },
   {
     variant_id: 'initial_baseline_margin',
-    variant_name: 'Ablation B: Initial 0.80 MPa Margin',
+    variant_name: 'Ablation B: Initial Baseline Margin (0.80 MPa)',
     total_cycles: 250,
     optimizer_feasible_pct: 100.0,
     tensile_compliance_pct: 78.8,
@@ -155,7 +200,7 @@ export const GATE4_ABLATION_VARIANTS: AblationRow[] = [
   },
   {
     variant_id: 'candidate_margin_120',
-    variant_name: 'Ablation C: Candidate 1.20 MPa Margin',
+    variant_name: 'Ablation C: Candidate Margin (1.20 MPa)',
     total_cycles: 250,
     optimizer_feasible_pct: 100.0,
     tensile_compliance_pct: 95.2,
