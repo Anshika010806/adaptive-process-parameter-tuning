@@ -9,7 +9,6 @@ import {
   SENSITIVITY_MARGIN_SWEEP,
   RECYCLED_CONTENT_SWEEP,
   OVERVIEW_METRICS,
-  GATE3_EXPERIMENT_COMPARISONS,
   TEST_SUITE_BREAKDOWN
 } from '../data/reportData';
 import {
@@ -591,192 +590,426 @@ export const ExperimentsPage: React.FC = () => {
 
       {/* SUB-TAB 3: Gates 2 & 3 Closed Loop & Adaptive Margin Formulation */}
       {activeSubTab === 'gate2_3' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
-          {/* Dynamic Recycled Safety Margin Formulation Card */}
-          <Card
-            title="Adaptive Margin Formulation (EXP-006)"
-            subtitle="Quadrature uncertainty decomposition protecting high-recycled feeds"
-          >
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', marginTop: '6px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          {/* Section A: The Original Problem */}
+          <Card>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <h2
                   style={{
-                    fontFamily: 'var(--font-mono)',
-                    backgroundColor: 'var(--bg-input)',
-                    padding: '12px 14px',
-                    borderRadius: 'var(--radius-sm)',
-                    fontSize: '13px',
-                    color: '#35A86B',
-                    fontWeight: 600
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '1.35rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    marginBottom: '8px'
                   }}
                 >
-                  ΔS(C_rec) = 1.50 + 0.035 · max(0, C_rec - 25.0)
-                </div>
-
-                <div style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                  In Gate 3, unpadded energy minimization dragged setpoints to the 49.0 MPa lower boundary, producing a 37.2% defect rate.
-                  EXP-006 resolved this using:
-                </div>
-
-                <ul style={{ fontSize: '12px', color: 'var(--text-primary)', paddingLeft: '18px', lineHeight: 1.7 }}>
-                  <li>
-                    <strong>Quadrature uncertainty:</strong> √(σ_surr² + σ_noise²) = 0.554 MPa (eliminating double-counting penalties).
-                  </li>
-                  <li>
-                    <strong>Adaptive Recycled Slope:</strong> +0.035 MPa/% buffer above 25 wt % recycled content.
-                  </li>
-                  <li>
-                    <strong>Padded Local Refinement:</strong> Boundary constraints strictly enforced during neighbor exploration.
-                  </li>
-                </ul>
+                  Why did the original system produce defects?
+                </h2>
+                <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.6, maxWidth: '850px' }}>
+                  The optimizer tried to reduce energy consumption by selecting settings too close to the minimum acceptable tensile strength. Small prediction errors could therefore cause products to fail quality requirements.
+                </p>
               </div>
 
+              {/* Three Metrics Callout Cards */}
               <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                  gap: '14px',
+                  marginTop: '4px'
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: 'var(--bg-card-alt)',
+                    border: '1px solid rgba(217, 83, 79, 0.35)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '16px 18px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px'
+                  }}
+                >
+                  <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)' }}>
+                    Defects
+                  </span>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                    <span className="metric-mono" style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--accent-red)' }}>
+                      93
+                    </span>
+                    <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>out of 250 cycles</span>
+                  </div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Initial 0.80 MPa safety margin</span>
+                </div>
+
+                <div
+                  style={{
+                    backgroundColor: 'var(--bg-card-alt)',
+                    border: '1px solid rgba(217, 83, 79, 0.35)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '16px 18px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px'
+                  }}
+                >
+                  <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)' }}>
+                    Quality compliance
+                  </span>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                    <span className="metric-mono" style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--accent-red)' }}>
+                      62.8%
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>37.2% defect rate at lower barrier</span>
+                </div>
+
+                <div
+                  style={{
+                    backgroundColor: 'var(--bg-card-alt)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '16px 18px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px'
+                  }}
+                >
+                  <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)' }}>
+                    Energy reduction
+                  </span>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                    <span className="metric-mono" style={{ fontSize: '1.6rem', fontWeight: 700, color: 'var(--accent-green)' }}>
+                      17.56%
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Compared to standard SOP</span>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Section B: How We Improved It */}
+          <Card>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              <div>
+                <h2
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '1.35rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    marginBottom: '8px'
+                  }}
+                >
+                  How did we make the system safer?
+                </h2>
+                <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                  Three coordinated defenses keep the process protected without sacrificing energy savings.
+                </p>
+              </div>
+
+              {/* Three Explanation Cards */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                  gap: '16px'
+                }}
+              >
+                {/* 1. Added a safety buffer */}
+                <div
+                  style={{
+                    backgroundColor: 'var(--bg-card-alt)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span
+                      style={{
+                        backgroundColor: 'var(--accent-green-dim)',
+                        color: 'var(--accent-green)',
+                        width: '26px',
+                        height: '26px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '13px',
+                        fontWeight: 700
+                      }}
+                    >
+                      1
+                    </span>
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: '14px',
+                        fontWeight: 700,
+                        color: 'var(--text-primary)'
+                      }}
+                    >
+                      Added a safety buffer
+                    </h3>
+                  </div>
+                  <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5, marginTop: '2px' }}>
+                    Kept optimized settings further away from the minimum tensile-strength limit.
+                  </p>
+                </div>
+
+                {/* 2. Adapted to recycled material */}
+                <div
+                  style={{
+                    backgroundColor: 'var(--bg-card-alt)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span
+                      style={{
+                        backgroundColor: 'var(--accent-green-dim)',
+                        color: 'var(--accent-green)',
+                        width: '26px',
+                        height: '26px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '13px',
+                        fontWeight: 700
+                      }}
+                    >
+                      2
+                    </span>
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: '14px',
+                        fontWeight: 700,
+                        color: 'var(--text-primary)'
+                      }}
+                    >
+                      Adapted to recycled material
+                    </h3>
+                  </div>
+                  <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5, marginTop: '2px' }}>
+                    Increased the safety buffer when recycled content exceeded 25%.
+                  </p>
+                </div>
+
+                {/* 3. Enforced operating limits */}
+                <div
+                  style={{
+                    backgroundColor: 'var(--bg-card-alt)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '18px 20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span
+                      style={{
+                        backgroundColor: 'var(--accent-green-dim)',
+                        color: 'var(--accent-green)',
+                        width: '26px',
+                        height: '26px',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '13px',
+                        fontWeight: 700
+                      }}
+                    >
+                      3
+                    </span>
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: '14px',
+                        fontWeight: 700,
+                        color: 'var(--text-primary)'
+                      }}
+                    >
+                      Enforced operating limits
+                    </h3>
+                  </div>
+                  <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5, marginTop: '2px' }}>
+                    Retained the existing checks on machine settings and feasible operating conditions.
+                  </p>
+                </div>
+              </div>
+
+              {/* Expandable Technical Details Section */}
+              <details
                 style={{
                   backgroundColor: 'var(--bg-card-alt)',
+                  border: '1px solid var(--border-subtle)',
                   borderRadius: 'var(--radius-sm)',
-                  padding: '14px 16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between'
+                  padding: '12px 16px',
+                  fontSize: '12px',
+                  color: 'var(--text-secondary)'
                 }}
               >
-                <div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    Engine Integration
+                <summary style={{ cursor: 'pointer', fontWeight: 600, color: 'var(--text-muted)' }}>
+                  Technical details
+                </summary>
+                <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px', lineHeight: 1.5 }}>
+                  <div
+                    className="metric-mono"
+                    style={{
+                      backgroundColor: 'var(--bg-input)',
+                      padding: '8px 12px',
+                      borderRadius: 'var(--radius-sm)',
+                      color: '#35A86B',
+                      fontWeight: 600,
+                      display: 'inline-block',
+                      width: 'fit-content'
+                    }}
+                  >
+                    ΔS(C_rec) = 1.50 + 0.035 · max(0, C_rec - 25.0) MPa
                   </div>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>
-                    src/optimization/adaptive_tuner.py
-                  </div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '8px', lineHeight: 1.5 }}>
-                    Evaluated across 250 matched-pair cycles. Verified in <code>test_gate2_corrective_iteration.py</code>.
-                  </div>
+                  <p>
+                    <strong>Quadrature uncertainty:</strong> Combined surrogate uncertainty (0.43 MPa) and process noise (0.35 MPa) in quadrature: √(0.43² + 0.35²) = 0.554 MPa to prevent double-counting penalties.
+                  </p>
+                  <p>
+                    <strong>Padded local search:</strong> Evaluates candidate parameters against the padded boundary (49.0 MPa + ΔS) during neighbor exploration in the optimization engine.
+                  </p>
                 </div>
-
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)' }}>
-                  <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Defects Post-Correction</span>
-                  <Badge variant="green" size="sm">0 DEFECTS (100% COMPLIANCE)</Badge>
-                </div>
-              </div>
+              </details>
             </div>
           </Card>
 
-          {/* Gate 3 Baseline Discovery vs Corrective Comparison */}
-          <Card
-            title="Gate 3 Baseline Discovery vs. EXP-006 Corrective Revalidation"
-            subtitle="Investigation of optimizer boundary bias and resolution via adaptive safety margins"
-          >
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', marginTop: '8px' }}>
-              <div
-                style={{
-                  backgroundColor: 'rgba(217, 83, 79, 0.08)',
-                  borderRadius: 'var(--radius-sm)',
-                  padding: '16px'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#D9534F' }}>
-                    Gate 3 Initial Baseline Failure (EXP-005)
-                  </span>
-                  <Badge variant="red" size="sm">37.2% DEFECT RATE</Badge>
-                </div>
-                <ul style={{ fontSize: '12px', color: 'var(--text-primary)', paddingLeft: '16px', lineHeight: 1.6 }}>
-                  <li>
-                    <strong>Root Cause 1:</strong> Boundary selection bias ("Optimizer's Curse"). Energy minimization pushed points to raw boundary (49.0 MPa).
-                  </li>
-                  <li>
-                    <strong>Root Cause 2:</strong> Unpadded local refinement bug evaluated raw tolerance rather than padded margin.
-                  </li>
-                  <li>
-                    <strong>Root Cause 3:</strong> High-recycled degradation acceleration (surrogate over-predicted tensile by +0.856 MPa at &gt;37.5 wt % recycled).
-                  </li>
-                </ul>
+          {/* Section C: Final Results */}
+          <Card>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <h2
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '1.35rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    marginBottom: '8px'
+                  }}
+                >
+                  Did the improvement work?
+                </h2>
+                <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                  Comparison of manufacturing outcomes across the three test configurations.
+                </p>
               </div>
 
-              <div
+              {/* Comparison Table */}
+              <div style={{ overflowX: 'auto', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-sm)' }}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style={{ padding: '12px 16px' }}>Configuration</th>
+                      <th style={{ textAlign: 'right', padding: '12px 16px' }}>Defects</th>
+                      <th style={{ textAlign: 'right', padding: '12px 16px' }}>Quality compliance</th>
+                      <th style={{ textAlign: 'right', padding: '12px 16px' }}>Energy reduction</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style={{ padding: '12px 16px', fontWeight: 500 }}>
+                        Original configuration (0.80 MPa)
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px', color: 'var(--accent-red)', fontWeight: 600 }}>
+                        93/250
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px', color: 'var(--accent-red)', fontWeight: 600 }}>
+                        62.8%
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px' }}>
+                        17.56%
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td style={{ padding: '12px 16px', fontWeight: 500 }}>
+                        Fixed safety buffer (1.20 MPa)
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px', color: 'var(--accent-amber)', fontWeight: 600 }}>
+                        12/250
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px', color: 'var(--accent-amber)', fontWeight: 600 }}>
+                        95.2%
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px' }}>
+                        16.98%
+                      </td>
+                    </tr>
+
+                    {/* Highlighted Final Adaptive Row */}
+                    <tr
+                      style={{
+                        backgroundColor: 'rgba(53, 168, 107, 0.12)',
+                        borderLeft: '3px solid var(--accent-green)'
+                      }}
+                    >
+                      <td style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--text-primary)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span>Final adaptive safety buffer</span>
+                          <span
+                            style={{
+                              backgroundColor: 'rgba(53, 168, 107, 0.2)',
+                              color: '#35A86B',
+                              fontSize: '10px',
+                              fontWeight: 700,
+                              padding: '2px 8px',
+                              borderRadius: 'var(--radius-sm)',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em'
+                            }}
+                          >
+                            Final
+                          </span>
+                        </div>
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px', color: '#35A86B', fontWeight: 700 }}>
+                        0/250
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px', color: '#35A86B', fontWeight: 700 }}>
+                        100.0%
+                      </td>
+                      <td className="metric-mono" style={{ textAlign: 'right', padding: '12px 16px', color: '#35A86B', fontWeight: 700 }}>
+                        16.32%
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Plain-Language Explanation */}
+              <p
                 style={{
-                  backgroundColor: 'rgba(53, 168, 107, 0.08)',
+                  fontSize: '13px',
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.6,
+                  padding: '12px 16px',
+                  backgroundColor: 'var(--bg-card-alt)',
                   borderRadius: 'var(--radius-sm)',
-                  padding: '16px'
+                  border: '1px solid var(--border-subtle)'
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: '#35A86B' }}>
-                    Gate 2 Corrective Revalidation (EXP-006)
-                  </span>
-                  <Badge variant="green" size="sm">0 DEFECTS (100% COMPLIANT)</Badge>
-                </div>
-                <ul style={{ fontSize: '12px', color: 'var(--text-primary)', paddingLeft: '16px', lineHeight: 1.6 }}>
-                  <li>
-                    <strong>Quadrature Decomposition:</strong> Combined surrogate uncertainty (0.43 MPa) and noise (0.35 MPa) in quadrature: √(0.43² + 0.35²) = 0.554 MPa.
-                  </li>
-                  <li>
-                    <strong>Empirical 1.20 MPa Candidate:</strong> Evaluated and rejected as sole fix (still had 4.8% defects in Q4).
-                  </li>
-                  <li>
-                    <strong>Adaptive Slope Formulation:</strong> ΔS(C_rec) = 1.50 + 0.035 · max(0, C_rec - 25.0) completely eliminated 100% of quality defects.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Card>
-
-          {/* Gate 3 Evolution Comparison Table */}
-          <Card
-            title="Gate 3 Configuration Evolution & Empirical Verification"
-            subtitle="Preserving experimental distinctions: Initial 0.80 MPa vs Candidate 1.20 MPa vs Corrected Adaptive Margin (N=250 cycles each)"
-          >
-            <div style={{ overflowX: 'auto', marginTop: '6px' }}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Experiment Configuration</th>
-                    <th>Safety Margin Buffer</th>
-                    <th>Observed Defects</th>
-                    <th>Quality Compliance %</th>
-                    <th>Energy Reduction %</th>
-                    <th>Evaluation Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {GATE3_EXPERIMENT_COMPARISONS.map((exp, idx) => {
-                    const isCorrected = exp.compliance_pct === 100.0;
-                    return (
-                      <tr
-                        key={idx}
-                        style={{
-                          backgroundColor: isCorrected ? 'rgba(53, 168, 107, 0.08)' : 'transparent'
-                        }}
-                      >
-                        <td style={{ fontWeight: 600 }}>
-                          {exp.configuration}
-                          <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px', fontWeight: 400 }}>
-                            {exp.notes}
-                          </div>
-                        </td>
-                        <td className="metric-mono">{exp.margin_label}</td>
-                        <td className="metric-mono" style={{ color: exp.defects > 0 ? '#D9534F' : '#35A86B', fontWeight: 700 }}>
-                          {exp.defects} / {exp.total_cycles}
-                        </td>
-                        <td className="metric-mono" style={{ color: exp.compliance_pct < 90 ? '#D9534F' : exp.compliance_pct < 100 ? '#D9822B' : '#35A86B', fontWeight: 700 }}>
-                          {exp.compliance_pct.toFixed(1)}%
-                        </td>
-                        <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>
-                          {exp.energy_reduction_pct.toFixed(2)}%
-                        </td>
-                        <td>
-                          <Badge variant={isCorrected ? 'green' : exp.defects < 20 ? 'amber' : 'red'} size="sm">
-                            {exp.status}
-                          </Badge>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '8px', lineHeight: 1.4 }}>
-              Note: Results are evaluated across 250 matched-pair cycles under identical disturbance seeds. The initial 0.80 MPa and candidate 1.20 MPa runs are earlier baseline iterations; their metrics are never combined with the final corrected tuner.
+                The final configuration met the specified quality limits in all 250 evaluated cycles and reduced average energy consumption by 16.32%. These results describe the tested scenarios and do not guarantee zero defects in future production.
+              </p>
             </div>
           </Card>
         </div>

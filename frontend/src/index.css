@@ -13,38 +13,6 @@
    - Error Red:          #D9534F
    ============================================================================== */
 
-@font-face {
-  font-family: 'Boska';
-  src: url('./assets/fonts/Boska-Variable.woff2') format('woff2-variations');
-  font-weight: 200 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Boska';
-  src: url('./assets/fonts/Boska-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Boska';
-  src: url('./assets/fonts/Boska-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Boska';
-  src: url('./assets/fonts/Boska-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --bg-main: #111918;
   --bg-sidebar: #263431;
@@ -72,7 +40,7 @@
   --border-subtle: #212E2B;
   --border-focus: #35A86B;
 
-  --font-heading: 'Boska', Georgia, serif;
+  --font-heading: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Roboto Mono', monospace;
 
@@ -98,27 +66,31 @@ html, body {
 }
 
 /* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
 h1.page-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.85rem;
+  font-size: 1.75rem;
   color: var(--text-primary);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   line-height: 1.25;
 }
 
 h2.section-heading {
-  font-family: var(--font-body);
+  font-family: var(--font-heading);
   font-weight: 600;
   font-size: 1.15rem;
   color: var(--text-primary);
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
 }
 
 h3.card-heading {
-  font-family: var(--font-body);
+  font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
