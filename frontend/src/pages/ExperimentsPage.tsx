@@ -36,10 +36,10 @@ type ExpSubTab = 'architecture' | 'gate4_ablation' | 'gate4_robustness' | 'gate2
 export const ExperimentsPage: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState<ExpSubTab>('architecture');
 
-  // Chart data for Gate 1 surrogate model R2 comparison
+  // Chart data for Gate 1 surrogate model R2 comparison (Tensile R2 across regimes)
   const gate1ChartData = GATE1_SURROGATE_MODELS.map((m) => ({
     name: m.model_name.split(' (')[0],
-    test_r2: Math.max(-0.5, m.test_mean_r2),
+    test_r2: Math.max(-0.5, m.test_tensile_r2),
     ood2_thermal_r2: Math.max(-0.5, m.ood2_thermal_r2),
     ood4_sensor_r2: Math.max(-0.5, m.ood4_sensor_r2)
   }));
@@ -803,6 +803,7 @@ export const ExperimentsPage: React.FC = () => {
                     <th>OOD-1 Feedstock R²</th>
                     <th>OOD-2 Thermal R²</th>
                     <th>OOD-3 Extrapolation R²</th>
+                    <th>OOD-4 Sensor R²</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -829,6 +830,9 @@ export const ExperimentsPage: React.FC = () => {
                         </td>
                         <td className="metric-mono" style={{ color: m.ood3_extrap_r2 < 0 ? '#D9534F' : '#35A86B' }}>
                           {m.ood3_extrap_r2.toFixed(3)}
+                        </td>
+                        <td className="metric-mono" style={{ color: m.ood4_sensor_r2 < 0 ? '#D9534F' : '#35A86B' }}>
+                          {m.ood4_sensor_r2.toFixed(3)}
                         </td>
                       </tr>
                     );

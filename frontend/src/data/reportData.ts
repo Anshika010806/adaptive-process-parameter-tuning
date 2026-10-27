@@ -84,23 +84,23 @@ export const GATE1_SURROGATE_MODELS: SurrogateBenchmarkModel[] = [
     test_shrinkage_mae: 0.146,
     test_shrinkage_r2: -0.001,
     test_mean_r2: -0.001,
-    ood1_feedstock_r2: -0.001,
-    ood2_thermal_r2: -0.001,
-    ood3_extrap_r2: -0.001,
-    ood4_sensor_r2: -0.001
+    ood1_feedstock_r2: -7.234,
+    ood2_thermal_r2: -0.640,
+    ood3_extrap_r2: -36.919,
+    ood4_sensor_r2: -0.232
   },
   {
     model_name: 'Linear Regression',
-    val_mean_r2: 0.852,
+    val_mean_r2: 0.847,
     test_tensile_mae: 0.674,
     test_tensile_r2: 0.759,
     test_shrinkage_mae: 0.033,
     test_shrinkage_r2: 0.946,
     test_mean_r2: 0.852,
-    ood1_feedstock_r2: 0.713,
-    ood2_thermal_r2: -0.742,
-    ood3_extrap_r2: -1.820,
-    ood4_sensor_r2: 0.152
+    ood1_feedstock_r2: 0.709,
+    ood2_thermal_r2: -0.746,
+    ood3_extrap_r2: -0.137,
+    ood4_sensor_r2: 0.151
   },
   {
     model_name: 'Ridge (alpha=10)',
@@ -112,21 +112,21 @@ export const GATE1_SURROGATE_MODELS: SurrogateBenchmarkModel[] = [
     test_mean_r2: 0.852,
     ood1_feedstock_r2: 0.713,
     ood2_thermal_r2: -0.742,
-    ood3_extrap_r2: -1.820,
+    ood3_extrap_r2: -0.166,
     ood4_sensor_r2: 0.152
   },
   {
     model_name: 'Decision Tree (depth=16)',
     val_mean_r2: 0.754,
     test_tensile_mae: 0.559,
-    test_tensile_r2: 0.835,
+    test_tensile_r2: 0.834,
     test_shrinkage_mae: 0.078,
     test_shrinkage_r2: 0.696,
     test_mean_r2: 0.765,
-    ood1_feedstock_r2: -8.120,
-    ood2_thermal_r2: 0.512,
-    ood3_extrap_r2: -35.210,
-    ood4_sensor_r2: 0.485
+    ood1_feedstock_r2: -6.719,
+    ood2_thermal_r2: 0.357,
+    ood3_extrap_r2: -33.345,
+    ood4_sensor_r2: 0.497
   },
   {
     model_name: 'Random Forest (100 trees)',
@@ -138,7 +138,7 @@ export const GATE1_SURROGATE_MODELS: SurrogateBenchmarkModel[] = [
     test_mean_r2: 0.879,
     ood1_feedstock_r2: -6.732,
     ood2_thermal_r2: 0.704,
-    ood3_extrap_r2: -33.580,
+    ood3_extrap_r2: -33.585,
     ood4_sensor_r2: 0.675
   }
 ];
