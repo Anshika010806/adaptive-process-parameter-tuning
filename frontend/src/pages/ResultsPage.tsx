@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card } from '../components/common/Card';
 import { StatCard } from '../components/common/StatCard';
-import { GATE4_ABLATION_VARIANTS } from '../data/reportData';
 import {
   BarChart,
   Bar,
@@ -21,66 +20,156 @@ import {
   CheckCircle2
 } from 'lucide-react';
 
-export const ResultsPage: React.FC = () => {
-  // Energy comparison bar chart data for all 6 Gate 4 controller variants
-  const energyChartData = [
-    {
-      name: 'Static SOP Baseline',
-      energy_kwh: 2.458,
-      reduction_pct: 0.0,
-      ci: '0.00%',
-      fill: '#3E8E9E'
-    },
-    {
-      name: 'Full Corrected Tuner',
-      energy_kwh: 2.057,
-      reduction_pct: 16.32,
-      ci: '95% CI [16.17, 16.47]',
-      fill: '#35A86B'
-    },
-    {
-      name: 'Ablation A: No Recycled Protection',
-      energy_kwh: 2.053,
-      reduction_pct: 16.47,
-      ci: '95% CI [16.34, 16.61]',
-      fill: '#1F6B68'
-    },
-    {
-      name: 'Ablation B: Initial Margin (0.80 MPa)',
-      energy_kwh: 2.031,
-      reduction_pct: 17.38,
-      ci: '95% CI [17.29, 17.48]',
-      fill: '#D9822B'
-    },
-    {
-      name: 'Ablation C: Candidate Margin (1.20 MPa)',
-      energy_kwh: 2.041,
-      reduction_pct: 16.98,
-      ci: '95% CI [16.86, 17.11]',
-      fill: '#5EC1BD'
-    },
-    {
-      name: 'Ablation D: Unpadded (0.00 MPa Margin)',
-      energy_kwh: 2.021,
-      reduction_pct: 17.80,
-      ci: '95% CI [17.76, 17.84]',
-      fill: '#D9534F'
-    }
-  ];
+// Energy comparison bar chart data for all 6 Gate 4 controller variants with readable short names
+const ENERGY_CHART_DATA = [
+  {
+    shortName: 'Standard SOP',
+    fullName: 'Static SOP Baseline',
+    energy_kwh: 2.458,
+    reduction_pct: 0.0,
+    ci: 'Baseline',
+    fill: '#3E8E9E'
+  },
+  {
+    shortName: 'Full Tuner',
+    fullName: 'Full Corrected Tuner',
+    energy_kwh: 2.057,
+    reduction_pct: 16.32,
+    ci: '95% CI [16.17, 16.47]%',
+    fill: '#35A86B'
+  },
+  {
+    shortName: 'No Recycled',
+    fullName: 'Ablation A: No Recycled Protection',
+    energy_kwh: 2.053,
+    reduction_pct: 16.47,
+    ci: '95% CI [16.34, 16.61]%',
+    fill: '#1F6B68'
+  },
+  {
+    shortName: '1.20 MPa',
+    fullName: 'Ablation C: Candidate Margin (1.20 MPa)',
+    energy_kwh: 2.041,
+    reduction_pct: 16.98,
+    ci: '95% CI [16.86, 17.11]%',
+    fill: '#5EC1BD'
+  },
+  {
+    shortName: '0.80 MPa',
+    fullName: 'Ablation B: Initial Margin (0.80 MPa)',
+    energy_kwh: 2.031,
+    reduction_pct: 17.38,
+    ci: '95% CI [17.29, 17.48]%',
+    fill: '#D9822B'
+  },
+  {
+    shortName: 'Unpadded',
+    fullName: 'Ablation D: Unpadded (0.00 MPa Margin)',
+    energy_kwh: 2.021,
+    reduction_pct: 17.80,
+    ci: '95% CI [17.76, 17.84]%',
+    fill: '#D9534F'
+  }
+];
 
-  // Pareto trade-off data (Energy Reduction % vs Defect Risk %)
-  const paretoData = GATE4_ABLATION_VARIANTS.map((v) => ({
-    name: v.variant_name,
-    energy_red: v.energy_reduction_pct_mean,
-    defect_risk: Number((100.0 - v.overall_compliance_pct).toFixed(1)),
-    defects: v.total_defects,
-    latency: v.latency_mean_ms,
-    isOptimal: v.variant_id === 'full_corrected'
-  }));
+// Pareto trade-off data (Energy Savings % vs Defect Rate %) across all 6 configurations
+const PARETO_DATA = [
+  {
+    name: 'Full Corrected Tuner',
+    shortName: 'Full Tuner (Optimal)',
+    energy_red: 16.32,
+    defect_risk: 0.0,
+    defects: 0,
+    color: '#35A86B',
+    isOptimal: true
+  },
+  {
+    name: 'Static SOP Baseline',
+    shortName: 'Standard SOP',
+    energy_red: 0.0,
+    defect_risk: 0.0,
+    defects: 0,
+    color: '#3E8E9E',
+    isOptimal: false
+  },
+  {
+    name: 'Ablation A: No Recycled Protection',
+    shortName: 'No Recycled Guard',
+    energy_red: 16.47,
+    defect_risk: 0.8,
+    defects: 2,
+    color: '#1F6B68',
+    isOptimal: false
+  },
+  {
+    name: 'Ablation C: Candidate Margin (1.20 MPa)',
+    shortName: '1.20 MPa Margin',
+    energy_red: 16.98,
+    defect_risk: 4.8,
+    defects: 12,
+    color: '#5EC1BD',
+    isOptimal: false
+  },
+  {
+    name: 'Ablation B: Initial Margin (0.80 MPa)',
+    shortName: '0.80 MPa Margin',
+    energy_red: 17.38,
+    defect_risk: 21.2,
+    defects: 53,
+    color: '#D9822B',
+    isOptimal: false
+  },
+  {
+    name: 'Ablation D: Unpadded (0.00 MPa)',
+    shortName: 'Unpadded (0.00 MPa)',
+    energy_red: 17.80,
+    defect_risk: 81.6,
+    defects: 204,
+    color: '#D9534F',
+    isOptimal: false
+  }
+];
+
+// Custom Tooltip for Pareto Chart that clearly identifies the controller name
+const CustomParetoTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const d = payload[0].payload;
+    return (
+      <div
+        style={{
+          backgroundColor: '#1B2926',
+          border: '1px solid #263B37',
+          borderRadius: '6px',
+          padding: '10px 14px',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '12px',
+          color: '#E5ECE8',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '4px'
+        }}
+      >
+        <div style={{ fontWeight: 700, color: d.color, fontSize: '13px' }}>
+          {d.name}
+        </div>
+        <div style={{ color: 'var(--text-secondary)' }}>
+          Energy Savings: <span style={{ color: '#35A86B', fontWeight: 600 }}>{d.energy_red.toFixed(2)}%</span>
+        </div>
+        <div style={{ color: 'var(--text-secondary)' }}>
+          Defect Rate: <span style={{ color: d.defects > 0 ? '#D9534F' : '#35A86B', fontWeight: 600 }}>{d.defect_risk.toFixed(1)}% ({d.defects}/250 cycles)</span>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
+export const ResultsPage: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* Top Metric Highlights */}
+      {/* 1. Four Main KPI Cards */}
       <div
         style={{
           display: 'grid',
@@ -92,9 +181,9 @@ export const ResultsPage: React.FC = () => {
           label="Baseline Energy (Static SOP)"
           value="2.458"
           unit="kWh/cycle"
-          badgeText="STATIC FIXED SETTINGS"
+          badgeText="STATIC SETTINGS"
           badgeVariant="muted"
-          secondaryText="Melt: 230°C, Press: 100 MPa, Dwell: 20s"
+          secondaryText="Standard SOP: 230°C, 100 MPa, 20s"
           icon={<Zap size={18} color="#7E968D" />}
         />
 
@@ -102,9 +191,9 @@ export const ResultsPage: React.FC = () => {
           label="Optimized Energy (Full Tuner)"
           value="2.057"
           unit="kWh/cycle"
-          badgeText="16.32% MEAN REDUCTION"
+          badgeText="16.32% REDUCTION"
           badgeVariant="green"
-          secondaryText="95% CI: [16.17%, 16.47%] across 250 cycles"
+          secondaryText="0.401 kWh saved per cycle (95% CI: [16.17, 16.47]%)"
           icon={<TrendingDown size={18} color="#35A86B" />}
         />
 
@@ -114,7 +203,7 @@ export const ResultsPage: React.FC = () => {
           unit="250/250 in-spec"
           badgeText="0 DEFECTS"
           badgeVariant="green"
-          secondaryText="Mean: 50.17 MPa, Min: 49.02 MPa [Spec: 49–55]"
+          secondaryText="Mean: 50.17 MPa, Min: 49.02 MPa (Limit: ≥ 49.0 MPa)"
           icon={<CheckCircle2 size={18} color="#35A86B" />}
         />
 
@@ -124,61 +213,61 @@ export const ResultsPage: React.FC = () => {
           unit="250/250 in-spec"
           badgeText="0 DEFECTS"
           badgeVariant="green"
-          secondaryText="Mean: 1.15%, Range: [1.02–1.28]% [Spec: 0.8–1.6%]"
+          secondaryText="Mean: 1.15%, Range: [1.02–1.28]% (Limit: 0.8–1.6%)"
           icon={<ShieldCheck size={18} color="#35A86B" />}
         />
       </div>
 
-      {/* Actuator & Quality Comparison Tables */}
+      {/* 2 & 3. Actuator & Quality Comparison Tables */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-        {/* Actuators Comparison */}
+        {/* Actuators Comparison Table */}
         <Card
-          title="Process Actuators: Static SOP vs. Adaptive Tuner"
-          subtitle="Operating setpoint coordinates and physical bounds adherence"
+          title="Machine Operating Settings: Standard vs. Adaptive Tuner"
+          subtitle="Operating parameters and why adjustments were made"
         >
           <div style={{ overflowX: 'auto', marginTop: '6px' }}>
             <table>
               <thead>
                 <tr>
-                  <th>Actuator Parameter</th>
-                  <th>Machine Bounds</th>
-                  <th>Static SOP</th>
-                  <th>Adaptive Tuned</th>
-                  <th>Shift & Rationale</th>
+                  <th>Machine Setting</th>
+                  <th>Safe Limits</th>
+                  <th>Standard SOP</th>
+                  <th>Optimized Setting</th>
+                  <th>Why It Changed</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    <strong>Melt Temp (T_melt)</strong>
+                    <strong>Melt Temperature</strong>
                   </td>
                   <td className="metric-mono">[205.0, 255.0] °C</td>
                   <td className="metric-mono">230.0 °C</td>
                   <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>205.0–220.0 °C</td>
-                  <td style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-                    Lowered by 10–25°C to reduce barrel heater power
+                  <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    Lowered by 10–25°C to save heating energy while keeping polymer flowable.
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Injection Pressure (P_inj)</strong>
+                    <strong>Injection Pressure</strong>
                   </td>
                   <td className="metric-mono">[65.0, 145.0] MPa</td>
                   <td className="metric-mono">100.0 MPa</td>
                   <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>101.0–141.0 MPa</td>
-                  <td style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-                    Elevated by 1–41 MPa to compact voids & compensate lower T
+                  <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    Increased dynamically to compact material voids and protect strength at lower temperatures.
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Cooling Time (t_cool)</strong>
+                    <strong>Cooling Time</strong>
                   </td>
                   <td className="metric-mono">[12.0, 32.0] s</td>
                   <td className="metric-mono">20.0 s</td>
                   <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>12.0 s</td>
-                  <td style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-                    Shortened by 8.0 s to minimize chiller dwell energy
+                  <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    Shortened by 8.0 s to reduce chiller energy while staying within shrinkage limits.
                   </td>
                 </tr>
               </tbody>
@@ -186,20 +275,20 @@ export const ResultsPage: React.FC = () => {
           </div>
         </Card>
 
-        {/* Quality Outcomes Comparison */}
+        {/* Quality Outcomes Comparison Table */}
         <Card
-          title="Physical Quality & Thermodynamic Balance"
-          subtitle="Evaluated across 250 matched-pair stochastic cycles"
+          title="Manufacturing Outcomes: Standard vs. Adaptive Tuner"
+          subtitle="Comparison of product quality across 250 matched evaluation cycles"
         >
           <div style={{ overflowX: 'auto', marginTop: '6px' }}>
             <table>
               <thead>
                 <tr>
                   <th>Performance Metric</th>
-                  <th>Specification</th>
-                  <th>Static SOP</th>
-                  <th>Adaptive Tuned</th>
-                  <th>Delta & Compliance</th>
+                  <th>Quality Limit</th>
+                  <th>Standard SOP</th>
+                  <th>Adaptive Tuner</th>
+                  <th>Difference</th>
                 </tr>
               </thead>
               <tbody>
@@ -210,66 +299,69 @@ export const ResultsPage: React.FC = () => {
                   <td className="metric-mono">Minimize</td>
                   <td className="metric-mono">2.458 kWh</td>
                   <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>2.057 kWh</td>
-                  <td className="metric-mono" style={{ color: '#35A86B' }}>-16.32% savings</td>
+                  <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>
+                    -16.32% (-0.401 kWh)
+                  </td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Tensile Yield (S)</strong>
+                    <strong>Tensile Strength</strong>
                   </td>
-                  <td className="metric-mono">[49.0, 55.0] MPa</td>
+                  <td className="metric-mono">≥ 49.0 MPa</td>
                   <td className="metric-mono">52.45 MPa</td>
                   <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>50.17 MPa</td>
-                  <td className="metric-mono" style={{ color: '#35A86B' }}>-2.28 MPa (100% In-Spec)</td>
+                  <td className="metric-mono" style={{ color: 'var(--text-secondary)' }}>
+                    -2.28 MPa (comfortably in-spec)
+                  </td>
                 </tr>
                 <tr>
                   <td>
-                    <strong>Volumetric Shrinkage (V_sh)</strong>
+                    <strong>Volumetric Shrinkage</strong>
                   </td>
-                  <td className="metric-mono">[0.80, 1.60] %</td>
-                  <td className="metric-mono">1.25 %</td>
-                  <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>1.15 %</td>
-                  <td className="metric-mono" style={{ color: '#35A86B' }}>-0.10 % (100% In-Spec)</td>
+                  <td className="metric-mono">0.80% – 1.60%</td>
+                  <td className="metric-mono">1.25%</td>
+                  <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>1.15%</td>
+                  <td className="metric-mono" style={{ color: 'var(--text-secondary)' }}>
+                    -0.10% (well within limits)
+                  </td>
                 </tr>
                 <tr>
                   <td>
                     <strong>Defect Rate</strong>
                   </td>
-                  <td className="metric-mono">0.00 %</td>
+                  <td className="metric-mono">0 defects</td>
                   <td className="metric-mono">0 / 250 (0%)</td>
                   <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>0 / 250 (0%)</td>
-                  <td className="metric-mono" style={{ color: '#35A86B' }}>0 Defects (100% Compliant)</td>
+                  <td className="metric-mono" style={{ color: '#35A86B', fontWeight: 600 }}>
+                    0 defects across 250 cycles
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '8px', lineHeight: 1.4 }}>
-            Note: The 2.28 MPa lower mean tensile strength in adaptive tuning represents an intentional energy trade-off operating above the 49.0 MPa lower limit. A change from baseline is only flagged as a failure if it breaches the 49.0–55.0 MPa specification.
-          </div>
         </Card>
       </div>
 
-      {/* Visual Recharts: Energy Comparison & Multi-Objective Pareto */}
+      {/* 4 & 5. Visual Charts: Energy Comparison & Multi-Objective Pareto */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '16px' }}>
         {/* Specific Energy Reduction Bar Chart */}
         <Card
-          title="Specific Energy Consumption across All 6 Gate 4 Variants"
-          subtitle="Mean cycle energy (kWh) evaluated over 250 matched cycles each"
+          title="Energy Consumption Across Six Controller Configurations"
+          subtitle="Average cycle energy (kWh) measured over 250 production cycles"
         >
-          <div style={{ height: '300px', marginTop: '10px' }}>
+          <div style={{ height: '310px', marginTop: '10px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={energyChartData}
-                margin={{ top: 10, right: 20, left: 0, bottom: 40 }}
+                data={ENERGY_CHART_DATA}
+                margin={{ top: 10, right: 20, left: 0, bottom: 25 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#263B37" vertical={false} />
                 <XAxis
-                  dataKey="name"
+                  dataKey="shortName"
                   stroke="#7E968D"
-                  fontSize={10}
+                  fontSize={11}
                   tickLine={false}
                   interval={0}
-                  angle={-15}
-                  textAnchor="end"
                 />
                 <YAxis
                   stroke="#7E968D"
@@ -282,14 +374,14 @@ export const ResultsPage: React.FC = () => {
                   contentStyle={{
                     backgroundColor: '#1B2926',
                     border: '1px solid #263B37',
-                    borderRadius: '4px',
+                    borderRadius: '6px',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '12px',
                     color: '#E5ECE8'
                   }}
                   formatter={(val: any, _name: any, item: any) => [
-                    `${Number(val).toFixed(3)} kWh/cycle (${item.payload.reduction_pct.toFixed(2)}% savings, ${item.payload.ci})`,
-                    'Energy'
+                    `${Number(val).toFixed(3)} kWh/cycle (${item.payload.reduction_pct > 0 ? `${item.payload.reduction_pct.toFixed(2)}% savings` : 'Baseline'}, ${item.payload.ci})`,
+                    item.payload.fullName
                   ]}
                 />
                 <Bar dataKey="energy_kwh" name="Energy (kWh/cycle)" radius={[4, 4, 0, 0]} />
@@ -298,64 +390,53 @@ export const ResultsPage: React.FC = () => {
           </div>
         </Card>
 
-        {/* Pareto Energy vs Defect Risk Scatter Chart */}
+        {/* Pareto Energy vs Defect Rate Scatter Chart */}
         <Card
-          title="Multi-Objective Pareto Analysis: Energy vs. Defect Risk"
-          subtitle="Trade-off between specific energy savings and defect rate across 250 cycles"
+          title="Energy Savings vs. Defect Rate (Pareto Analysis)"
+          subtitle="Compares energy reduction against product defect risk across 250 cycles"
         >
-          <div style={{ height: '300px', marginTop: '10px' }}>
+          <div style={{ height: '270px', marginTop: '10px' }}>
             <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart margin={{ top: 10, right: 20, bottom: 30, left: 10 }}>
+              <ScatterChart margin={{ top: 10, right: 20, bottom: 25, left: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#263B37" />
                 <XAxis
                   type="number"
                   dataKey="energy_red"
-                  name="Energy Reduction"
+                  name="Energy Savings"
                   unit="%"
                   domain={[0, 20]}
                   stroke="#7E968D"
                   fontSize={11}
-                  label={{ value: 'Energy Savings %', position: 'insideBottom', offset: -10, fill: '#7E968D', fontSize: 11 }}
+                  label={{ value: 'Energy Savings (%)', position: 'insideBottom', offset: -12, fill: '#7E968D', fontSize: 11 }}
                 />
                 <YAxis
                   type="number"
                   dataKey="defect_risk"
-                  name="Defect Risk"
+                  name="Defect Rate"
                   unit="%"
                   domain={[0, 90]}
                   stroke="#7E968D"
                   fontSize={11}
-                  label={{ value: 'Observed Defect Rate %', angle: -90, position: 'insideLeft', fill: '#7E968D', fontSize: 11 }}
+                  label={{ value: 'Observed Defect Rate (%)', angle: -90, position: 'insideLeft', offset: -2, fill: '#7E968D', fontSize: 11 }}
                 />
-                <ZAxis range={[80, 140]} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#1B2926',
-                    border: '1px solid #263B37',
-                    borderRadius: '4px',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '11px',
-                    color: '#E5ECE8'
-                  }}
-                  formatter={(value: any, name: any) => [`${value}%`, name]}
-                />
+                <ZAxis range={[90, 140]} />
+                <Tooltip cursor={{ strokeDasharray: '3 3', stroke: '#3E8E9E' }} content={<CustomParetoTooltip />} />
                 <Scatter
                   name="Controllers"
-                  data={paretoData}
-                  fill="#35A86B"
+                  data={PARETO_DATA}
+                  cursor="pointer"
                   shape={(props: any) => {
                     const { cx, cy, payload } = props;
                     const isFull = payload.isOptimal;
-                    const isUnpadded = payload.name.includes('Unpadded');
-                    const color = isFull ? '#35A86B' : isUnpadded ? '#D9534F' : '#D9822B';
                     return (
                       <circle
                         cx={cx}
                         cy={cy}
-                        r={isFull ? 7 : 5}
-                        fill={color}
+                        r={isFull ? 8 : 6}
+                        fill={payload.color}
                         stroke="#E5ECE8"
                         strokeWidth={isFull ? 2 : 1}
+                        style={{ cursor: 'pointer' }}
                       />
                     );
                   }}
@@ -363,10 +444,52 @@ export const ResultsPage: React.FC = () => {
               </ScatterChart>
             </ResponsiveContainer>
           </div>
-          <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', textAlign: 'center', marginTop: '6px', lineHeight: 1.4 }}>
-            Sample size: N=250 cycles per variant (50 contexts × 5 repetitions). 100% observed compliance represents empirical verification in the validated domain, but does not guarantee future compliance under non-stationary distributions.
+
+          {/* Interactive Legend for Pareto Chart */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '12px',
+              justifyContent: 'center',
+              marginTop: '10px',
+              fontSize: '11px',
+              color: 'var(--text-secondary)'
+            }}
+          >
+            {PARETO_DATA.map((p) => (
+              <div key={p.name} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <span
+                  style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: p.color,
+                    display: 'inline-block'
+                  }}
+                />
+                <span style={{ color: p.isOptimal ? '#35A86B' : 'var(--text-secondary)', fontWeight: p.isOptimal ? 700 : 400 }}>
+                  {p.shortName}: {p.defect_risk}% defects
+                </span>
+              </div>
+            ))}
           </div>
         </Card>
+      </div>
+
+      {/* 7. Concise Evaluation Note & Performance Disclaimer */}
+      <div
+        style={{
+          backgroundColor: 'var(--bg-card)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: 'var(--radius-sm)',
+          padding: '12px 18px',
+          fontSize: '12px',
+          color: 'var(--text-secondary)',
+          lineHeight: 1.6
+        }}
+      >
+        <strong style={{ color: 'var(--text-primary)' }}>Evaluation context:</strong> All performance metrics were evaluated across 250 matched-pair cycles (50 diverse material disturbance scenarios × 5 stochastic noise repetitions) against the ground-truth physical simulator. Observed 100% compliance demonstrates reliability under tested operating scenarios and does not guarantee zero defects in future production.
       </div>
     </div>
   );

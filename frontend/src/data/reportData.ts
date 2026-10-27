@@ -52,7 +52,7 @@ export const GATE3_EXPERIMENT_COMPARISONS = [
     notes: 'Constant 1.20 MPa margin reduced defects but still yielded 12 defects concentrated at >32.5 wt% recycled content.'
   },
   {
-    configuration: 'Corrected Configuration: Adaptive Recycled Margin (EXP-006)',
+    configuration: 'Corrected Configuration: Adaptive Recycled Margin',
     margin_label: '1.50 MPa + 0.035·max(0, C_rec - 25.0)',
     total_cycles: 250,
     defects: 0,
@@ -67,7 +67,7 @@ export const TEST_SUITE_BREAKDOWN = [
   { module: 'test_gate4_evaluation.py', tests: 30, scope: 'Ablation, noise regimes, sensitivity sweeps, actuator limits' },
   { module: 'test_simulation.py', tests: 16, scope: 'Physical simulator thermodynamics, transients, noise injection' },
   { module: 'test_gate2_tuning.py', tests: 15, scope: 'Constrained tuning engine, Domain Guard OOD rejection' },
-  { module: 'test_gate2_corrective_iteration.py', tests: 12, scope: 'EXP-006 adaptive margin, chance constraints, quadrature decomposition' },
+  { module: 'test_gate2_corrective_iteration.py', tests: 12, scope: 'Adaptive margin, chance constraints, quadrature decomposition' },
   { module: 'test_gate3_validation.py', tests: 11, scope: 'Closed-loop matched validation, error analysis, confidence intervals' },
   { module: 'test_profiler.py', tests: 7, scope: 'Dataset profiling, defensive validation, category handling' },
   { module: 'test_adaptive_tuner.py', tests: 6, scope: 'Closed-loop actuator enforcement, tree surrogate optimization' },

@@ -17,7 +17,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-// Internal configured safety margin settings (EXP-006 formulation)
+// Internal configured safety margin settings (adaptive formulation)
 // Controls removed from UI per safety requirement, but configured values remain strictly active
 const CONFIGURED_BASE_MARGIN = 1.50; // Base margin (MPa)
 const CONFIGURED_RECYCLED_SLOPE = 0.035; // Recycled content slope (MPa/%)
