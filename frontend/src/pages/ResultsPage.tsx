@@ -130,34 +130,78 @@ const PARETO_DATA = [
   }
 ];
 
-// Custom Tooltip for Pareto Chart that clearly identifies the controller name
+// Custom Tooltip for Energy Bar Chart ensuring high-contrast white text on dark green/charcoal
+const CustomEnergyBarTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const d = payload[0].payload;
+    return (
+      <div
+        style={{
+          backgroundColor: '#162421',
+          border: '1px solid #263B37',
+          borderRadius: '6px',
+          padding: '10px 14px',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '12px',
+          color: '#FFFFFF',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '4px'
+        }}
+      >
+        <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '13px' }}>
+          {d.fullName}
+        </div>
+        <div style={{ color: '#FFFFFF' }}>
+          Energy: <span style={{ color: '#FFFFFF', fontWeight: 600 }}>{Number(d.energy_kwh).toFixed(3)} kWh/cycle</span>
+        </div>
+        <div style={{ color: '#FFFFFF' }}>
+          Reduction:{' '}
+          <span style={{ color: '#FFFFFF', fontWeight: 600 }}>
+            {d.reduction_pct > 0 ? `${d.reduction_pct.toFixed(2)}% savings` : 'Baseline (0.00%)'}
+          </span>
+        </div>
+        <div style={{ color: '#FFFFFF', fontSize: '11px', opacity: 0.9 }}>
+          {d.ci}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
+// Custom Tooltip for Pareto Chart that clearly identifies the controller name with high-contrast white text
 const CustomParetoTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const d = payload[0].payload;
     return (
       <div
         style={{
-          backgroundColor: '#1B2926',
+          backgroundColor: '#162421',
           border: '1px solid #263B37',
           borderRadius: '6px',
           padding: '10px 14px',
           fontFamily: 'var(--font-mono)',
           fontSize: '12px',
-          color: '#E5ECE8',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+          color: '#FFFFFF',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.5)',
           display: 'flex',
           flexDirection: 'column',
           gap: '4px'
         }}
       >
-        <div style={{ fontWeight: 700, color: d.color, fontSize: '13px' }}>
+        <div style={{ fontWeight: 700, color: '#FFFFFF', fontSize: '13px' }}>
           {d.name}
         </div>
-        <div style={{ color: 'var(--text-secondary)' }}>
-          Energy Savings: <span style={{ color: '#35A86B', fontWeight: 600 }}>{d.energy_red.toFixed(2)}%</span>
+        <div style={{ color: '#FFFFFF' }}>
+          Energy Savings: <span style={{ color: '#FFFFFF', fontWeight: 600 }}>{d.energy_red.toFixed(2)}%</span>
         </div>
-        <div style={{ color: 'var(--text-secondary)' }}>
-          Defect Rate: <span style={{ color: d.defects > 0 ? '#D9534F' : '#35A86B', fontWeight: 600 }}>{d.defect_risk.toFixed(1)}% ({d.defects}/250 cycles)</span>
+        <div style={{ color: '#FFFFFF' }}>
+          Defect Rate:{' '}
+          <span style={{ color: '#FFFFFF', fontWeight: 600 }}>
+            {d.defect_risk.toFixed(1)}% ({d.defects}/250 cycles)
+          </span>
         </div>
       </div>
     );
@@ -371,18 +415,9 @@ export const ResultsPage: React.FC = () => {
                   unit=" kWh"
                 />
                 <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#1B2926',
-                    border: '1px solid #263B37',
-                    borderRadius: '6px',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '12px',
-                    color: '#E5ECE8'
-                  }}
-                  formatter={(val: any, _name: any, item: any) => [
-                    `${Number(val).toFixed(3)} kWh/cycle (${item.payload.reduction_pct > 0 ? `${item.payload.reduction_pct.toFixed(2)}% savings` : 'Baseline'}, ${item.payload.ci})`,
-                    item.payload.fullName
-                  ]}
+                  cursor={{ fill: 'rgba(53, 168, 107, 0.1)' }}
+                  content={<CustomEnergyBarTooltip />}
+                  wrapperStyle={{ zIndex: 1000 }}
                 />
                 <Bar dataKey="energy_kwh" name="Energy (kWh/cycle)" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -420,7 +455,11 @@ export const ResultsPage: React.FC = () => {
                   label={{ value: 'Observed Defect Rate (%)', angle: -90, position: 'insideLeft', offset: -2, fill: '#7E968D', fontSize: 11 }}
                 />
                 <ZAxis range={[90, 140]} />
-                <Tooltip cursor={{ strokeDasharray: '3 3', stroke: '#3E8E9E' }} content={<CustomParetoTooltip />} />
+                <Tooltip
+                  cursor={{ strokeDasharray: '3 3', stroke: '#3E8E9E' }}
+                  content={<CustomParetoTooltip />}
+                  wrapperStyle={{ zIndex: 1000 }}
+                />
                 <Scatter
                   name="Controllers"
                   data={PARETO_DATA}

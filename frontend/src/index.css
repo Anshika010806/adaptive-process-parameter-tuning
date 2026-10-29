@@ -185,3 +185,48 @@ td {
 tr:hover td {
   background-color: rgba(32, 50, 46, 0.4);
 }
+
+/* ==============================================================================
+   Recharts Tooltip High-Contrast Overrides
+   Dark green / charcoal background with pure white label & value text
+   ============================================================================== */
+.recharts-default-tooltip {
+  background-color: #162421 !important;
+  border: 1px solid #263B37 !important;
+  border-radius: 6px !important;
+  padding: 10px 14px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 12px !important;
+  color: #FFFFFF !important;
+}
+
+.recharts-tooltip-wrapper {
+  z-index: 1000 !important;
+}
+
+.recharts-tooltip-label {
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  margin-bottom: 6px !important;
+}
+
+.recharts-tooltip-item-list {
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+.recharts-tooltip-item {
+  color: #FFFFFF !important;
+  padding: 2px 0 !important;
+}
+
+.recharts-tooltip-item-name,
+.recharts-tooltip-item-separator,
+.recharts-tooltip-item-value,
+.recharts-tooltip-item-unit {
+  color: #FFFFFF !important;
+}
+
