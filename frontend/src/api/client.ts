@@ -264,7 +264,7 @@ export class OptimizationApiClient {
 
   async checkHealth(): Promise<{ status: string; mode: string }> {
     try {
-      const response = await fetch(`${this.baseUrl}/health`, { signal: AbortSignal.timeout(1000) });
+      const response = await fetch(`${this.baseUrl}/health`, { signal: AbortSignal.timeout(60000) });
       if (response.ok) {
         return { status: 'ONLINE', mode: 'FASTAPI_REST' };
       }
@@ -280,7 +280,7 @@ export class OptimizationApiClient {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(inputs),
-        signal: AbortSignal.timeout(2000)
+        signal: AbortSignal.timeout(60000)
       });
       if (response.ok) {
         return await response.json();
